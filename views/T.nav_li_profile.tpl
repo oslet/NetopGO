@@ -1,26 +1,23 @@
-{{define "nav_li_profile"}}
+{{define "nav_li_profile" }}
 <li class="nav-header">
     <div class="dropdown profile-element">
         <span>
-            <img alt="image" class="img-circle" width="48" height="48" src="/static/img/admin.png" />
+            <img alt="image" class="img-circle" width="48" height="48" src="/static/img/{{if .Admin}}root.png{{ else }}a4.jpg{{end}}" />
         </span>
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
             <span class="clear">
                 <span class="block m-t-xs">
-                    <strong class="font-bold">S1<span style="color: #8095a8"></span></strong>
+                    <strong class="font-bold">{{.Auth}}<span style="color: #8095a8"></span></strong>
                 </span>
                 <span class="text-muted text-xs block">
-                    S2 <b class="caret"></b>
+                    {{.Uname}} <b class="caret"></b>
                 </span>
             </span>
         </a>
         <ul class="dropdown-menu animated fadeInRight m-t-xs">
             <li><a value="#" class="iframe_user">个人信息</a></li>
             <li><a href="#">修改信息</a></li>
-				<li><a href="#">系统后台</a></li>
-				<li><a href="#">主机控制台</a></li>
-            <li class="divider"></li>
-            <li><a href="#">注销</a></li>
+            <li><a href="/logout">注销</a></li>
         </ul>
     </div>
 

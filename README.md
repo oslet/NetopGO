@@ -1,2 +1,2 @@
-# 2016-04-16
-    用户模块
+# 2016-04-18
+    user model static ready!

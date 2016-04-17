@@ -6,9 +6,10 @@ import (
 )
 
 type User struct {
-	Id      int8
+	Id      int
 	Name    string `orm:size(100)`
 	Passwd  string `orm:size(100)`
+	Type    string `orm:size(20)`
 	Email   string `orm:size(50)`
 	Dept    string `orm:size(20)`
 	Created time.Time
@@ -18,4 +19,11 @@ type User struct {
 
 func init() {
 	orm.RegisterModel(new(User))
+}
+
+func Login(uname string) (*User, error) {
+	o := orm.NewOrm()
+	user := &User{}
+	err := o.QueryTable("user").Filter("name", uname).One(user)
+	return user, err
 }

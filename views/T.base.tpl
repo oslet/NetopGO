@@ -16,7 +16,7 @@
 <body>
 
     <div id="wrapper">
-    	{{template "nav"}}
+    	{{template "nav" .}}
         <div id="page-wrapper" class="gray-bg">
             <div class="row border-bottom">
             	{{template "nav_bar_header"}}
