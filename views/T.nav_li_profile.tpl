@@ -2,12 +2,12 @@
 <li class="nav-header">
     <div class="dropdown profile-element">
         <span>
-            <img alt="image" class="img-circle" width="48" height="48" src="/static/img/{{if .Admin}}root.png{{ else }}a4.jpg{{end}}" />
+            <img alt="image" class="img-circle" width="48" height="48" src="/static/img/{{if eq .Role 1}}root.png{{ else if eq .Role 2}}a4.jpg{{else}}a6.jpg{{end}}" />
         </span>
         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
             <span class="clear">
                 <span class="block m-t-xs">
-                    <strong class="font-bold">{{.Auth}}<span style="color: #8095a8"></span></strong>
+                    <strong class="font-bold">{{if eq .Role 1}}超级管理员{{else if eq .Role 2}}数据库管理员{{else}}来宾用户{{end}}<span style="color: #8095a8"></span></strong>
                 </span>
                 <span class="text-muted text-xs block">
                     {{.Uname}} <b class="caret"></b>

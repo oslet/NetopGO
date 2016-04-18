@@ -9,7 +9,7 @@
             <li id="user">
                 <a href="#"><i class="fa fa-group"></i> <span class="nav-label">用户管理</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li class="group"><a href="/user/list">用户列表</a></li>
+                    <li class="group"><a href="/user/list?page=">用户列表</a></li>
                 </ul>
             </li>
             <li id="host">

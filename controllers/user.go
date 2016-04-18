@@ -1,36 +1,42 @@
 package controllers
 
 import (
+	"NetopGO/models"
 	"github.com/astaxie/beego"
+	"strconv"
 )
 
 type UserController struct {
-	beego.Controller
+	BaseController
 }
 
 func (this *UserController) Get() {
-	uname := this.GetSession("uname")
-	auth := this.GetSession("auth")
-	beego.Info(uname)
-	beego.Info(auth)
-	if uname == nil {
-		this.Redirect("/login", 302)
-		return
-	}
+	var page string
+	uname, role := this.IsLogined()
 	this.Data["Uname"] = uname
-	switch auth {
-	case 1:
-		this.Data["Auth"] = "超级管理员"
-	case 2:
-		this.Data["Auth"] = "数据库管理员"
-	case 3:
-		this.Data["Auth"] = "来宾用户"
-	}
-	if uname == "admin" {
-		this.Data["Admin"] = true
+	this.Data["Role"] = role
+	if len(this.Input().Get("page")) == 0 {
+		page = "1"
 	} else {
-		this.Data["Admin"] = false
+		page = this.Input().Get("page")
 	}
-
+	currPage, _ := strconv.ParseInt(page, 10, 64)
+	pageSize := 1
+	total, err := models.GetUserCount()
+	users, _, err := models.GetUsers(int(currPage), pageSize)
+	if err != nil {
+		beego.Error(err)
+	}
+	res := models.Paginator(int(currPage), pageSize, total)
+	this.Data["paginator"] = res
+	this.Data["Users"] = users
+	this.Data["totals"] = total
 	this.TplName = "user_list.html"
+}
+
+func (this *UserController) Add() {
+	uname, role := this.IsLogined()
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.TplName = "user_add.html"
 }
