@@ -1,19 +1,21 @@
 package models
 
 import (
+	//	"fmt"
 	"github.com/astaxie/beego/orm"
 	"math"
+	"strconv"
 	"time"
 )
 
 type User struct {
-	Id      int
+	Id      int64
 	Name    string `orm:size(100)`
 	Passwd  string `orm:size(100)`
 	Email   string `orm:size(50)`
 	Dept    string `orm:size(20)`
 	Created time.Time
-	Auth    int
+	Auth    int64
 	Tel     string `orm:size(11)`
 }
 
@@ -48,16 +50,80 @@ func GetUsers(currPage, pageSize int) ([]*User, int64, error) {
 	return users, total, err
 }
 
-// func Paginator(page, pageSize int, total int64) map[string]interface{} {
-// 	totalPages := int(math.Ceil(float64(total) / float64(pageSize)))
-// 	if page > totalPages {
-// 		page = totalPages
-// 	}
-// 	if page <= 0 {
-// 		page = 1
-// 	}
+func AddUser(name, passwd, email, tel, auth, dept string) error {
+	o := orm.NewOrm()
+	authInt, err := strconv.ParseInt(auth, 10, 64)
+	if err != nil {
+		return err
+	}
+	passwd = string(Base64Encode([]byte(passwd)))
+	user := &User{
+		Name:    name,
+		Passwd:  passwd,
+		Email:   email,
+		Tel:     tel,
+		Auth:    authInt,
+		Dept:    dept,
+		Created: time.Now(),
+	}
+	err = o.QueryTable("user").Filter("name", name).One(user)
+	//fmt.Printf("+++++++is exists+++++++: %v\n", err)
+	if err == nil {
+		return nil
 
-// }
+	}
+	_, err = o.Insert(user)
+	return err
+}
+
+func MofifyUser(id, name, passwd, email, tel, auth, dept string) error {
+	o := orm.NewOrm()
+	uid, err := strconv.ParseInt(id, 10, 64)
+	authInt, err := strconv.ParseInt(auth, 10, 64)
+	passwd = string(Base64Encode([]byte(passwd)))
+	user := &User{
+		Id: uid,
+	}
+	err = o.Read(user)
+	if err == nil {
+		user.Name = name
+		user.Passwd = passwd
+		user.Email = email
+		user.Tel = tel
+		user.Auth = authInt
+		user.Dept = dept
+	}
+	o.Update(user)
+	return err
+}
+
+func DeleteUser(id string) error {
+	o := orm.NewOrm()
+	uid, err := strconv.ParseInt(id, 10, 64)
+	user := &User{
+		Id: uid,
+	}
+	_, err = o.Delete(user)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func GetUserById(id string) (*User, error) {
+	o := orm.NewOrm()
+	uid, err := strconv.ParseInt(id, 10, 64)
+	user := &User{}
+	err = o.QueryTable("user").Filter("id", uid).One(user)
+	return user, err
+}
+
+func SearchUserByName(currPage, pageSize int, name string) ([]*User, int64, error) {
+	o := orm.NewOrm()
+	users := make([]*User, 0)
+	total, err := o.QueryTable("user").Filter("name__icontains", name).All(&users)
+	return users, total, err
+}
 
 func Paginator(page, prepage int, nums int64) map[string]interface{} {
 
