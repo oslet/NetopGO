@@ -8,8 +8,8 @@ type BaseController struct {
 	beego.Controller
 }
 
-func (this *BaseController) IsLogined() (uname interface{}, auth interface{}) {
-
+func (this *BaseController) IsLogined() (uid, uname, auth interface{}) {
+	uid = this.GetSession("id")
 	uname = this.GetSession("uname")
 	auth = this.GetSession("auth")
 	if uname == nil {

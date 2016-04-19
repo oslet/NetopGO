@@ -15,8 +15,8 @@
             </span>
         </a>
         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-            <li><a value="#" class="iframe_user">个人信息</a></li>
-            <li><a href="#">修改信息</a></li>
+            <li><a href="/user/detail?id={{.Id}}">个人信息</a></li>
+            <li><a href="/user/reset_password?id={{.Id}}&action=view">修改密码</a></li>
             <li><a href="/logout">注销</a></li>
         </ul>
     </div>
@@ -25,20 +25,4 @@
         JS+
     </div>
 </li>
-<script>
-    $(".iframe_user").on('click', function(){
-        var url= $(this).attr("value");
-        layer.open({
-            type: 2,
-            title: '个人信息',
-            maxmin: true,
-            shift: 'top',
-            border: [2, 0.3, '#1AB394'],
-            shade: [0.5, '#000000'],
-            shadeClose: true,
-            area : ['800px' , '600px'],
-            content: url
-        });
-    });
-</script>
 {{end}}

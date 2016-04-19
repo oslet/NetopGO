@@ -132,6 +132,21 @@ func SearchUserByName(currPage, pageSize int, name string) ([]*User, error) {
 	return users, err
 }
 
+func ResetPasswd(id, passwd string) error {
+	o := orm.NewOrm()
+	uid, err := strconv.ParseInt(id, 10, 64)
+	passwd = string(Base64Encode([]byte(passwd)))
+	user := &User{
+		Id: uid,
+	}
+	err = o.Read(user)
+	if err == nil {
+		user.Passwd = passwd
+	}
+	o.Update(user)
+	return err
+}
+
 func Paginator(page, prepage int, nums int64) map[string]interface{} {
 
 	var firstpage int //前一页地址

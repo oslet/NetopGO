@@ -1,12 +1,9 @@
 {{template "page_top" .}}
+{{template "nav_cat_bar" .}}
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5> 用户列表 </h5>
-                </div>
-
                 <div class="ibox-content">
                     <div class="">
                         <a href="/user/add" class="btn btn-sm btn-primary "> 添加用户 </a>
@@ -80,19 +77,6 @@
 <script src="/static/js/jquery.shiftcheckbox.js"></script>
 <script>
     $(document).ready(function(){
-        $('.del').click(function(){
-            var row = $(this).closest('tr');
-            var data = {{.Msg}}
-            if (confirm("确定删除")) {
-            $.get(
-                    $(this).attr('value'),
-                    {},
-                    function(data){
-                         row.remove();
-                         alert(data);
-                    }
-            )}
-        });
 
         $('#del_btn').click(function(){
             var check_array = [];
@@ -104,11 +88,10 @@
                 $.post("/user/bitchDel",
                         {ids: check_array.join(",")},
                         function(data){
-                            console.log(data);
-                            $(".gradeX input:checked").closest("tr").remove();
-                            alert(data);
-
-                            
+                            //console.log(data);
+                            //$(".gradeX input:checked").closest("tr").remove();                            
+                            window.location.href="/user/list"                            
+                            //alert(data);
                         }
                 )
             }

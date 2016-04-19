@@ -16,5 +16,9 @@ func init() {
 	beego.Router("/user/modify", &controllers.UserController{}, "post:Post")
 	beego.Router("/user/del", &controllers.UserController{}, "get:Delete")
 	beego.Router("/user/search", &controllers.UserController{}, "get:Search")
+	beego.Router("/user/detail", &controllers.UserController{}, "get:Detail")
 	beego.Router("/user/bitchDel", &controllers.UserController{}, "post:BitchDelete")
+	beego.Router("/user/reset_password", &controllers.UserController{}, "get:ResetPasswd")
+	beego.Router("/user/reset_password", &controllers.UserController{}, "post:ResetPasswd")
+
 }

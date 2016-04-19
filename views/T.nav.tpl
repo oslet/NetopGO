@@ -19,7 +19,7 @@
                 </ul>
             </li>
             <li id="db">
-                <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">DB管理</span><span class="fa arrow"></span></a>
+                <a href="#"><i class="fa fa-gears"></i> <span class="nav-label">DB管理</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li class="rule">
                         <a href="#">实例列表</a>

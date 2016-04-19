@@ -13,7 +13,8 @@ type UserController struct {
 
 func (this *UserController) Get() {
 	var page string
-	uname, role := this.IsLogined()
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	if len(this.Input().Get("page")) == 0 {
@@ -33,12 +34,16 @@ func (this *UserController) Get() {
 	this.Data["Users"] = users
 	this.Data["totals"] = total
 	this.Data["IsSearch"] = false
+	this.Data["Path1"] = "用户列表"
+	this.Data["Path2"] = ""
+	this.Data["Href"] = "/user/list"
 	this.TplName = "user_list.html"
 	return
 }
 
 func (this *UserController) Add() {
-	uname, role := this.IsLogined()
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	id := this.Input().Get("id")
@@ -48,15 +53,22 @@ func (this *UserController) Add() {
 			beego.Error(err)
 		}
 		this.Data["User"] = user
+		this.Data["Path1"] = "用户列表"
+		this.Data["Path2"] = "修改用户"
+		this.Data["Href"] = "/user/list"
 		this.TplName = "user_modify.html"
 		return
 	}
+	this.Data["Path1"] = "用户列表"
+	this.Data["Path2"] = "添加用户"
+	this.Data["Href"] = "/user/list"
 	this.TplName = "user_add.html"
 
 }
 
 func (this *UserController) Delete() {
-	uname, role := this.IsLogined()
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 
@@ -65,14 +77,16 @@ func (this *UserController) Delete() {
 	if err != nil {
 		beego.Error(err)
 	}
-	this.Data["Msg"] = "success"
+	this.Data["Path1"] = "用户列表"
+	this.Data["Path2"] = ""
+	this.Data["Href"] = "/user/list"
 	this.Redirect("/user/list", 302)
-	//this.TplName = "user_list.html"
 	return
 }
 
 func (this *UserController) BitchDelete() {
-	uname, role := this.IsLogined()
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 
@@ -89,7 +103,8 @@ func (this *UserController) BitchDelete() {
 }
 
 func (this *UserController) Post() {
-	uname, role := this.IsLogined()
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 
@@ -100,7 +115,7 @@ func (this *UserController) Post() {
 	tel := this.Input().Get("tel")
 	auth := this.Input().Get("auth")
 	dept := this.Input().Get("dept")
-	beego.Info(id)
+	//beego.Info(id)
 	if len(id) > 0 {
 		err := models.MofifyUser(id, name, passwd, email, tel, auth, dept)
 		if err != nil {
@@ -112,13 +127,17 @@ func (this *UserController) Post() {
 			beego.Error(err)
 		}
 	}
+	this.Data["Path1"] = "用户列表"
+	this.Data["Path2"] = ""
+	this.Data["Href"] = "/user/list"
 	this.Redirect("/user/list", 302)
 	return
 }
 
 func (this *UserController) Search() {
 	var page string
-	uname, role := this.IsLogined()
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 
@@ -142,6 +161,82 @@ func (this *UserController) Search() {
 	this.Data["totals"] = total
 	this.Data["IsSearch"] = true
 	this.Data["Keyword"] = name
+	this.Data["Path1"] = "用户列表"
+	this.Data["Path2"] = "搜索结果"
+	this.Data["Href"] = "/user/list"
 	this.TplName = "user_list.html"
 	return
+}
+
+func (this *UserController) Detail() {
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+
+	id := this.Input().Get("id")
+	user, err := models.GetUserById(id)
+	if err != nil {
+		beego.Error(err)
+	}
+	this.Data["User"] = user
+	this.Data["Path1"] = "用户列表"
+	this.Data["Path2"] = "个人信息"
+	this.Data["Href"] = "/user/list"
+	this.TplName = "user_detail.html"
+	return
+
+}
+
+func (this *UserController) ResetPasswd() {
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+
+	var flag int
+	id := this.Input().Get("id")
+	action := this.Input().Get("action")
+	if action == "view" {
+		flag = 0
+		this.Data["Flag"] = flag
+		this.Data["Id"] = id
+		this.Data["Path1"] = "用户列表"
+		this.Data["Path2"] = "修改密码"
+		this.Data["Href"] = "/user/list"
+		this.TplName = "reset_password.html"
+		return
+	} else {
+		passwd0 := this.Input().Get("passwd0")
+		passwd1 := this.Input().Get("passwd1")
+		passwd2 := this.Input().Get("passwd2")
+		user, err := models.GetUserById(id)
+		if err != nil {
+			beego.Error(err)
+		}
+		if string(models.Base64Encode([]byte(passwd0))) != user.Passwd {
+			flag = 1
+			this.Data["Flag"] = flag
+			this.Data["Path1"] = "用户列表"
+			this.Data["Path2"] = "修改密码"
+			this.Data["Href"] = "/user/list"
+			this.TplName = "reset_password.html"
+			return
+		}
+		if passwd1 != passwd2 {
+			flag = 2
+			this.Data["Flag"] = flag
+			this.Data["Path1"] = "用户列表"
+			this.Data["Path2"] = "修改密码"
+			this.Data["Href"] = "/user/list"
+			this.TplName = "reset_password.html"
+			return
+		}
+		err = models.ResetPasswd(id, passwd1)
+		if err != nil {
+			beego.Error(err)
+		}
+
+		this.Redirect("/", 302)
+	}
 }
