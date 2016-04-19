@@ -4,6 +4,7 @@ import (
 	"NetopGO/models"
 	"github.com/astaxie/beego"
 	"strconv"
+	"strings"
 )
 
 type UserController struct {
@@ -21,7 +22,7 @@ func (this *UserController) Get() {
 		page = this.Input().Get("page")
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
-	pageSize := 1
+	pageSize := 2
 	total, err := models.GetUserCount()
 	users, _, err := models.GetUsers(int(currPage), pageSize)
 	if err != nil {
@@ -64,9 +65,26 @@ func (this *UserController) Delete() {
 	if err != nil {
 		beego.Error(err)
 	}
-
+	this.Data["Msg"] = "success"
 	this.Redirect("/user/list", 302)
 	//this.TplName = "user_list.html"
+	return
+}
+
+func (this *UserController) BitchDelete() {
+	uname, role := this.IsLogined()
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+
+	ids := strings.Split(this.Input().Get("ids"), ",")
+	for _, id := range ids {
+		err := models.DeleteUser(id)
+		if err != nil {
+			this.Ctx.WriteString("删除失败！")
+		}
+	}
+	//this.Redirect("/user/list", 302)
+	this.Ctx.WriteString("删除成功！")
 	return
 }
 
@@ -105,6 +123,7 @@ func (this *UserController) Search() {
 	this.Data["Role"] = role
 
 	name := this.Input().Get("keyword")
+	beego.Info(name)
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
 	} else {
@@ -112,7 +131,8 @@ func (this *UserController) Search() {
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
 	pageSize := 1
-	users, total, err := models.SearchUserByName(int(currPage), pageSize, name)
+	total, err := models.SearchUserCount(name)
+	users, err := models.SearchUserByName(int(currPage), pageSize, name)
 	if err != nil {
 		beego.Error(err)
 	}
@@ -121,6 +141,7 @@ func (this *UserController) Search() {
 	this.Data["Users"] = users
 	this.Data["totals"] = total
 	this.Data["IsSearch"] = true
+	this.Data["Keyword"] = name
 	this.TplName = "user_list.html"
 	return
 }

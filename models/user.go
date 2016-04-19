@@ -43,7 +43,7 @@ func GetUserCount() (int64, error) {
 func GetUsers(currPage, pageSize int) ([]*User, int64, error) {
 	o := orm.NewOrm()
 	users := make([]*User, 0)
-	total, err := o.QueryTable("user").Limit(pageSize, (currPage-1)*1).All(&users)
+	total, err := o.QueryTable("user").Limit(pageSize, (currPage-1)*pageSize).All(&users)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -118,11 +118,18 @@ func GetUserById(id string) (*User, error) {
 	return user, err
 }
 
-func SearchUserByName(currPage, pageSize int, name string) ([]*User, int64, error) {
+func SearchUserCount(name string) (int64, error) {
 	o := orm.NewOrm()
 	users := make([]*User, 0)
 	total, err := o.QueryTable("user").Filter("name__icontains", name).All(&users)
-	return users, total, err
+	return total, err
+}
+
+func SearchUserByName(currPage, pageSize int, name string) ([]*User, error) {
+	o := orm.NewOrm()
+	users := make([]*User, 0)
+	_, err := o.QueryTable("user").Filter("name__icontains", name).Limit(pageSize, (currPage-1)*pageSize).All(&users)
+	return users, err
 }
 
 func Paginator(page, prepage int, nums int64) map[string]interface{} {
