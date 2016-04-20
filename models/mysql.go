@@ -1,7 +1,9 @@
 package models
 
 import (
+	"crypto/md5"
 	"encoding/base64"
+	"encoding/hex"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
@@ -30,4 +32,9 @@ func Base64Encode(src []byte) []byte {
 
 func Base64Decode(src []byte) ([]byte, error) {
 	return base64.StdEncoding.DecodeString(string(src))
+}
+
+func Md5Encode(src []byte) string {
+	m := md5.Sum(src)
+	return hex.EncodeToString(m[:])
 }

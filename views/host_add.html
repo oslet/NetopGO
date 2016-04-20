@@ -1,0 +1,165 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<br>
+                    <div class="ibox-content">
+                        <form method="post" id="userForm" class="form-horizontal" action="/host/add">
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">主机名<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="name" name="name" placeholder="hostname" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="ip" class="col-sm-2 control-label">IP<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="ip" name="ip" placeholder="ip address" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="rootpwd" class="col-sm-2 control-label">root用户口令<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="rootpwd" name="rootpwd" placeholder="root password" type="password" class="form-control" >
+                                </div>
+                            </div>                                                        
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="readpwd" class="col-sm-2 control-label">只读用户口令<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="readpwd" name="readpwd" placeholder="read only password" type="password" class="form-control"  >
+                                </div>
+                            </div>                
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="cpu" class="col-sm-2 control-label">Cpu</label>
+                                <div class="col-sm-8">
+                                    <select name="cpu" class="form-control">
+                                        <option value="1核" selected>2GB</option>
+                                        <option value="2核">2GB</option>
+                                        <option value="4核">4核</option>
+                                        <option value="8核">8核</option>
+                                        <option value="12核">12核</option>
+                                        <option value="16核">16核</option>
+                                        <option value="32核">32核</option>
+                                        <option value="64核">64核</option>
+                                        <option value="128核">128核</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="mem" class="col-sm-2 control-label">Mem</label>
+                                <div class="col-sm-8">
+                                    <select name="mem" class="form-control">
+                                        <option value="2GB" selected>2GB</option>
+                                        <option value="4GB">4GB</option>
+                                        <option value="6GB">6GB</option>
+                                        <option value="8GB">8GB</option>
+                                        <option value="12GB">12GB</option>
+                                        <option value="16GB">16GB</option>
+                                        <option value="24GB">24GB</option>
+                                        <option value="32GB">32GB</option>
+                                        <option value="48GB">48GB</option>
+                                        <option value="64GB">64GB</option>
+                                        <option value="128GB">128GB</option>
+                                        <option value="256GB">256GB</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="disk" class="col-sm-2 control-label">Disk</label>
+                                <div class="col-sm-8">
+                                    <select name="disk" class="form-control">
+                                        <option value="50GB" selected>50GB</option>
+                                        <option value="100GB">100GB</option>
+                                        <option value="200GB">200GB</option>
+                                        <option value="500GB">500GB</option>
+                                        <option value="1TB">1TB</option>
+                                        <option value="2TB">2TB</option>
+                                        <option value="3TB">3TB</option>
+                                        <option value="4TB">4TB</option>
+                                    </select>
+                                </div>
+                            </div>                         
+                            <div class="hr-line-dashed"></div>                               
+                            <div class="form-group">                            
+                                <label for="group" class="col-sm-2 control-label">业务组</label>
+                                <div class="col-sm-8">
+                                    <select name="group" class="form-control">
+                                        <option value="1" selected>---请选择业务组---</option>
+                                        {{range .Groups}}
+                                        <option value="{{.Name}}">{{.Name}}</option>
+                                        {{end}}
+                                    </select>
+                                </div>
+                            </div>                         
+                            <div class="hr-line-dashed"></div>                               
+                            <div class="form-group">                            
+                                <label for="idc" class="col-sm-2 control-label">所属机房</label>
+                                <div class="col-sm-8">
+                                    <select name="idc" class="form-control">
+                                        <option value="1" selected>---请选择机房---</option>
+                                        <option value="Ucloud">Ucloud</option>
+                                        <option value="网宿机房">网宿机房</option>
+                                        <option value="腾讯云">腾讯云</option>
+                                        <option value="阿里云">阿里云</option>
+                                        <option value="青云">青云</option>
+                                        <option value="AWS">AWS</option>
+                                        <option value="微软云">微软云</option>
+                                        <option value="百度云">百度云</option>
+                                        <option value="金山云">金山云</option>
+                                    </select>
+                                </div>
+                            </div>                                                     
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white" type="reset">重置</button>
+                                    <button id="submit_button" class="btn btn-primary" type="submit">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+$('#userForm').validator({
+    timely: 2,
+    theme: "yellow_right_effect",
+    fields: {
+        "name": {
+            rule: "required;length[1~100]",
+            tip: "输入主机名",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "ip": {
+            rule: "required;length[7~15]",
+            tip: "输入IP",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "rootpwd": {
+            rule: "required;length[6~50]",
+            tip: "输入root用户密码",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "readpwd": {
+            rule: "required;length[6~50]",
+            tip: "输入只读用户密码",
+            ok: "",
+            msg: {required: "必须填写!"}
+        }
+    },
+    valid: function(form) {
+        form.submit();
+    }
+});
+</script>
+{{template "page_buttom" .}}
+
+

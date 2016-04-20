@@ -1,0 +1,17 @@
+<<!DOCTYPE html>
+<html>
+<head>
+	<title>ss</title>
+</head>
+<body>
+{{with .Host}}
+<div>{{.Name}}</div>
+{{end}}
+{{range .Groups}}
+{{.Name}}
+{{end}}
+{{with .Host}}
+<div>{{.Ip}}</div>
+{{end}}
+</body>
+</html>

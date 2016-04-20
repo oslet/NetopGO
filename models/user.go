@@ -76,7 +76,7 @@ func AddUser(name, passwd, email, tel, auth, dept string) error {
 	return err
 }
 
-func MofifyUser(id, name, passwd, email, tel, auth, dept string) error {
+func ModifyUser(id, name, passwd, email, tel, auth, dept string) error {
 	o := orm.NewOrm()
 	uid, err := strconv.ParseInt(id, 10, 64)
 	authInt, err := strconv.ParseInt(auth, 10, 64)

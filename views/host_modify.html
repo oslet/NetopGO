@@ -1,0 +1,166 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<br>
+                    <div class="ibox-content">
+                        {{with .Host}}
+                        <form method="post" id="userForm" class="form-horizontal" action="/host/modify?id={{.Id}}">
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">主机名<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="name" name="name" placeholder="hostname" type="text" class="form-control" value="{{.Name}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="ip" class="col-sm-2 control-label">IP<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="ip" name="ip" placeholder="ip address" type="text" class="form-control" value="{{.Ip}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="rootpwd" class="col-sm-2 control-label">root用户口令<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="rootpwd" name="rootpwd" placeholder="root password" type="password" class="form-control" value="{{.Rootpwd}}">
+                                </div>
+                            </div>                                                        
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="readpwd" class="col-sm-2 control-label">只读用户口令<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="readpwd" name="readpwd" placeholder="read only password" type="password" class="form-control"  value="Readpwd">
+                                </div>
+                            </div>                
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="cpu" class="col-sm-2 control-label">Cpu</label>
+                                <div class="col-sm-8">
+                                    <select name="cpu" class="form-control">
+                                        <option value="1核" {{if eq .Cpu "1核"}}selected{{end}}>2GB</option>
+                                        <option value="2核" {{if eq .Cpu "2核"}}selected{{end}}>2核</option>
+                                        <option value="4核" {{if eq .Cpu "4核"}}selected{{end}}>4核</option>
+                                        <option value="8核" {{if eq .Cpu "8核"}}selected{{end}}>8核</option>
+                                        <option value="12核" {{if eq .Cpu "12核"}}selected{{end}}>12核</option>
+                                        <option value="16核" {{if eq .Cpu "16核"}}selected{{end}}>16核</option>
+                                        <option value="32核" {{if eq .Cpu "32核"}}selected{{end}}>32核</option>
+                                        <option value="64核" {{if eq .Cpu "64核"}}selected{{end}}>64核</option>
+                                        <option value="128核" {{if eq .Cpu "128核"}}selected{{end}}>128核</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="mem" class="col-sm-2 control-label">Mem</label>
+                                <div class="col-sm-8">
+                                    <select name="mem" class="form-control">
+                                        <option value="2GB" {{if eq .Mem "2GB"}}selected{{end}}>2GB</option>
+                                        <option value="4GB" {{if eq .Mem "4GB"}}selected{{end}}>4GB</option>
+                                        <option value="6GB" {{if eq .Mem "6GB"}}selected{{end}}>6GB</option>
+                                        <option value="8GB" {{if eq .Mem "8GB"}}selected{{end}}>8GB</option>
+                                        <option value="12GB" {{if eq .Mem "12GB"}}selected{{end}}>12GB</option>
+                                        <option value="16GB" {{if eq .Mem "16GB"}}selected{{end}}>16GB</option>
+                                        <option value="24GB" {{if eq .Mem "24GB"}}selected{{end}}>24GB</option>
+                                        <option value="32GB" {{if eq .Mem "32GB"}}selected{{end}}>32GB</option>
+                                        <option value="48GB" {{if eq .Mem "48GB"}}selected{{end}}>48GB</option>
+                                        <option value="64GB" {{if eq .Mem "64GB"}}selected{{end}}>64GB</option>
+                                        <option value="128GB" {{if eq .Mem "128GB"}}selected{{end}}>128GB</option>
+                                        <option value="256GB" {{if eq .Mem "256GB"}}selected{{end}}>256GB</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="disk" class="col-sm-2 control-label">Disk</label>
+                                <div class="col-sm-8">
+                                    <select name="disk" class="form-control">
+                                        <option value="50GB" {{if eq .Disk "50GB"}}selected{{end}}>50GB</option>
+                                        <option value="100GB" {{if eq .Disk "100GB"}}selected{{end}}>100GB</option>
+                                        <option value="200GB" {{if eq .Disk "200GB"}}selected{{end}}>200GB</option>
+                                        <option value="500GB" {{if eq .Disk "500GB"}}selected{{end}}>500GB</option>
+                                        <option value="1TB" {{if eq .Disk "1TB"}}selected{{end}}>1TB</option>
+                                        <option value="2TB" {{if eq .Disk "2TB"}}selected{{end}}>2TB</option>
+                                        <option value="3TB" {{if eq .Disk "3TB"}}selected{{end}}>3TB</option>
+                                        <option value="4TB" {{if eq .Disk "4TB"}}selected{{end}}>4TB</option>
+                                    </select>
+                                </div>
+                            </div>
+                            {{end}}                         
+                            <div class="hr-line-dashed"></div>                               
+                            <div class="form-group">                            
+                                <label for="group" class="col-sm-2 control-label">业务组</label>
+                                <div class="col-sm-8">
+                                {{$HostGroupName:= .HostGroupName}}
+                                    <select name="group" class="form-control">
+                                        {{range .Groups}}
+                                        <option value="{{.Name}}" {{if eq $HostGroupName .Name}}selected{{end}}>{{.Name}}</option>
+                                        {{end}}
+                                    </select>
+                                </div>
+                            </div>                     
+                            {{with .Host}}    
+                            <div class="hr-line-dashed"></div>                               
+                            <div class="form-group">                            
+                                <label for="idc" class="col-sm-2 control-label">所属机房</label>
+                                <div class="col-sm-8">
+                                    <select name="idc" class="form-control">
+                                        <option value="Ucloud" {{if eq .Idc "Ucloud"}}selected{{end}}>Ucloud</option>
+                                        <option value="网宿机房" {{if eq .Idc "网宿机房"}}selected{{end}}>网宿机房</option>
+                                        <option value="腾讯云" {{if eq .Idc "腾讯云"}}selected{{end}}>腾讯云</option>
+                                        <option value="阿里云" {{if eq .Idc "阿里云"}}selected{{end}}>阿里云</option>
+                                        <option value="青云" {{if eq .Idc "青云"}}selected{{end}}>青云</option>
+                                        <option value="AWS" {{if eq .Idc "AWS"}}selected{{end}}>AWS</option>
+                                        <option value="微软云" {{if eq .Idc "微软云"}}selected{{end}}>微软云</option>
+                                        <option value="百度云" {{if eq .Idc "百度云"}}selected{{end}}>百度云</option>
+                                        <option value="金山云" {{if eq .Idc "金山云"}}selected{{end}}>金山云</option>
+                                    </select>
+                                </div>
+                            </div>                                                     
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white" type="reset">重置</button>
+                                    <button id="submit_button" class="btn btn-primary" type="submit">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+$('#userForm').validator({
+    timely: 2,
+    theme: "yellow_right_effect",
+    fields: {
+        "name": {
+            rule: "required;length[1~100]",
+            tip: "输入主机名",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "ip": {
+            rule: "required;length[7~15]",
+            tip: "输入IP",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "rootpwd": {
+            rule: "required;length[6~50]",
+            tip: "输入root用户密码",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "readpwd": {
+            rule: "required;length[6~50]",
+            tip: "输入只读用户密码",
+            ok: "",
+            msg: {required: "必须填写!"}
+        }
+    },
+    valid: function(form) {
+        form.submit();
+    }
+});
+</script>
+{{template "page_buttom" .}}

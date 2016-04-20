@@ -53,5 +53,28 @@ func main() {
 		Tel:     "18202808939",
 	}
 	o.Insert(guest)
+
+	host := &models.Host{
+		Name:    "ucd-ty-ice-log-1",
+		Ip:      "192.168.2.17",
+		Cpu:     "4核",
+		Mem:     "8GB",
+		Disk:    "1TB",
+		Idc:     "Ucloud",
+		Rootpwd: passwd,
+		Readpwd: passwd,
+		Group:   "flume",
+		Created: time.Now(),
+	}
+	o.Insert(host)
+
+	group := &models.Group{
+		Name:    "flume",
+		Conment: "flume",
+		Created: time.Now(),
+	}
+	o.Insert(group)
+	// str := "nbs2010"
+	// beego.Info(models.Md5Encode([]byte(str)))
 	beego.Run()
 }

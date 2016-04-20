@@ -15,8 +15,11 @@
             <li id="host">
                 <a><i class="fa fa-inbox"></i> <span class="nav-label">主机管理</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li class="idc"> <a href="#">主机列表</a></li>
+                    <li class="idc"> <a href="/host/list">主机列表</a></li>
                 </ul>
+                <ul class="nav nav-second-level">
+                    <li class="idc"> <a href="/group/list">业务组列表</a></li>
+                </ul>                                
             </li>
             <li id="db">
                 <a href="#"><i class="fa fa-gears"></i> <span class="nav-label">DB管理</span><span class="fa arrow"></span></a>

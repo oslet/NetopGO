@@ -17,6 +17,8 @@ func (this *UserController) Get() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
+	this.Data["Category"] = "user"
+
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
 	} else {
@@ -46,6 +48,8 @@ func (this *UserController) Add() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
+	this.Data["Category"] = "user"
+
 	id := this.Input().Get("id")
 	if len(id) > 0 {
 		user, err := models.GetUserById(id)
@@ -71,6 +75,7 @@ func (this *UserController) Delete() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
+	this.Data["Category"] = "user"
 
 	id := this.Input().Get("id")
 	err := models.DeleteUser(id)
@@ -89,6 +94,7 @@ func (this *UserController) BitchDelete() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
+	this.Data["Category"] = "user"
 
 	ids := strings.Split(this.Input().Get("ids"), ",")
 	for _, id := range ids {
@@ -107,6 +113,7 @@ func (this *UserController) Post() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
+	this.Data["Category"] = "user"
 
 	id := this.Input().Get("id")
 	name := this.Input().Get("uname")
@@ -117,7 +124,7 @@ func (this *UserController) Post() {
 	dept := this.Input().Get("dept")
 	//beego.Info(id)
 	if len(id) > 0 {
-		err := models.MofifyUser(id, name, passwd, email, tel, auth, dept)
+		err := models.ModifyUser(id, name, passwd, email, tel, auth, dept)
 		if err != nil {
 			beego.Error(err)
 		}
@@ -140,6 +147,7 @@ func (this *UserController) Search() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
+	this.Data["Category"] = "user"
 
 	name := this.Input().Get("keyword")
 	beego.Info(name)
@@ -173,6 +181,7 @@ func (this *UserController) Detail() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
+	this.Data["Category"] = "user"
 
 	id := this.Input().Get("id")
 	user, err := models.GetUserById(id)
@@ -193,6 +202,7 @@ func (this *UserController) ResetPasswd() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
+	this.Data["Category"] = "user"
 
 	var flag int
 	id := this.Input().Get("id")

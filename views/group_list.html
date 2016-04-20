@@ -6,14 +6,14 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="">
-                        <a href="/user/add" class="btn btn-sm btn-primary "> 添加用户 </a>
+                        <a href="/group/add" class="btn btn-sm btn-primary "> 添加业务组 </a>
                         <a id="del_btn" class="btn btn-sm btn-danger "> 删除所选 </a>
                         {{if .IsSearch}}
-                        <a href="/user/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        <a href="/group/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}
-                        <form id="search_form" method="get" action="/user/search" class="pull-right mail-search">
+                        <form id="search_form" method="get" action="/group/search" class="pull-right mail-search">
                             <div class="input-group">
-                                <input type="text" class="form-control input-sm" id="search_input" name="keyword" placeholder="按用户名搜索...">
+                                <input type="text" class="form-control input-sm" id="search_input" name="keyword" placeholder="按业务组名称搜索...">
                                 <div class="input-group-btn">
                                     <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
                                         -搜索-
@@ -29,28 +29,24 @@
                                 <th class="text-center">
                                     <input type="checkbox" id="check_all" onclick="checkAll('check_all', 'checked')">
                                 </th>
-                                <th class="text-center">用户名</th>
-                                <th class="text-center">权限</th>
-                                <th class="text-center">所在部门</th>
-                                <th class="text-center">联系方式</th>
-                                <th class="text-center">邮箱地址</th>
+                                <th class="text-center">业务组名</th>
+                                <th class="text-center">备注</th>
+                                <th class="text-center">创建时间</th>                         
                                 <th class="text-center">操作</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{range .Users}}
+                            {{range .Groups}}
                             <tr class="gradeX">
                                 <td class="text-center">
                                     <input type="checkbox" name="checked" value="{{.Id}}">
                                 </td>
                                 <td class="text-center"><a href="#">{{.Name}}</a></td>
-                                <td class="text-center">{{if eq .Auth 1}} 超级管理员 {{else if eq .Auth 2}} 数据库管理员 {{else}} 来宾用户 {{end}}</td>
-                                <td class="text-center" title="c3">{{.Dept}}</td>
-                                <td class="text-center">{{.Tel}}</td>
-                                <th class="text-center">{{.Email}}</th>
+                                <td class="text-center">{{.Conment}}</td>
+                                <td class="text-center">{{.Created}}</td>
                                 <td class="text-center">
-                                    <a href="/user/add?id={{.Id}}" class="btn btn-xs btn-info">编辑</a>
-                                    <a href="/user/del?id={{.Id}}" class="btn btn-xs btn-danger" onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                    <a href="/group/add?id={{.Id}}" class="btn btn-xs btn-info">编辑</a>
+                                    <a href="/group/del?id={{.Id}}" class="btn btn-xs btn-danger" onclick="if(confirm('确定删除?')==false)return false;">删除</a>
                                 </td>
                             </tr>
                             {{end}}
@@ -81,12 +77,12 @@
                     check_array.push($(this).attr("value"))
                 });
                 console.log(check_array.join(","));
-                $.post("/user/bitchDel",
+                $.post("/group/bitchDel",
                         {ids: check_array.join(",")},
                         function(data){
                             //console.log(data);
                             //$(".gradeX input:checked").closest("tr").remove();                            
-                            window.location.href="/user/list"                            
+                            window.location.href="/group/list"                            
                             //alert(data);
                         }
                 )
