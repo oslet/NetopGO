@@ -18,10 +18,17 @@ func main() {
 
 	o := orm.NewOrm()
 	// psw := "nbs2010"
-	// encode := models.Base64Encode([]byte(psw))
-	// beego.Info(string(encode))
-	// decode, _ := models.Base64Decode(encode)
-	// beego.Info(string(decode))
+	// encode1 := models.Base64Encode([]byte(psw))
+	// beego.Info(string(encode1))
+	// // decode, _ := models.Base64Decode(encode)
+	// // beego.Info(string(decode))
+	// aesKey := beego.AppConfig.String("aesKey")
+	// beego.Info(aesKey)
+	// encode, _ := models.AESEncode(psw, aesKey)
+	// beego.Info(encode)
+	// decode, _ := models.AESDecode(encode, aesKey)
+	// beego.Info(decode)
+
 	passwd := string(models.Base64Encode([]byte("nbs2010")))
 	admin := &models.User{
 		Name:    "admin",
@@ -53,16 +60,16 @@ func main() {
 		Tel:     "18202808939",
 	}
 	o.Insert(guest)
-
+	encode, _ := models.AESEncode("upbjsxt", models.AesKey)
 	host := &models.Host{
-		Name:    "ucd-ty-ice-log-1",
-		Ip:      "192.168.2.17",
+		Name:    "localhost",
+		Ip:      "127.0.0.1",
 		Cpu:     "4核",
 		Mem:     "8GB",
 		Disk:    "1TB",
 		Idc:     "Ucloud",
-		Rootpwd: passwd,
-		Readpwd: passwd,
+		Rootpwd: encode,
+		Readpwd: encode,
 		Group:   "flume",
 		Created: time.Now(),
 	}

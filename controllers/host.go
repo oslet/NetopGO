@@ -204,3 +204,44 @@ func (this *HostController) Search() {
 	this.TplName = "host_list.html"
 	return
 }
+
+func (this *HostController) WebConsole() {
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "host"
+
+	id := this.Input().Get("id")
+	ip := this.Input().Get("ip")
+	user := this.Input().Get("user")
+
+	host, err := models.GetHostById(id)
+	if err != nil {
+		beego.Error(err)
+	}
+	vmAddr := ip + ":22"
+	var passwd string
+	if "root" == user {
+		passwd, _ = models.AESDecode(host.Rootpwd, models.AesKey)
+	} else {
+		passwd, _ = models.AESDecode(host.Readpwd, models.AesKey)
+	}
+
+	ssh_info := make([]string, 0, 0)
+	ssh_info = append(ssh_info, user)
+	ssh_info = append(ssh_info, passwd)
+	ssh_info = append(ssh_info, vmAddr)
+	beego.Info(user)
+	beego.Info(passwd)
+	beego.Info(vmAddr)
+
+	b64_ssh_info, err := models.AESEncode(strings.Join(ssh_info, "\n"), models.AesKey)
+	beego.Info(b64_ssh_info)
+	wsAddr := "ws://" + this.Ctx.Request.Host + "/console/sshws" + "?vm_info=" + b64_ssh_info
+	beego.Info(wsAddr)
+	this.Data["Uname"] = uname
+	this.Data["WsAddr"] = wsAddr
+	this.TplName = "console.html"
+	return
+}

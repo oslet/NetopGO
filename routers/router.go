@@ -2,7 +2,9 @@ package routers
 
 import (
 	"NetopGO/controllers"
+	"NetopGO/models"
 	"github.com/astaxie/beego"
+	"golang.org/x/net/websocket"
 )
 
 func init() {
@@ -36,4 +38,6 @@ func init() {
 	beego.Router("/host/del", &controllers.HostController{}, "get:Delete")
 	beego.Router("/host/bitchDel", &controllers.HostController{}, "post:BitchDelete")
 	beego.Router("/host/search", &controllers.HostController{}, "get:Search")
+	beego.Router("/host/webconsole", &controllers.HostController{}, "get:WebConsole")
+	beego.Handler("/console/sshws", websocket.Handler(models.SSHWebSocketHandler))
 }

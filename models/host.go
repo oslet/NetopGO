@@ -55,8 +55,8 @@ func GetHostById(id string) (*Host, error) {
 
 func AddHost(name, ip, rootpwd, readpwd, cpu, mem, disk, group, idc string) error {
 	o := orm.NewOrm()
-	rootpwd = Md5Encode([]byte(rootpwd))
-	readpwd = Md5Encode([]byte(readpwd))
+	rootpwd, _ = AESEncode(AesKey, rootpwd)
+	readpwd, _ = AESEncode(AesKey, readpwd)
 	host := &Host{
 		Name:    name,
 		Ip:      ip,
@@ -79,8 +79,8 @@ func AddHost(name, ip, rootpwd, readpwd, cpu, mem, disk, group, idc string) erro
 
 func ModifyHost(id, name, ip, rootpwd, readpwd, cpu, mem, disk, group, idc string) error {
 	o := orm.NewOrm()
-	rootpwd = Md5Encode([]byte(rootpwd))
-	readpwd = Md5Encode([]byte(readpwd))
+	rootpwd, _ = AESEncode(AesKey, rootpwd)
+	readpwd, _ = AESEncode(AesKey, readpwd)
 	hid, err := strconv.ParseInt(id, 10, 64)
 	host := &Host{
 		Id: hid,

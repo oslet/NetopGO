@@ -74,8 +74,8 @@
                                 <td class="text-center">{{.Idc}}</td>
                                 <th class="text-center">{{.Group}}</th>
                                 <td class="text-center">
-                                    <a href="#" class="btn btn-xs btn-warning">ROOT用户</a>
-                                    <a href="#" class="btn btn-xs btn btn-success">只读用户</a>
+                                    <a href="/host/webconsole?ip={{.Ip}}&id={{.Id}}&user=root" class="btn btn-xs btn-warning">ROOT用户</a>
+                                    <a href="/host/webconsole?ip={{.Ip}}&id={{.Id}}&user=guest" class="btn btn-xs btn btn-success">只读用户</a>
                                 </td>
                                 <td class="text-center">
                                     <a href="/host/add?id={{.Id}}" class="btn btn-xs btn-info">编辑</a>
