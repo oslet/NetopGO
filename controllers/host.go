@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"NetopGO/models"
+	"fmt"
 	"github.com/astaxie/beego"
 	"strconv"
 	"strings"
@@ -69,6 +70,9 @@ func (this *HostController) Add() {
 		if err != nil {
 			beego.Error(err)
 		}
+		host.Rootpwd, _ = models.AESDecode(host.Rootpwd, models.AesKey)
+		host.Readpwd, _ = models.AESDecode(host.Readpwd, models.AesKey)
+		fmt.Printf("***root :%v,read :%v\n", host.Rootpwd, host.Readpwd)
 		this.Data["Host"] = host
 		this.Data["HostGroupName"] = host.Group
 		this.Data["Path1"] = "主机列表"
@@ -96,6 +100,8 @@ func (this *HostController) Post() {
 	id := this.Input().Get("id")
 	name := this.Input().Get("name")
 	ip := this.Input().Get("ip")
+	root := this.Input().Get("root")
+	read := this.Input().Get("read")
 	rootpwd := this.Input().Get("rootpwd")
 	readpwd := this.Input().Get("readpwd")
 	cpu := this.Input().Get("cpu")
@@ -103,14 +109,15 @@ func (this *HostController) Post() {
 	disk := this.Input().Get("disk")
 	group := this.Input().Get("group")
 	idc := this.Input().Get("idc")
+	comment := this.Input().Get("comment")
 	beego.Info(idc)
 	if len(id) > 0 {
-		err := models.ModifyHost(id, name, ip, rootpwd, readpwd, cpu, mem, disk, group, idc)
+		err := models.ModifyHost(id, name, ip, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
 		if err != nil {
 			beego.Error(err)
 		}
 	} else {
-		err := models.AddHost(name, ip, rootpwd, readpwd, cpu, mem, disk, group, idc)
+		err := models.AddHost(name, ip, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
 		if err != nil {
 			beego.Error(err)
 		}
@@ -215,6 +222,7 @@ func (this *HostController) WebConsole() {
 	id := this.Input().Get("id")
 	ip := this.Input().Get("ip")
 	user := this.Input().Get("user")
+	account := this.Input().Get("role")
 
 	host, err := models.GetHostById(id)
 	if err != nil {
@@ -222,7 +230,7 @@ func (this *HostController) WebConsole() {
 	}
 	vmAddr := ip + ":22"
 	var passwd string
-	if "root" == user {
+	if "1" == account {
 		passwd, _ = models.AESDecode(host.Rootpwd, models.AesKey)
 	} else {
 		passwd, _ = models.AESDecode(host.Readpwd, models.AesKey)

@@ -40,4 +40,13 @@ func init() {
 	beego.Router("/host/search", &controllers.HostController{}, "get:Search")
 	beego.Router("/host/webconsole", &controllers.HostController{}, "get:WebConsole")
 	beego.Handler("/console/sshws", websocket.Handler(models.SSHWebSocketHandler))
+
+	beego.Router("/schema/list", &controllers.SchemaController{})
+	beego.Router("/schema/add", &controllers.SchemaController{}, "get:Add")
+	beego.Router("/schema/add", &controllers.SchemaController{}, "post:Post")
+	beego.Router("/schema/modify", &controllers.SchemaController{}, "post:Post")
+	beego.Router("/schema/del", &controllers.SchemaController{}, "get:Delete")
+	beego.Router("/schema/bitchDel", &controllers.SchemaController{}, "post:BitchDelete")
+	beego.Router("/schema/search", &controllers.SchemaController{}, "get:Search")
+
 }

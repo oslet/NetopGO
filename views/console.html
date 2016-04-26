@@ -26,16 +26,9 @@
     <div id="c-appbar" class="app-bar darcula" >
         <a href="javascript:void(0);" class="app-bar-element branding">NetopGO</a>
         <span class="app-bar-divider"></span>
-        <div class="app-bar-element place-right">
-            <span class="dropdown-toggle">
-                <i class="mif-cog"></i>
-            {{.Uname}}
-                </span>
-            <div class="app-bar-drop-container padding10 place-right no-margin-top block-shadow fg-dark" data-role="dropdown" data-no-close="true" style="width: 220px">
-                    <li><a href="/" class="fg-white3 fg-hover-yellow">退出</a></li>
-                </ul>
-            </div>
-        </div>
+        <ul class="app-bar-menu">
+            <li><a href="#">当前用户--{{.Uname}}</a></li>
+        </ul>
     </div>
     <div class="page-content">
         <div id="console_div">

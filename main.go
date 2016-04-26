@@ -68,13 +68,33 @@ func main() {
 		Mem:     "8GB",
 		Disk:    "1TB",
 		Idc:     "Ucloud",
+		Root:    "quenlang",
+		Read:    "quenlang",
 		Rootpwd: encode,
 		Readpwd: encode,
 		Group:   "flume",
 		Created: time.Now(),
 	}
 	o.Insert(host)
-
+	schemaPwd, _ := models.AESEncode("upbjsxt", models.AesKey)
+	schema1 := &models.Schema{
+		Name:    "lens_conf",
+		Comment: "lens_conf",
+		Created: time.Now(),
+		DBName:  "lens_conf",
+		User:    "lens",
+		Passwd:  schemaPwd,
+	}
+	o.Insert(schema1)
+	schema2 := &models.Schema{
+		Name:    "lens_server_data",
+		Comment: "lens_server_data",
+		Created: time.Now(),
+		DBName:  "lens_server_data",
+		User:    "lens",
+		Passwd:  schemaPwd,
+	}
+	o.Insert(schema2)
 	group := &models.Group{
 		Name:    "flume",
 		Conment: "flume",

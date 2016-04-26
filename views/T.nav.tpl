@@ -22,17 +22,18 @@
                 </ul>                                
             </li>
             <li id="db">
-                <a href="#"><i class="fa fa-gears"></i> <span class="nav-label">DB管理</span><span class="fa arrow"></span></a>
+                <a><i class="fa fa-gears"></i> <span class="nav-label">DB管理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">                
+                    <li class="rule"><a href="#">实例列表</a></li>
+                </ul>
                 <ul class="nav nav-second-level">
-                    <li class="rule">
-                        <a href="#">实例列表</a>
-                    </li>
-                    <li class="rule">
-                        <a href="#">查询窗口</a>
-                    </li>
-                    <li class="rule">
-                        <a href="#">分区监控</a>
-                    </li>
+                    <li class="rule"><a href="#">查询窗口</a></li>
+                </ul>
+                <ul class="nav nav-second-level">                
+                    <li class="rule"><a href="#">分区监控</a></li>
+                </ul>
+                <ul class="nav nav-second-level">                                
+                    <li class="rule"><a href="/schema/list">Schema列表</a></li>                    
                 </ul>
             </li>
             <li id="record">

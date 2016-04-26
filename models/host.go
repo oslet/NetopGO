@@ -14,9 +14,12 @@ type Host struct {
 	Mem     string `orm:size(50)`
 	Disk    string `orm:size(50)`
 	Idc     string `orm:size(50)`
+	Root    string `orm:size(10)`
 	Rootpwd string `orm:size(50)`
+	Read    string `orm:size(10)`
 	Readpwd string `orm:size(50)`
 	Group   string `orm:size(50)`
+	Comment string `orm:size(100)`
 	Created time.Time
 }
 
@@ -53,13 +56,15 @@ func GetHostById(id string) (*Host, error) {
 	return host, err
 }
 
-func AddHost(name, ip, rootpwd, readpwd, cpu, mem, disk, group, idc string) error {
+func AddHost(name, ip, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment string) error {
 	o := orm.NewOrm()
-	rootpwd, _ = AESEncode(AesKey, rootpwd)
-	readpwd, _ = AESEncode(AesKey, readpwd)
+	rootpwd, _ = AESEncode(rootpwd, AesKey)
+	readpwd, _ = AESEncode(readpwd, AesKey)
 	host := &Host{
 		Name:    name,
 		Ip:      ip,
+		Root:    root,
+		Read:    read,
 		Rootpwd: rootpwd,
 		Readpwd: readpwd,
 		Cpu:     cpu,
@@ -67,6 +72,7 @@ func AddHost(name, ip, rootpwd, readpwd, cpu, mem, disk, group, idc string) erro
 		Disk:    disk,
 		Group:   group,
 		Idc:     idc,
+		Comment: comment,
 		Created: time.Now(),
 	}
 	err := o.QueryTable("host").Filter("name", name).One(host)
@@ -77,10 +83,10 @@ func AddHost(name, ip, rootpwd, readpwd, cpu, mem, disk, group, idc string) erro
 	return err
 }
 
-func ModifyHost(id, name, ip, rootpwd, readpwd, cpu, mem, disk, group, idc string) error {
+func ModifyHost(id, name, ip, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment string) error {
 	o := orm.NewOrm()
-	rootpwd, _ = AESEncode(AesKey, rootpwd)
-	readpwd, _ = AESEncode(AesKey, readpwd)
+	rootpwd, _ = AESEncode(rootpwd, AesKey)
+	readpwd, _ = AESEncode(readpwd, AesKey)
 	hid, err := strconv.ParseInt(id, 10, 64)
 	host := &Host{
 		Id: hid,
@@ -89,6 +95,8 @@ func ModifyHost(id, name, ip, rootpwd, readpwd, cpu, mem, disk, group, idc strin
 	if err == nil {
 		host.Name = name
 		host.Ip = ip
+		host.Root = root
+		host.Read = read
 		host.Rootpwd = rootpwd
 		host.Readpwd = readpwd
 		host.Cpu = cpu
@@ -96,6 +104,7 @@ func ModifyHost(id, name, ip, rootpwd, readpwd, cpu, mem, disk, group, idc strin
 		host.Disk = disk
 		host.Group = group
 		host.Idc = idc
+		host.Comment = comment
 	}
 	o.Update(host)
 	return err
