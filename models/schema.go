@@ -8,6 +8,7 @@ import (
 
 type Schema struct {
 	Id      int64
+	Addr    string `orm:size(50)`
 	Name    string `orm:size(50)`
 	Comment string `orm:size(50)`
 	User    string `orm:size(50)`
@@ -48,7 +49,7 @@ func GetSchemaById(id string) (*Schema, error) {
 	return schema, err
 }
 
-func AddSchema(name, dbname, user, passwd, comment string) error {
+func AddSchema(name, dbname, user, passwd, comment, addr string) error {
 	o := orm.NewOrm()
 	passwd, _ = AESEncode(passwd, AesKey)
 	schema := &Schema{
@@ -57,6 +58,7 @@ func AddSchema(name, dbname, user, passwd, comment string) error {
 		DBName:  dbname,
 		Passwd:  passwd,
 		Comment: comment,
+		Addr:    addr,
 		Created: time.Now(),
 	}
 	err := o.QueryTable("schema").Filter("name", name).One(schema)
@@ -67,7 +69,7 @@ func AddSchema(name, dbname, user, passwd, comment string) error {
 	return err
 }
 
-func ModifySchema(id, name, dbname, user, passwd, comment string) error {
+func ModifySchema(id, name, dbname, user, passwd, comment, addr string) error {
 	o := orm.NewOrm()
 	sid, err := strconv.ParseInt(id, 10, 64)
 	passwd, _ = AESEncode(passwd, AesKey)
@@ -81,6 +83,7 @@ func ModifySchema(id, name, dbname, user, passwd, comment string) error {
 		schema.User = user
 		schema.Passwd = passwd
 		schema.Comment = comment
+		schema.Addr = addr
 	}
 	o.Update(schema)
 	return err

@@ -19,6 +19,13 @@
                             </div>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
+                                <label for="addr" class="col-sm-2 control-label">Addr<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="addr" name="addr" placeholder="" type="text" class="form-control" value="{{.Addr}}">
+                                </div>
+                            </div>                            
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
                                 <label for="user" class="col-sm-2 control-label">用户名<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
                                     <input id="user" name="user" placeholder="" type="text" class="form-control" value="{{.User}}">
@@ -76,6 +83,12 @@ $('#userForm').validator({
             ok: "",
             msg: {required: "必须填写!"}
         },
+        "addr": {
+            rule: "required;check_username",
+            tip: "输入addr",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },    
         "user": {
             rule: "required;check_username",
             tip: "输入用户名",

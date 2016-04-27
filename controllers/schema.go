@@ -87,13 +87,14 @@ func (this *SchemaController) Post() {
 	user := this.Input().Get("user")
 	passwd := this.Input().Get("passwd")
 	comment := this.Input().Get("comment")
+	addr := this.Input().Get("addr")
 	if len(id) > 0 {
-		err := models.ModifySchema(id, name, dbname, user, passwd, comment)
+		err := models.ModifySchema(id, name, dbname, user, passwd, comment, addr)
 		if err != nil {
 			beego.Error(err)
 		}
 	} else {
-		err := models.AddSchema(name, dbname, user, passwd, comment)
+		err := models.AddSchema(name, dbname, user, passwd, comment, addr)
 		if err != nil {
 			beego.Error(err)
 		}
