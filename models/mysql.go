@@ -29,9 +29,10 @@ func RegisterDB() {
 	db_passwd := beego.AppConfig.String("db_passwd")
 
 	jdbcUrl := db_user + ":" + db_passwd + "@tcp(" + db_host + ":" + db_port + ")/" + db_schema + "?charset=utf8"
-	beego.Info("connect mysql server:" + jdbcUrl)
+	beego.Info(fmt.Sprintf("connect to mysql server %v successfully !", db_host))
 	orm.RegisterDriver(_DB_Driver, orm.DRMySQL)
 	orm.RegisterDataBase("default", _DB_Driver, jdbcUrl, 30)
+
 }
 
 func Base64Encode(src []byte) []byte {

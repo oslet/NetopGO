@@ -1,0 +1,36 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="">
+                        <form id="search_form" method="get" action="/db/query">
+                            <div class="input-group pull-left" >
+                                <div class="form-group">                            
+                                    <select name="schema" class="form-control">
+                                        {{range .Schemas}}
+                                        <option value="{{.Name}}">{{.Name}}</option>
+                                        {{end}}
+                                    </select>
+                                </div>                                                             
+                                <div class="input-group-btn">
+                                    <button id='search_btn' type="submit" class="btn btn-success">
+                                        -执行-
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>                             
+                            <div>
+                                <input type="hidden" name="flag" value="result"></input>
+                                <textarea name="sql" class="form-control" rows="20">{{.Sqltext}}</textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{template "page_buttom"}}

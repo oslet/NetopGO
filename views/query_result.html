@@ -1,0 +1,42 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="">
+                        <a href="/db/query?sql={{.Sqltext}}" class="btn btn-sm btn-primary "> 返回窗口 </a>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                                Total {{.Total}} entries
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-bordered table-hover " id="editable" >
+                        <thead>
+                            <tr>
+                            {{range .Columns}}
+                                <th class="text-center">{{.}}</th>
+                            {{end}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{range $index,$value := .Values}}
+                            <tr class="gradeX">
+                                {{range $value}}
+                                <td class="text-center">{{.}}</td>
+                                {{end}}
+                            </tr>
+                            {{end}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{template "page_buttom"}}

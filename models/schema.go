@@ -9,6 +9,7 @@ import (
 type Schema struct {
 	Id      int64
 	Addr    string `orm:size(50)`
+	Port    string `orm:size(10)`
 	Name    string `orm:size(50)`
 	Comment string `orm:size(50)`
 	User    string `orm:size(50)`
@@ -49,7 +50,7 @@ func GetSchemaById(id string) (*Schema, error) {
 	return schema, err
 }
 
-func AddSchema(name, dbname, user, passwd, comment, addr string) error {
+func AddSchema(name, dbname, user, passwd, comment, addr, port string) error {
 	o := orm.NewOrm()
 	passwd, _ = AESEncode(passwd, AesKey)
 	schema := &Schema{
@@ -59,6 +60,7 @@ func AddSchema(name, dbname, user, passwd, comment, addr string) error {
 		Passwd:  passwd,
 		Comment: comment,
 		Addr:    addr,
+		Port:    port,
 		Created: time.Now(),
 	}
 	err := o.QueryTable("schema").Filter("name", name).One(schema)
@@ -69,7 +71,7 @@ func AddSchema(name, dbname, user, passwd, comment, addr string) error {
 	return err
 }
 
-func ModifySchema(id, name, dbname, user, passwd, comment, addr string) error {
+func ModifySchema(id, name, dbname, user, passwd, comment, addr, port string) error {
 	o := orm.NewOrm()
 	sid, err := strconv.ParseInt(id, 10, 64)
 	passwd, _ = AESEncode(passwd, AesKey)
@@ -84,6 +86,7 @@ func ModifySchema(id, name, dbname, user, passwd, comment, addr string) error {
 		schema.Passwd = passwd
 		schema.Comment = comment
 		schema.Addr = addr
+		schema.Port = port
 	}
 	o.Update(schema)
 	return err
@@ -116,12 +119,12 @@ func SearchSchemaByName(currPage, pageSize int, name string) ([]*Schema, error) 
 	return schemas, err
 }
 
-// func GetNames() ([]*Schema, error) {
-// 	o := orm.NewOrm()
-// 	schemas := make([]*Schema, 0)
-// 	_, err := o.QueryTable("group").All(&schemas)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return schemas, err
-// }
+func GetSchemaNames() ([]*Schema, error) {
+	o := orm.NewOrm()
+	schemas := make([]*Schema, 0)
+	_, err := o.QueryTable("schema").All(&schemas)
+	if err != nil {
+		return nil, err
+	}
+	return schemas, err
+}

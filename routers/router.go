@@ -49,4 +49,12 @@ func init() {
 	beego.Router("/schema/bitchDel", &controllers.SchemaController{}, "post:BitchDelete")
 	beego.Router("/schema/search", &controllers.SchemaController{}, "get:Search")
 
+	beego.Router("/db/list", &controllers.DBController{})
+	beego.Router("/db/add", &controllers.DBController{}, "get:Add")
+	beego.Router("/db/add", &controllers.DBController{}, "post:Post")
+	beego.Router("/db/modify", &controllers.DBController{}, "post:Post")
+	beego.Router("/db/del", &controllers.DBController{}, "get:Delete")
+	beego.Router("/db/bitchDel", &controllers.DBController{}, "post:BitchDelete")
+	beego.Router("/db/search", &controllers.DBController{}, "get:Search")
+	beego.Router("/db/query", &controllers.DBController{}, "get:Query")
 }
