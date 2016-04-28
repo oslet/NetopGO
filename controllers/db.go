@@ -193,7 +193,7 @@ func (this *DBController) Query() {
 		this.Data["Sqltext"] = sqltext
 		this.Data["Path1"] = "查询窗口"
 		this.Data["Path2"] = "查询结果"
-		this.Data["Href"] = "/db/query"
+		this.Data["Href"] = "/db/query?sql=" + sqltext
 		this.TplName = "query_result.html"
 		return
 	}
