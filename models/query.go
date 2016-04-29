@@ -2,14 +2,18 @@ package models
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"strings"
 )
 
-func Query(alias, sqltext string) (*map[int64][]string, []string, int64) {
-
+func Query(alias, sqltext string) (*map[int64][]string, []string, int64, error) {
+	result := make(map[int64][]string)
+	var total int64
+	var columns []string
 	o := orm.NewOrm()
 	schema := &Schema{}
 	o.QueryTable("schema").Filter("name", alias).All(schema)
@@ -20,36 +24,39 @@ func Query(alias, sqltext string) (*map[int64][]string, []string, int64) {
 
 	conn, err := sql.Open("mysql", schemaUrl)
 	if err != nil {
-		fmt.Println("mysql connect error")
-		return nil, nil, 0
+		return &result, columns, total, err
 	}
 
 	defer conn.Close()
-	rows, err := conn.Query(sqltext)
-	if err != nil {
-		fmt.Println("mysql query error", err.Error())
-	}
-	defer rows.Close()
-	columns, err := rows.Columns()
-
-	values := make([]sql.RawBytes, len(columns))
-	scans := make([]interface{}, len(columns))
-
-	for i := range values {
-		scans[i] = &values[i]
-	}
-
-	result := make(map[int64][]string)
-	var total int64
-	for rows.Next() {
-		var row []string
-		_ = rows.Scan(scans...)
-		for _, col := range values {
-			row = append(row, string(col))
+	sqlTrim := strings.Trim(sqltext, " ")
+	sqlPrefix := sqlTrim[:6]
+	if "select" == strings.ToLower(sqlPrefix) {
+		rows, err := conn.Query(sqlTrim)
+		beego.Info(sqltext)
+		if err != nil {
+			return &result, columns, total, err
 		}
-		total = total + 1
-		result[total] = row
+		defer rows.Close()
+		columns, err = rows.Columns()
+		values := make([]sql.RawBytes, len(columns))
+		scans := make([]interface{}, len(columns))
+
+		for i := range values {
+			scans[i] = &values[i]
+		}
+
+		for rows.Next() {
+			var row []string
+			_ = rows.Scan(scans...)
+			for _, col := range values {
+				row = append(row, string(col))
+			}
+			total = total + 1
+			result[total] = row
+		}
+		beego.Info(result)
+		return &result, columns, total, nil
+	} else {
+		return &result, columns, total, errors.New("没有执行权限，请联系DBAs！")
 	}
-	beego.Info(result)
-	return &result, columns, total
 }

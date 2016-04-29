@@ -181,16 +181,21 @@ func (this *DBController) Query() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "db"
-
+	var error int
 	schema := this.Input().Get("schema")
 	flag := this.Input().Get("flag")
 	sqltext := this.Input().Get("sql")
 	if "result" == flag {
-		values, columns, total := models.Query(schema, sqltext)
+		values, columns, total, msg := models.Query(schema, sqltext)
+		if msg != nil {
+			error = 1
+		}
 		this.Data["Values"] = values
 		this.Data["Columns"] = columns
 		this.Data["Total"] = total
 		this.Data["Sqltext"] = sqltext
+		this.Data["Error"] = error
+		this.Data["Msg"] = msg
 		this.Data["Path1"] = "查询窗口"
 		this.Data["Path2"] = "查询结果"
 		this.Data["Href"] = "/db/query?sql=" + sqltext
