@@ -31,8 +31,10 @@
                                 </th>
                                 <th class="text-center">Schema</th>
                                 <th class="text-center">备注</th>
+                                <th class="text-center">分区数</th>
                                 <th class="text-center">创建时间</th>                         
                                 <th class="text-center">操作</th>
+                                <th class="text-center">分区监控</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,10 +45,16 @@
                                 </td>
                                 <td class="text-center"><a href="#">{{.Name}}</a></td>
                                 <td class="text-center">{{.Comment}}</td>
+                                <td class="text-center">{{.Partition}}</td>
                                 <td class="text-center">{{.Created}}</td>
                                 <td class="text-center">
                                     <a href="/schema/add?id={{.Id}}" class="btn btn-xs btn-info">编辑</a>
                                     <a href="/schema/del?id={{.Id}}" class="btn btn-xs btn-danger" onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/schema/partition?schema={{.Name}}&flag=min&num={{.Partition}}" class="btn btn-xs btn-primary"{{if eq .Partition 0}}disabled="disabled"{{end}} target="_blank">分钟</a>
+                                    <a href="/schema/partition?schema={{.Name}}&flag=hour&num={{.Partition}}" class="btn btn-xs btn-success"{{if eq .Partition 0}}disabled="disabled"{{end}} target="_blank">小时</a>
+                                    <a href="/schema/partition?schema={{.Name}}&flag=day&num={{.Partition}}" class="btn btn-xs btn-warning"{{if eq .Partition 0}}disabled="disabled"{{end}} target="_blank">天</a>
                                 </td>
                             </tr>
                             {{end}}

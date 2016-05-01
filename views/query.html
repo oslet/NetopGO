@@ -5,13 +5,17 @@
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
-                    <div class="">
-                        <form id="search_form" method="get" action="/db/query">
+                    {{if eq .Error 1}} 
+                        <div class="alert alert-warning text-center">{{.Msg}}</div>
+                    {{end}}
+                    <div>
+                        {{$schema := .Schema}}
+                        <form id="search_form" method="get" target="_parent" action="/db/query">
                             <div class="input-group pull-left" >
                                 <div class="form-group">                            
                                     <select name="schema" class="form-control">
                                         {{range .Schemas}}
-                                        <option value="{{.Name}}">{{.Name}}</option>
+                                        <option value="{{.Name}}"{{if eq $schema .Name}}selected{{end}}>{{.Name}}</option>
                                         {{end}}
                                     </select>
                                 </div>                                                             
@@ -20,11 +24,10 @@
                                         -执行-
                                     </button>
                                 </div>
-                            </div>
-                            <div class="hr-line-dashed"></div>                             
+                            </div>                       
                             <div>
                                 <input type="hidden" name="flag" value="result"></input>
-                                <textarea name="sql" class="form-control" rows="20">{{.Sqltext}}</textarea>
+                                <textarea name="sql" class="form-control" rows="15">{{.Sqltext}}</textarea>
                             </div>
                         </form>
                     </div>

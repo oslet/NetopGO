@@ -47,7 +47,7 @@ func init() {
 	beego.Router("/schema/modify", &controllers.SchemaController{}, "post:Post")
 	beego.Router("/schema/del", &controllers.SchemaController{}, "get:Delete")
 	beego.Router("/schema/bitchDel", &controllers.SchemaController{}, "post:BitchDelete")
-	beego.Router("/schema/search", &controllers.SchemaController{}, "get:Search")
+	beego.Router("/schema/partition", &controllers.SchemaController{}, "get:Partition")
 
 	beego.Router("/db/list", &controllers.DBController{})
 	beego.Router("/db/add", &controllers.DBController{}, "get:Add")

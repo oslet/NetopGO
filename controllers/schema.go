@@ -89,13 +89,14 @@ func (this *SchemaController) Post() {
 	comment := this.Input().Get("comment")
 	addr := this.Input().Get("addr")
 	port := this.Input().Get("port")
+	partition := this.Input().Get("partition")
 	if len(id) > 0 {
-		err := models.ModifySchema(id, name, dbname, user, passwd, comment, addr, port)
+		err := models.ModifySchema(id, name, dbname, partition, user, passwd, comment, addr, port)
 		if err != nil {
 			beego.Error(err)
 		}
 	} else {
-		err := models.AddSchema(name, dbname, user, passwd, comment, addr, port)
+		err := models.AddSchema(name, dbname, partition, user, passwd, comment, addr, port)
 		if err != nil {
 			beego.Error(err)
 		}
@@ -176,5 +177,27 @@ func (this *SchemaController) Search() {
 	this.Data["Path2"] = "搜索结果"
 	this.Data["Href"] = "/schema/list"
 	this.TplName = "schema_list.html"
+	return
+}
+
+func (this *SchemaController) Partition() {
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "schema"
+
+	schmea := this.Input().Get("schema")
+	flag := this.Input().Get("flag")
+	total, _ := strconv.ParseInt(this.Input().Get("num"), 10, 64)
+
+	parts, num, err := models.GetPartDetail(flag, schmea)
+	if err != nil {
+		beego.Error(err)
+	}
+	this.Data["Partitions"] = parts
+	this.Data["Num"] = num
+	this.Data["Total"] = total
+	this.TplName = "part_detail.html"
 	return
 }

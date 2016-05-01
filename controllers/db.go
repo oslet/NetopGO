@@ -181,6 +181,11 @@ func (this *DBController) Query() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "db"
+	schemas, err := models.GetSchemaNames()
+	if err != nil {
+		beego.Error(err)
+	}
+
 	var error int
 	schema := this.Input().Get("schema")
 	flag := this.Input().Get("flag")
@@ -189,24 +194,32 @@ func (this *DBController) Query() {
 		values, columns, total, msg := models.Query(schema, sqltext)
 		if msg != nil {
 			error = 1
+			this.Data["Schema"] = schema
+			this.Data["Sqltext"] = sqltext
+			this.Data["Error"] = error
+			this.Data["Msg"] = msg
+			this.Data["Schemas"] = schemas
+			this.Data["Path1"] = "查询窗口"
+			this.Data["Path2"] = ""
+			this.Data["Href"] = "/db/query"
+			this.TplName = "query.html"
+			return
 		}
+		this.Data["Schema"] = schema
 		this.Data["Values"] = values
 		this.Data["Columns"] = columns
 		this.Data["Total"] = total
 		this.Data["Sqltext"] = sqltext
-		this.Data["Error"] = error
-		this.Data["Msg"] = msg
-		this.Data["Path1"] = "查询窗口"
-		this.Data["Path2"] = "查询结果"
-		this.Data["Href"] = "/db/query?sql=" + sqltext
 		this.TplName = "query_result.html"
 		return
 	}
-
-	schemas, err := models.GetSchemaNames()
-	if err != nil {
-		beego.Error(err)
+	if len(schema) == 0 {
+		this.Data["Schema"] = ""
+	} else {
+		this.Data["Schema"] = schema
 	}
+
+	this.Data["Error"] = -1
 	this.Data["Sqltext"] = sqltext
 	this.Data["Schemas"] = schemas
 	this.Data["Path1"] = "查询窗口"

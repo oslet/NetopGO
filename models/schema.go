@@ -1,21 +1,23 @@
 package models
 
 import (
+	//"fmt"
 	"github.com/astaxie/beego/orm"
 	"strconv"
 	"time"
 )
 
 type Schema struct {
-	Id      int64
-	Addr    string `orm:size(50)`
-	Port    string `orm:size(10)`
-	Name    string `orm:size(50)`
-	Comment string `orm:size(50)`
-	User    string `orm:size(50)`
-	Passwd  string `orm:size(50)`
-	DBName  string `orm:size(50)`
-	Created time.Time
+	Id        int64
+	Addr      string `orm:size(50)`
+	Port      string `orm:size(10)`
+	Name      string `orm:size(50)`
+	Comment   string `orm:size(50)`
+	User      string `orm:size(50)`
+	Passwd    string `orm:size(50)`
+	DBName    string `orm:size(50)`
+	Partition int64
+	Created   time.Time
 }
 
 func init() {
@@ -50,18 +52,20 @@ func GetSchemaById(id string) (*Schema, error) {
 	return schema, err
 }
 
-func AddSchema(name, dbname, user, passwd, comment, addr, port string) error {
+func AddSchema(name, dbname, partition, user, passwd, comment, addr, port string) error {
 	o := orm.NewOrm()
+	parNum, _ := strconv.ParseInt(partition, 10, 64)
 	passwd, _ = AESEncode(passwd, AesKey)
 	schema := &Schema{
-		Name:    name,
-		User:    user,
-		DBName:  dbname,
-		Passwd:  passwd,
-		Comment: comment,
-		Addr:    addr,
-		Port:    port,
-		Created: time.Now(),
+		Name:      name,
+		User:      user,
+		DBName:    dbname,
+		Passwd:    passwd,
+		Comment:   comment,
+		Addr:      addr,
+		Port:      port,
+		Partition: parNum,
+		Created:   time.Now(),
 	}
 	err := o.QueryTable("schema").Filter("name", name).One(schema)
 	if err == nil {
@@ -71,8 +75,9 @@ func AddSchema(name, dbname, user, passwd, comment, addr, port string) error {
 	return err
 }
 
-func ModifySchema(id, name, dbname, user, passwd, comment, addr, port string) error {
+func ModifySchema(id, name, dbname, partition, user, passwd, comment, addr, port string) error {
 	o := orm.NewOrm()
+	parNum, _ := strconv.ParseInt(partition, 10, 64)
 	sid, err := strconv.ParseInt(id, 10, 64)
 	passwd, _ = AESEncode(passwd, AesKey)
 	schema := &Schema{
@@ -87,6 +92,7 @@ func ModifySchema(id, name, dbname, user, passwd, comment, addr, port string) er
 		schema.Comment = comment
 		schema.Addr = addr
 		schema.Port = port
+		schema.Partition = parNum
 	}
 	o.Update(schema)
 	return err
@@ -127,4 +133,41 @@ func GetSchemaNames() ([]*Schema, error) {
 		return nil, err
 	}
 	return schemas, err
+}
+
+type Partition struct {
+	Instance  string
+	Timestamp string
+	Count     int64
+}
+
+func GetPartDetail(flag, schema string) ([]*Partition, int64, error) {
+	o := orm.NewOrm()
+	parts := make([]*Partition, 0)
+
+	var num int64
+	var err error
+	if "min" == flag {
+		yesterday := time.Now().AddDate(0, 0, -1).String()[:10]
+		num, err = o.Raw("SELECT instance, timestamp,count FROM partition WHERE `schema` = ? and `timestamp` > ? and `type` = ?", schema, yesterday, flag).QueryRows(&parts)
+	} else if "hour" == flag {
+		lastweek := time.Now().AddDate(0, 0, -7).String()[:10]
+		num, err = o.Raw("SELECT instance, timestamp,count FROM partition WHERE `schema` = ? and `timestamp` > ? and `type` = ?", schema, lastweek, flag).QueryRows(&parts)
+	} else {
+		var lastquarter string
+		year := time.Now().String()[:5]
+		month := time.Now().String()[6:7]
+		if month >= "1" && month < "4" {
+			lastquarter = year + "01-01"
+		} else if month >= "4" && month < "7" {
+			lastquarter = year + "04-01"
+		} else if month >= "7" && month < "10" {
+			lastquarter = year + "07-01"
+		} else if month >= "10" {
+			lastquarter = year + "10-01"
+		}
+		num, err = o.Raw("SELECT instance, timestamp,count FROM partition WHERE `schema` = ? and `timestamp` > ? and `type` = ?", schema, lastquarter, flag).QueryRows(&parts)
+	}
+
+	return parts, num, err
 }

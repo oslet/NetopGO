@@ -29,9 +29,6 @@
                 <ul class="nav nav-second-level">
                     <li class="rule"><a href="/db/query">查询窗口</a></li>
                 </ul>
-                <ul class="nav nav-second-level">                
-                    <li class="rule"><a href="#">分区监控</a></li>
-                </ul>
                 <ul class="nav nav-second-level">                                
                     <li class="rule"><a href="/schema/list">数据源列表</a></li>                    
                 </ul>
