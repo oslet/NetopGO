@@ -161,7 +161,7 @@ func QueryServer(alias, sqltext string) (*map[int64][]string, []string, int64, e
 		num, _ := res.RowsAffected()
 		isAffected = true
 		return &result, columns, total, nil, isAffected, num
-	} else if "create" == strings.ToLower(sqlAlter) {
+	} else if "create" == strings.ToLower(sqlPrefix) {
 		res, err := o.Raw(sqlTrim).Exec()
 		if err != nil {
 			return &result, columns, total, err, isAffected, 0
@@ -238,7 +238,7 @@ func QueryProxy(alias, sqltext string) (*map[int64][]string, []string, int64, er
 		return &result, columns, total, errors.New("后端是代理，为保证数据一致性，暂不支持DML、DDL操作！")
 	} else if "alter" == strings.ToLower(sqlAlter) {
 		return &result, columns, total, errors.New("后端是代理，为保证数据一致性，暂不支持DML、DDL操作！")
-	} else if "create" == strings.ToLower(sqlAlter) {
+	} else if "create" == strings.ToLower(sqlPrefix) {
 		return &result, columns, total, errors.New("后端是代理，为保证数据一致性，暂不支持DML、DDL操作！")
 	} else if "select" == strings.ToLower(sqlPrefix) {
 		rows, err := conn.Query(sqlTrim)
