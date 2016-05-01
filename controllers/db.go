@@ -4,6 +4,7 @@ import (
 	"NetopGO/models"
 	"github.com/astaxie/beego"
 	//"github.com/astaxie/beego/orm"
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -185,34 +186,105 @@ func (this *DBController) Query() {
 	if err != nil {
 		beego.Error(err)
 	}
-
 	var error int
 	schema := this.Input().Get("schema")
 	flag := this.Input().Get("flag")
 	sqltext := this.Input().Get("sql")
+	schemaIns, _ := models.GetSchemaByName(schema)
+	fmt.Printf("******schema type %v\n", schemaIns.Status)
+	// rolestr, ok := role.(string)
+	// var roleFinal string
+	// if ok {
+	// 	roleFinal = rolestr
+	// }
+	fmt.Printf("******role type %v\n", this.Input().Get("role"))
 	if "result" == flag {
-		values, columns, total, msg := models.Query(schema, sqltext)
-		if msg != nil {
-			error = 1
+
+		if "2" == this.Input().Get("role") && 1 == schemaIns.Status {
+			values, columns, total, msg, isAffected, num := models.QueryServer(schema, sqltext)
+			if msg != nil {
+				error = 1
+				this.Data["Schema"] = schema
+				this.Data["Sqltext"] = sqltext
+				this.Data["Error"] = error
+				this.Data["Msg"] = msg
+				this.Data["Schemas"] = schemas
+				this.Data["Path1"] = "查询窗口"
+				this.Data["Path2"] = ""
+				this.Data["Href"] = "/db/query"
+				this.TplName = "query.html"
+				return
+			}
+			if msg == nil && isAffected {
+				error = 0
+				this.Data["IsAffected"] = isAffected
+				this.Data["Schema"] = schema
+				this.Data["Sqltext"] = sqltext
+				this.Data["Error"] = error
+				this.Data["Msg"] = msg
+				this.Data["AffectRows"] = num
+				this.Data["Schemas"] = schemas
+				this.Data["Path1"] = "查询窗口"
+				this.Data["Path2"] = ""
+				this.Data["Href"] = "/db/query"
+				this.TplName = "query.html"
+				return
+			}
 			this.Data["Schema"] = schema
+			this.Data["Values"] = values
+			this.Data["Columns"] = columns
+			this.Data["Total"] = total
 			this.Data["Sqltext"] = sqltext
-			this.Data["Error"] = error
-			this.Data["Msg"] = msg
-			this.Data["Schemas"] = schemas
-			this.Data["Path1"] = "查询窗口"
-			this.Data["Path2"] = ""
-			this.Data["Href"] = "/db/query"
-			this.TplName = "query.html"
+			this.TplName = "query_result.html"
+			return
+		} else if "2" == this.Input().Get("role") && 2 == schemaIns.Status {
+			values, columns, total, msg := models.QueryProxy(schema, sqltext)
+			if msg != nil {
+				error = 1
+				this.Data["Schema"] = schema
+				this.Data["Sqltext"] = sqltext
+				this.Data["Error"] = error
+				this.Data["Msg"] = msg
+				this.Data["Schemas"] = schemas
+				this.Data["Path1"] = "查询窗口"
+				this.Data["Path2"] = ""
+				this.Data["Href"] = "/db/query"
+				this.TplName = "query.html"
+				return
+			}
+			this.Data["Schema"] = schema
+			this.Data["Values"] = values
+			this.Data["Columns"] = columns
+			this.Data["Total"] = total
+			this.Data["Sqltext"] = sqltext
+			this.TplName = "query_result.html"
+			return
+		} else {
+			values, columns, total, msg := models.Query(schema, sqltext)
+			if msg != nil {
+				error = 1
+				this.Data["Schema"] = schema
+				this.Data["Sqltext"] = sqltext
+				this.Data["Error"] = error
+				this.Data["Msg"] = msg
+				this.Data["Schemas"] = schemas
+				this.Data["Path1"] = "查询窗口"
+				this.Data["Path2"] = ""
+				this.Data["Href"] = "/db/query"
+				this.TplName = "query.html"
+				return
+			}
+			this.Data["Schema"] = schema
+			this.Data["Values"] = values
+			this.Data["Columns"] = columns
+			this.Data["Total"] = total
+			this.Data["Sqltext"] = sqltext
+			this.TplName = "query_result.html"
 			return
 		}
-		this.Data["Schema"] = schema
-		this.Data["Values"] = values
-		this.Data["Columns"] = columns
-		this.Data["Total"] = total
-		this.Data["Sqltext"] = sqltext
-		this.TplName = "query_result.html"
-		return
+
 	}
+
 	if len(schema) == 0 {
 		this.Data["Schema"] = ""
 	} else {

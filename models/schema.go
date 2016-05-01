@@ -17,6 +17,7 @@ type Schema struct {
 	Passwd    string `orm:size(50)`
 	DBName    string `orm:size(50)`
 	Partition int64
+	Status    int64
 	Created   time.Time
 }
 
@@ -52,9 +53,17 @@ func GetSchemaById(id string) (*Schema, error) {
 	return schema, err
 }
 
-func AddSchema(name, dbname, partition, user, passwd, comment, addr, port string) error {
+func GetSchemaByName(name string) (*Schema, error) {
+	o := orm.NewOrm()
+	schema := &Schema{}
+	err := o.QueryTable("schema").Filter("name", name).One(schema)
+	return schema, err
+}
+
+func AddSchema(name, dbname, partition, user, passwd, status, comment, addr, port string) error {
 	o := orm.NewOrm()
 	parNum, _ := strconv.ParseInt(partition, 10, 64)
+	statusInt, _ := strconv.ParseInt(status, 10, 64)
 	passwd, _ = AESEncode(passwd, AesKey)
 	schema := &Schema{
 		Name:      name,
@@ -65,6 +74,7 @@ func AddSchema(name, dbname, partition, user, passwd, comment, addr, port string
 		Addr:      addr,
 		Port:      port,
 		Partition: parNum,
+		Status:    statusInt,
 		Created:   time.Now(),
 	}
 	err := o.QueryTable("schema").Filter("name", name).One(schema)
@@ -75,9 +85,10 @@ func AddSchema(name, dbname, partition, user, passwd, comment, addr, port string
 	return err
 }
 
-func ModifySchema(id, name, dbname, partition, user, passwd, comment, addr, port string) error {
+func ModifySchema(id, name, dbname, partition, user, passwd, status, comment, addr, port string) error {
 	o := orm.NewOrm()
 	parNum, _ := strconv.ParseInt(partition, 10, 64)
+	statusInt, _ := strconv.ParseInt(status, 10, 64)
 	sid, err := strconv.ParseInt(id, 10, 64)
 	passwd, _ = AESEncode(passwd, AesKey)
 	schema := &Schema{
@@ -93,6 +104,7 @@ func ModifySchema(id, name, dbname, partition, user, passwd, comment, addr, port
 		schema.Addr = addr
 		schema.Port = port
 		schema.Partition = parNum
+		schema.Status = statusInt
 	}
 	o.Update(schema)
 	return err

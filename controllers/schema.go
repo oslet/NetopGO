@@ -90,13 +90,14 @@ func (this *SchemaController) Post() {
 	addr := this.Input().Get("addr")
 	port := this.Input().Get("port")
 	partition := this.Input().Get("partition")
+	status := this.Input().Get("status")
 	if len(id) > 0 {
-		err := models.ModifySchema(id, name, dbname, partition, user, passwd, comment, addr, port)
+		err := models.ModifySchema(id, name, dbname, partition, user, passwd, status, comment, addr, port)
 		if err != nil {
 			beego.Error(err)
 		}
 	} else {
-		err := models.AddSchema(name, dbname, partition, user, passwd, comment, addr, port)
+		err := models.AddSchema(name, dbname, partition, user, passwd, status, comment, addr, port)
 		if err != nil {
 			beego.Error(err)
 		}

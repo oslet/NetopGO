@@ -8,23 +8,28 @@
                     {{if eq .Error 1}} 
                         <div class="alert alert-warning text-center">{{.Msg}}</div>
                     {{end}}
+                    {{if .IsAffected}} 
+                        <div class="alert alert-success text-center">{{.AffectRows}} rows affected.</div>
+                    {{end}}
                     <div>
-                        {{$schema := .Schema}}
+                        {{$schema := .Schema}}           
                         <form id="search_form" method="get" target="_parent" action="/db/query">
+                        <input type="hidden" name="role" value="{{.Role}}"></input>
                             <div class="input-group pull-left" >
                                 <div class="form-group">                            
+                                    
                                     <select name="schema" class="form-control">
                                         {{range .Schemas}}
                                         <option value="{{.Name}}"{{if eq $schema .Name}}selected{{end}}>{{.Name}}</option>
                                         {{end}}
-                                    </select>
-                                </div>                                                             
+                                    </select>                                                                                    
+                                </div>            
                                 <div class="input-group-btn">
                                     <button id='search_btn' type="submit" class="btn btn-success">
                                         -执行-
                                     </button>
                                 </div>
-                            </div>                       
+                            </div>                 
                             <div>
                                 <input type="hidden" name="flag" value="result"></input>
                                 <textarea name="sql" class="form-control" rows="15">{{.Sqltext}}</textarea>
