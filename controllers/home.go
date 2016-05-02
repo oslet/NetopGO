@@ -1,7 +1,8 @@
 package controllers
 
 import (
-//"github.com/astaxie/beego"
+	"NetopGO/models"
+	"github.com/astaxie/beego"
 )
 
 type MainController struct {
@@ -13,5 +14,11 @@ func (this *MainController) Get() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
+	times, sizes, err := models.GetAllSize()
+	if err != nil {
+		beego.Error(err)
+	}
+	this.Data["TotalTimes"] = times
+	this.Data["TotalSizes"] = sizes
 	this.TplName = "index.html"
 }

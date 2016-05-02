@@ -8,8 +8,8 @@
                                 <h5>用户总数</h5>
                             </div>
                             <div class="ibox-content">
-                                <h1 class="no-margins"><a href="{% url 'user_list' %}">2</a></h1>
-                                <small>All user</small>
+                                <h1 class="no-margins"><a href="/user/list">2</a></h1>
+                                <small>All users</small>
                             </div>
                         </div>
                     </div>
@@ -20,8 +20,8 @@
                                 <h5>主机总数</h5>
                             </div>
                             <div class="ibox-content">
-                                <h1 class="no-margins"><a href="{% url 'asset_list' %}">3</a></h1>
-                                <small>All host</small>
+                                <h1 class="no-margins"><a href="/host/list">3</a></h1>
+                                <small>All hosts</small>
                             </div>
                         </div>
                     </div>
@@ -29,25 +29,25 @@
                     <div class="col-sm-3">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <span class="label label-primary pull-right">Online</span>
-                                <h5>在线用户</h5>
+                                <span class="label label-primary pull-right">MySQL</span>
+                                <h5>DB总数</h5>
                             </div>
                             <div class="ibox-content">
-                                <h1 class="no-margins"><a href="#"> <span id="online_users">10</span></a></h1>
-                                <div class="stat-percent font-bold text-navy">3 <i class="fa fa-level-up"></i></div>
-                                <small>Online user</small>
+                                <h1 class="no-margins"><a href="/db/list"> <span id="online_users">10</span></a></h1>
+                                <small>MySQL Nums</small>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <span class="label label-danger pull-right">Connected</span>
-                                <h5>已连接服务器</h5>
+                                <span class="label label-warning pull-right">Size</span>
+                                <h5>数据总量</h5>
                             </div>
                             <div class="ibox-content">
-                                    <h1 class="no-margins"><a href="#"><span id="aa">2</span></a></h1>
-                                <small>Connected host</small>
+                                <h1 class="no-margins"><a href="#"> <span id="online_users">10</span></a></h1>
+                                <div class="stat-percent font-bold text-navy">3 <i class="fa fa-level-up"></i></div>
+                                <small>Total Size</small>
                             </div>
                         </div>
                     </div>
@@ -56,46 +56,44 @@
                     <div class="col-sm-3">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <span class="label label-success pull-right">Users</span>
-                                <h5>用户总数</h5>
+                                <span class="label label-info pull-right">Iteration</span>
+                                <h5>应用本月变更次数</h5>
                             </div>
                             <div class="ibox-content">
-                                <h1 class="no-margins"><a href="{% url 'user_list' %}">2</a></h1>
-                                <small>All user</small>
+                                <h1 class="no-margins"><a href="#">2</a></h1>
+                                <small>All App</small>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <span class="label label-info pull-right">Hosts</span>
-                                <h5>主机总数</h5>
+                                <span class="label label-default pull-right">Upgrade</span>
+                                <h5>应用DB变更次数</h5>
                             </div>
                             <div class="ibox-content">
-                                <h1 class="no-margins"><a href="{% url 'asset_list' %}">3</a></h1>
-                                <small>All host</small>
+                                <h1 class="no-margins"><a href="#">3</a></h1>
+                                <small>All DB</small>
                             </div>
                         </div>
                     </div>
-
                     <div class="col-sm-3">
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
-                                <span class="label label-primary pull-right">Online</span>
-                                <h5>在线用户</h5>
+                                <span class="label label-danger pull-right">Applications</span>
+                                <h5>应用本月故障总数</h5>
                             </div>
                             <div class="ibox-content">
-                                <h1 class="no-margins"><a href="#"> <span id="online_users">10</span></a></h1>
-                                <div class="stat-percent font-bold text-navy">3 <i class="fa fa-level-up"></i></div>
-                                <small>Online user</small>
+                                    <h1 class="no-margins"><a href="#"><span id="aa">2</span></a></h1>
+                                <small>Connected host</small>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <span class="label label-danger pull-right">Connected</span>
-                                    <h5>已连接服务器</h5>
+                                    <span class="label label-danger pull-right">Mysqls</span>
+                                    <h5>DB本月故障总数</h5>
                                 </div>
                                 <div class="ibox-content">
                                         <h1 class="no-margins"><a href="#"><span id="aa">2</span></a></h1>
@@ -105,26 +103,41 @@
                     </div>
                 </div>                                              
                 <div class="row">
-                  <div class="col-sm-7 white-bg">
-                      <div class="box float-e-margins" id="top10" style="margin-left: auto;margin-right: auto;width:100%;height: 346px;padding: 15px 0 15px 0;"></div>
-                  </div>
+                    <div class="col-sm-2 border-bottom white-bg dashboard-header" style="margin-left:10px;height: 346px">
+                        <h3>本月应用变更详情</h3>
+                        <ul class="list-group clear-list m-t">
+                                <li class="list-group-item fist-item">
+                                    <span class="label random pull-right">2</span>
+                                    <span class="pull-left">
+                                        1次/周
+                                    </span>
+                                    
+                                </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-7 white-bg" id="top10" style="margin-left: -10px;height: 346px;padding: 0px 0px 0px 0px;"></div>
+                    <div class="col-sm-3 white-bg" id="top1" style="margin-left: -15px;height: 346px;padding: 14px 15px 15px 45px;">
+                         <h3>本月数据增量详情</h3>
+                         <ul class="list-group clear-list m-t">
+                                 <li class="list-group-item fist-item">
+                                     <span class="label color pull-right">2</span>
+                                     <span class="pull-left">
+                                         1次/周
+                                     </span>                                     
+                                 </li>
+                         </ul>
+                    </div>
                 </div>
             </div>
 
             <script src="/static/js/echarts/echarts.js"></script>
             <script>
-            $(document).ready(function(){
-                $('#show').click(function(){
-                    $('#show').css('display', 'none');
-                    $('#more').css('display', 'block');
-                })
-            });
 
             require.config({
                 paths: {
                     'echarts': '/static/js/echarts/chart',
                     'echarts/chart/line': '/static/js/echarts/chart/line',
-                    'echarts/chart/pie': '/static/js/echarts/chart/pie'
+                    //'echarts/chart/pie': '/static/js/echarts/chart/pie'
                 }
             });
             require(
@@ -136,32 +149,23 @@
                     var top10Chart = ec.init(document.getElementById('top10'));
                     var option = {
                         title : {
-                            text: '月数据总览',
-                            subtext: '一个月内历史汇总',
+                            text: '听云数据总量变化趋势/TB',
                             x: 'center'
                         },
                         tooltip : {
                             trigger: 'axis'
                         },
+                        dataZoom : {
+                            show : true,
+                            start : 20
+                        },
                         backgroundColor: '#fff',
-                        legend: {
-                            data:['登陆次数', '活跃用户','活跃资产'],
-                            y: 'bottom'
-                        },
-                        toolbox: {
-                            show : false,
-                            feature : {
-                                  mark : {show: true},
-                                  dataView : {show: true, readOnly: false},
-                                magicType : {show: true, type: ['line', 'bar']}
-                            }
-                        },
                         calculable : true,
                         xAxis : [
                             {
-                                type : 'category',
+                            type : 'category',
                             boundaryGap : false,
-                            data : 2
+                            data : {{.TotalTimes}}
                         }
                     ],
                     yAxis : [
@@ -171,25 +175,11 @@
                     ],
                     series : [
                         {
-                            name:'登陆次数',
+                            name:'数据量',
                             type:'line',
                             smooth:true,
                             itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: 2
-                        },
-                        {
-                            name:'活跃用户',
-                            type:'line',
-                            smooth:true,
-                            itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: 2
-                        },
-                        {
-                            name:'活跃资产',
-                            type:'line',
-                            smooth:true,
-                            itemStyle: {normal: {areaStyle: {type: 'default'}}},
-                            data: 2
+                            data: {{.TotalSizes}}
                         }
 
                     ]
