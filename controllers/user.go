@@ -25,13 +25,13 @@ func (this *UserController) Get() {
 		page = this.Input().Get("page")
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
-	pageSize := 2
+	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
 	total, err := models.GetUserCount()
-	users, _, err := models.GetUsers(int(currPage), pageSize)
+	users, _, err := models.GetUsers(int(currPage), int(pageSize))
 	if err != nil {
 		beego.Error(err)
 	}
-	res := models.Paginator(int(currPage), pageSize, total)
+	res := models.Paginator(int(currPage), int(pageSize), total)
 	this.Data["paginator"] = res
 	this.Data["Users"] = users
 	this.Data["totals"] = total
@@ -157,13 +157,13 @@ func (this *UserController) Search() {
 		page = this.Input().Get("page")
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
-	pageSize := 1
+	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
 	total, err := models.SearchUserCount(name)
-	users, err := models.SearchUserByName(int(currPage), pageSize, name)
+	users, err := models.SearchUserByName(int(currPage), int(pageSize), name)
 	if err != nil {
 		beego.Error(err)
 	}
-	res := models.Paginator(int(currPage), pageSize, total)
+	res := models.Paginator(int(currPage), int(pageSize), total)
 	this.Data["paginator"] = res
 	this.Data["Users"] = users
 	this.Data["totals"] = total

@@ -11,6 +11,7 @@ type Db struct {
 	Name    string `orm:size(50)`
 	Uuid    string `orm:size(50)`
 	Comment string `orm:size(100)`
+	Size    int64
 	Created time.Time
 }
 
@@ -46,13 +47,15 @@ func GetDBById(id string) (*Db, error) {
 	return db, err
 }
 
-func AddDB(name, uuid, comment string) error {
+func AddDB(name, uuid, comment, size string) error {
 	o := orm.NewOrm()
+	sizeInt, _ := strconv.ParseInt(size, 10, 64)
 	db := &Db{
 		Name:    name,
 		Uuid:    uuid,
 		Comment: comment,
 		Created: time.Now(),
+		Size:    sizeInt,
 	}
 	err := o.QueryTable("db").Filter("name", name).One(db)
 	if err == nil {
@@ -62,10 +65,11 @@ func AddDB(name, uuid, comment string) error {
 	return err
 }
 
-func ModifyDB(id, name, uuid, comment string) error {
+func ModifyDB(id, name, uuid, comment, size string) error {
 	o := orm.NewOrm()
 
 	did, err := strconv.ParseInt(id, 10, 64)
+	sizeInt, _ := strconv.ParseInt(size, 10, 64)
 	db := &Db{
 		Id: did,
 	}
@@ -74,6 +78,7 @@ func ModifyDB(id, name, uuid, comment string) error {
 		db.Name = name
 		db.Uuid = uuid
 		db.Comment = comment
+		db.Size = sizeInt
 	}
 	o.Update(db)
 	return err

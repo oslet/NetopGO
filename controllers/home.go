@@ -18,6 +18,14 @@ func (this *MainController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
+	userNums, err := models.GetUserCount()
+	hostNums, err := models.GetHostCount()
+	dbNums, err := models.GetDBCount()
+	nowSize, err := models.GetNowSize()
+	this.Data["NowSize"] = nowSize
+	this.Data["UserNums"] = userNums
+	this.Data["HostNums"] = hostNums
+	this.Data["DbNums"] = dbNums
 	this.Data["TotalTimes"] = times
 	this.Data["TotalSizes"] = sizes
 	this.TplName = "index.html"

@@ -8,7 +8,7 @@
                                 <h5>用户总数</h5>
                             </div>
                             <div class="ibox-content">
-                                <h1 class="no-margins"><a href="/user/list">2</a></h1>
+                                <h1 class="no-margins"><a href="/user/list">{{.UserNums}}</a></h1>
                                 <small>All users</small>
                             </div>
                         </div>
@@ -20,7 +20,7 @@
                                 <h5>主机总数</h5>
                             </div>
                             <div class="ibox-content">
-                                <h1 class="no-margins"><a href="/host/list">3</a></h1>
+                                <h1 class="no-margins"><a href="/host/list">{{.HostNums}}</a></h1>
                                 <small>All hosts</small>
                             </div>
                         </div>
@@ -33,7 +33,7 @@
                                 <h5>DB总数</h5>
                             </div>
                             <div class="ibox-content">
-                                <h1 class="no-margins"><a href="/db/list"> <span id="online_users">10</span></a></h1>
+                                <h1 class="no-margins"><a href="/db/list"> <span id="online_users">{{.DbNums}}</span></a></h1>
                                 <small>MySQL Nums</small>
                             </div>
                         </div>
@@ -45,8 +45,8 @@
                                 <h5>数据总量</h5>
                             </div>
                             <div class="ibox-content">
-                                <h1 class="no-margins"><a href="#"> <span id="online_users">10</span></a></h1>
-                                <div class="stat-percent font-bold text-navy">3 <i class="fa fa-level-up"></i></div>
+                                <h1 class="no-margins"><a href="#"> <span id="online_users">{{.NowSize}}</span></a></h1>
+                                <div class="stat-percent font-bold text-navy">TB<i class="fa fa-level-up"></i></div>
                                 <small>Total Size</small>
                             </div>
                         </div>

@@ -29,13 +29,13 @@ func (this *GroupController) Get() {
 		page = this.Input().Get("page")
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
-	pageSize := 2
+	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
 	total, err := models.GetGroupCount()
-	groups, _, err := models.GetGroups(int(currPage), pageSize)
+	groups, _, err := models.GetGroups(int(currPage), int(pageSize))
 	if err != nil {
 		beego.Error(err)
 	}
-	res := models.Paginator(int(currPage), pageSize, total)
+	res := models.Paginator(int(currPage), int(pageSize), total)
 
 	this.Data["paginator"] = res
 	this.Data["Groups"] = groups
@@ -153,13 +153,13 @@ func (this *GroupController) Search() {
 		page = this.Input().Get("page")
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
-	pageSize := 1
+	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
 	total, err := models.SearchGroupCount(name)
-	groups, err := models.SearchGroupByName(int(currPage), pageSize, name)
+	groups, err := models.SearchGroupByName(int(currPage), int(pageSize), name)
 	if err != nil {
 		beego.Error(err)
 	}
-	res := models.Paginator(int(currPage), pageSize, total)
+	res := models.Paginator(int(currPage), int(pageSize), total)
 	this.Data["paginator"] = res
 	this.Data["Groups"] = groups
 	this.Data["totals"] = total

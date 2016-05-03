@@ -1,0 +1,119 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<div class="wrapper">
+    <br>
+    <div class="row">
+        <div class="col-sm-7 white-bg" id="top10" style="margin-left: auto;margin-right: auto; height: 346px;padding: 0px 0px 0px 0px;"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-7 " id="top11" style="height: 346px;padding: 0px 0px 0px 0px;"></div>
+    </div>
+    <script src="/static/js/echarts/echarts.js"></script>
+    <script>
+        require.config({
+            paths: {
+                'echarts': '/static/js/echarts/chart',
+                'echarts/chart/line': '/static/js/echarts/chart/line'
+                //'echarts/chart/pie': '/static/js/echarts/chart/pie'
+            }
+        });
+        require(
+            [
+                'echarts',
+                'echarts/chart/line'
+            ],
+            function (ec) {
+                var top10Chart = ec.init(document.getElementById('top10'));
+                var option = {
+                    title : {
+                        text: '数据量/GB',
+                        x: 'center'
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    dataZoom : {
+                        show : true,
+                        start : 20
+                    },
+                    backgroundColor: '#fff',
+                    calculable : true,
+                    xAxis : [
+                        {
+                            type : 'category',
+                            boundaryGap : false,
+                            data : {{.TotalTimes}}
+                        }
+                    ],
+                    yAxis : [
+                        {
+                            type : 'value'
+                        }
+                    ],
+                    series : [
+                        {
+                            name:'数据量',
+                            type:'line',
+                            smooth:true,
+                            data: {{.TotalSizes}}
+                        }
+
+                    ]
+                };
+                top10Chart.setOption(option);
+            }
+        );
+        require.config({
+            paths: {
+                'echarts': '/static/js/echarts/chart',
+                'echarts/chart/line': '/static/js/echarts/chart/line'
+                //'echarts/chart/pie': '/static/js/echarts/chart/pie'
+            }
+        });
+        require(
+            [
+                'echarts',
+                'echarts/chart/line'
+            ],
+            function (ec) {
+                var top10Chart = ec.init(document.getElementById('top11'));
+                var option = {
+                    title : {
+                        text: 'QPS',
+                        x: 'center'
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    dataZoom : {
+                        show : true,
+                        start : 20
+                    },
+                    backgroundColor: '#fff',
+                    calculable : true,
+                    xAxis : [
+                        {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : {{.TotalTimes}}
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'数据量',
+                        type:'line',
+                        smooth:true,
+                        data: {{.TotalSizes}}
+                    }
+                ]
+            };
+            top10Chart.setOption(option);
+        }
+    );
+    </script>
+{{template "page_buttom"}}

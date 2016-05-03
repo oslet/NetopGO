@@ -31,13 +31,13 @@ func (this *DBController) Get() {
 		page = this.Input().Get("page")
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
-	pageSize := 2
+	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
 	total, err := models.GetDBCount()
-	dbs, _, err := models.GetDBs(int(currPage), pageSize)
+	dbs, _, err := models.GetDBs(int(currPage), int(pageSize))
 	if err != nil {
 		beego.Error(err)
 	}
-	res := models.Paginator(int(currPage), pageSize, total)
+	res := models.Paginator(int(currPage), int(pageSize), total)
 
 	this.Data["paginator"] = res
 	this.Data["DBs"] = dbs
@@ -87,13 +87,14 @@ func (this *DBController) Post() {
 	name := this.Input().Get("name")
 	uuid := this.Input().Get("uuid")
 	comment := this.Input().Get("comment")
+	size := this.Input().Get("size")
 	if len(id) > 0 {
-		err := models.ModifyDB(id, name, uuid, comment)
+		err := models.ModifyDB(id, name, uuid, comment, size)
 		if err != nil {
 			beego.Error(err)
 		}
 	} else {
-		err := models.AddDB(name, uuid, comment)
+		err := models.AddDB(name, uuid, comment, size)
 		if err != nil {
 			beego.Error(err)
 		}
@@ -157,13 +158,13 @@ func (this *DBController) Search() {
 		page = this.Input().Get("page")
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
-	pageSize := 1
+	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
 	total, err := models.SearchDBCount(name)
-	dbs, err := models.SearchDBByName(int(currPage), pageSize, name)
+	dbs, err := models.SearchDBByName(int(currPage), int(pageSize), name)
 	if err != nil {
 		beego.Error(err)
 	}
-	res := models.Paginator(int(currPage), pageSize, total)
+	res := models.Paginator(int(currPage), int(pageSize), total)
 	this.Data["paginator"] = res
 	this.Data["DBs"] = dbs
 	this.Data["totals"] = total
@@ -299,4 +300,18 @@ func (this *DBController) Query() {
 	this.Data["Href"] = "/db/query"
 	this.TplName = "query.html"
 	return
+}
+
+func (this *DBController) Detail() {
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	times, sizes, err := models.GetAllSize()
+	if err != nil {
+		beego.Error(err)
+	}
+	this.Data["TotalTimes"] = times
+	this.Data["TotalSizes"] = sizes
+	this.TplName = "db_detail.html"
 }

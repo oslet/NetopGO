@@ -36,13 +36,13 @@ func (this *HostController) Get() {
 		page = this.Input().Get("page")
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
-	pageSize := 2
+	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
 	total, err := models.GetHostCount()
-	hosts, _, err := models.GetHosts(int(currPage), pageSize)
+	hosts, _, err := models.GetHosts(int(currPage), int(pageSize))
 	if err != nil {
 		beego.Error(err)
 	}
-	res := models.Paginator(int(currPage), pageSize, total)
+	res := models.Paginator(int(currPage), int(pageSize), total)
 
 	this.Data["paginator"] = res
 	this.Data["Hosts"] = hosts
@@ -191,13 +191,13 @@ func (this *HostController) Search() {
 		page = this.Input().Get("page")
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
-	pageSize := 1
+	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
 	total, err := models.SearchHostCount(idc, group, name)
-	hosts, err := models.SearchHostByName(int(currPage), pageSize, idc, group, name)
+	hosts, err := models.SearchHostByName(int(currPage), int(pageSize), idc, group, name)
 	if err != nil {
 		beego.Error(err)
 	}
-	res := models.Paginator(int(currPage), pageSize, total)
+	res := models.Paginator(int(currPage), int(pageSize), total)
 	this.Data["paginator"] = res
 	this.Data["Hosts"] = hosts
 	this.Data["totals"] = total
