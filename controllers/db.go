@@ -313,5 +313,8 @@ func (this *DBController) Detail() {
 	}
 	this.Data["TotalTimes"] = times
 	this.Data["TotalSizes"] = sizes
+	this.Data["Path1"] = "DB列表"
+	this.Data["Path2"] = "图表展示"
+	this.Data["Href"] = "/db/list"
 	this.TplName = "db_detail.html"
 }
