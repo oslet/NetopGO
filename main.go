@@ -113,5 +113,6 @@ func main() {
 	// o.Insert(db)
 	// str := "nbs2010"
 	// beego.Info(models.Md5Encode([]byte(str)))
+
 	beego.Run()
 }

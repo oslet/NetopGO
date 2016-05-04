@@ -1,0 +1,78 @@
+<<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetopGO | 执行计划</title>
+    <link rel="shortcut icon" href="/static/img/facio.ico" type="image/x-icon">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="/static/css/plugins/iCheck/custom.css" rel="stylesheet">
+    <link href="/static/css/animate.css" rel="stylesheet">
+    <link href="/static/css/style.css" rel="stylesheet">
+    <link href="/static/css/colorbox.css" rel="stylesheet">
+    <link href="/static/css/vaildator/jquery.validator.css" rel="stylesheet">
+    <link href="/static/css/magnific/magnific-popup.css" rel="stylesheet">
+    <link href="/static/css/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">
+    <link href="/static/css/plugins/dropzone/basic.css" rel="stylesheet">
+    <link href="/static/css/plugins/dropzone/dropzone.css" rel="stylesheet">
+    <script src="/static/js/jquery-2.1.1.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/base.js"></script>
+
+    <script src="/static/js/jquery.colorbox.js"></script>
+    <script src="/static/js/validator/jquery.validator.js"></script>
+    <script src="/static/js/validator/zh_CN.js"></script>
+    <script src="/static/js/datapicker/bootstrap-datepicker.js"></script>
+</head>
+<body>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="alert alert-success text-left">explain {{.Sql}}</div>
+    <div class="row">
+        <div class="col-sm-12">
+            <span class="pull-right" style="font-size:18px;color:yellow;">Total <strong>{{.Total}}</strong> entries</span>
+            <a href="/db/slowlog?name={{.Name}}" class="btn btn-success pull-left"> 返回窗口 </a>
+
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                <div style="overflow:auto;height: 650px;width: 100%;background: #FFF">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-left">id</th>
+                                <th class="text-left">select_type</th>
+                                <th class="text-left">table</th>
+                                <th class="text-left">type</th>
+                                <th class="text-left">possible_keys</th>
+                                <th class="text-left">key</th>
+                                <th class="text-left">key_len</th>
+                                <th class="text-left">ref</th>                                
+                                <th class="text-left">rows</th>                                
+                                <th class="text-left">Extra</th>                                
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{range .Plain}}
+                            <tr>
+                                <td class="text-left" nowrap="true" >{{.Id}}</td>
+                                <td class="text-left" nowrap="true" >{{.SelectType}}</td>
+                                <td class="text-left" nowrap="true" >{{.Table}}</td>
+                                <td class="text-left" nowrap="true" >{{.Type}}</td>
+                                <td class="text-left" nowrap="true" >{{.PossibleKeys}}</td>
+                                <td class="text-left" nowrap="true" >{{.Key}}</td>
+                                <td class="text-left" nowrap="true" >{{.KeyLen}}</td>
+                                <td class="text-left" nowrap="true" >{{.Ref}}</td>
+                                <td class="text-left" nowrap="true" >{{.Rows}}</td>
+                                <td class="text-left" nowrap="true" >{{.Extra}}</td>
+                            </tr>
+                            {{end}}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

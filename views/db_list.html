@@ -31,7 +31,9 @@
                                 </th>
                                 <th class="text-center">DB名称</th>
                                 <th class="text-center">备注</th>
-                                <th class="text-center">UUID</th>                                
+                                <th class="text-center">UUID</th>
+                                <th class="text-center">容量</th>
+                                <th class="text-center">角色</th>                                
                                 <th class="text-center">操作</th>
                                 <th class="text-center">详细信息</th>                                
                             </tr>
@@ -45,13 +47,15 @@
                                 <td class="text-center"><a href="#">{{.Name}}</a></td>
                                 <td class="text-center">{{.Comment}}</td>
                                 <td class="text-center">{{.Uuid}}</td>
+                                <td class="text-center">{{.Size}}</td>
+                                <td class="text-center">{{.Role}}</td>
+                                <td class="text-center">
+                                    <a href="/db/detail?name={{.Name}}" class="btn btn-xs btn-warning">图表</a>
+                                    <a href="/db/slowlog?name={{.Name}}&role={{.Role}}" class="btn btn-xs btn-success">慢查询</a>
+                                </td>
                                 <td class="text-center">
                                     <a href="/db/add?id={{.Id}}" class="btn btn-xs btn-info">编辑</a>
                                     <a href="/db/del?id={{.Id}}" class="btn btn-xs btn-danger" onclick="if(confirm('确定删除?')==false)return false;">删除</a>
-                                </td>
-                                <td class="text-center">
-                                    <a href="/db/detail?id={{.Id}}" class="btn btn-xs btn-warning">图表</a>
-                                    <a href="/db/detail?id={{.Id}}" class="btn btn-xs btn-success">慢查询</a>
                                 </td>
                             </tr>
                             {{end}}

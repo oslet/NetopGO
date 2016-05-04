@@ -58,4 +58,6 @@ func init() {
 	beego.Router("/db/search", &controllers.DBController{}, "get:Search")
 	beego.Router("/db/query", &controllers.DBController{}, "get:Query")
 	beego.Router("/db/detail", &controllers.DBController{}, "get:Detail")
+	beego.Router("/db/slowlog", &controllers.DBController{}, "get:SlowLog")
+	beego.Router("/db/explain", &controllers.DBController{}, "get:Explain")
 }

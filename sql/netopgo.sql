@@ -51,8 +51,15 @@ CREATE TABLE `db` (
   `uuid` varchar(255) NOT NULL DEFAULT '',
   `comment` varchar(255) NOT NULL DEFAULT '',
   `created` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  `size` char(10) DEFAULT NULL,
+  `role` varchar(255) NOT NULL DEFAULT '',
+  `user` varchar(255) NOT NULL DEFAULT '',
+  `passwd` varchar(255) NOT NULL DEFAULT '',
+  `port` varchar(255) NOT NULL DEFAULT '',
+  `schema` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_uniq_name_uuid` (`name`,`uuid`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -61,7 +68,7 @@ CREATE TABLE `db` (
 
 LOCK TABLES `db` WRITE;
 /*!40000 ALTER TABLE `db` DISABLE KEYS */;
-INSERT INTO `db` VALUES (1,'dbmaster_conf','udb-rwsdk','lens_conf','2016-05-02 10:36:18'),(2,'dbslave1_conf','udc-skjdf9','lens_conf','2016-05-02 10:36:37');
+INSERT INTO `db` VALUES (1,'dbmaster_conf','udb-rwsdk','lens_conf','2016-05-04 04:36:18','500GB','从库','root','6NSYLCGVSQ==','3306','netopgo'),(2,'dbslave1_conf','udc-skjdf9','lens_conf','2016-05-03 14:36:37','500GB','从库','root','6NSYLCGVSQ==','',''),(5,'db0slave1_mobapp','udb-2030','app','2016-05-05 10:56:23','500GB','从库','root','6NSYLCGVSQ==','',''),(6,'db0master_mobapp','udb-sdjkj','app','2016-05-04 07:18:41','500GB','主库','root','6NSYLCGVSQ==','','');
 /*!40000 ALTER TABLE `db` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -128,6 +135,32 @@ INSERT INTO `host` VALUES (1,'localhost','127.0.0.1','4核','8GB','1TB','Ucloud'
 UNLOCK TABLES;
 
 --
+-- Table structure for table `inst_info`
+--
+
+DROP TABLE IF EXISTS `inst_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `inst_info` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` char(35) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `size` int(11) NOT NULL DEFAULT '500',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `inst_info`
+--
+
+LOCK TABLES `inst_info` WRITE;
+/*!40000 ALTER TABLE `inst_info` DISABLE KEYS */;
+INSERT INTO `inst_info` VALUES (1,'dbmaster_conf','2016-04-30 07:00:00',300),(2,'dbmaster_conf','2016-05-01 07:00:00',301),(3,'dbmaster_conf','2016-05-02 07:00:00',303);
+/*!40000 ALTER TABLE `inst_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `partition`
 --
 
@@ -151,6 +184,32 @@ LOCK TABLES `partition` WRITE;
 /*!40000 ALTER TABLE `partition` DISABLE KEYS */;
 INSERT INTO `partition` VALUES ('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min'),('lens_conf','db0master_conf','2016-04-30 21:56:28',84,'min'),('lens_conf','db1master_conf','2016-04-30 21:56:34',83,'min');
 /*!40000 ALTER TABLE `partition` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `qps_tps_overview`
+--
+
+DROP TABLE IF EXISTS `qps_tps_overview`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `qps_tps_overview` (
+  `name` char(50) DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `qps` float DEFAULT NULL,
+  `tps` float DEFAULT NULL,
+  KEY `idx_qps_tps_overview_0` (`name`,`timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `qps_tps_overview`
+--
+
+LOCK TABLES `qps_tps_overview` WRITE;
+/*!40000 ALTER TABLE `qps_tps_overview` DISABLE KEYS */;
+INSERT INTO `qps_tps_overview` VALUES ('dbmaster_conf','2016-05-01 07:00:00',134.4,123.4),('dbmaster_conf','2016-05-02 07:00:00',234.4,223.4),('dbmaster_conf','2016-05-03 07:00:00',204.4,203.4),('dbmaster_conf','2016-05-04 07:00:00',284.4,283.4);
+/*!40000 ALTER TABLE `qps_tps_overview` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -187,6 +246,58 @@ INSERT INTO `schema` VALUES (1,'192.168.2.83','3306','lens_conf','newlens','root
 UNLOCK TABLES;
 
 --
+-- Table structure for table `slow_overview`
+--
+
+DROP TABLE IF EXISTS `slow_overview`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `slow_overview` (
+  `name` char(50) DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `count` int(11) DEFAULT NULL,
+  KEY `idx_slow_overview_0` (`name`,`timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `slow_overview`
+--
+
+LOCK TABLES `slow_overview` WRITE;
+/*!40000 ALTER TABLE `slow_overview` DISABLE KEYS */;
+INSERT INTO `slow_overview` VALUES ('dbmaster_conf','2016-05-01 07:00:00',2),('dbmaster_conf','2016-05-02 07:00:00',20),('dbmaster_conf','2016-05-03 07:00:00',18),('dbmaster_conf','2016-05-04 07:00:00',11);
+/*!40000 ALTER TABLE `slow_overview` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sql_info`
+--
+
+DROP TABLE IF EXISTS `sql_info`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sql_info` (
+  `name` char(50) DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `query_time` float DEFAULT NULL,
+  `sql_text` mediumtext,
+  `uuid` char(40) DEFAULT NULL,
+  KEY `idx_sql_info_0` (`name`,`timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sql_info`
+--
+
+LOCK TABLES `sql_info` WRITE;
+/*!40000 ALTER TABLE `sql_info` DISABLE KEYS */;
+INSERT INTO `sql_info` VALUES ('dbmaster_conf','2015-05-05 07:00:00',3,'select * from user where id in (select id from user)','23784ueiwyr9233904890'),('dbmaster_conf','2015-05-05 07:00:00',2,'select * from user where id in (select id from user)','23784ueiwyr9233904890'),('dbmaster_conf','2015-05-05 07:00:00',6,'select * from user where id in (select id from user)','2378sad4ueiwyr9233904890');
+/*!40000 ALTER TABLE `sql_info` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `user`
 --
 
@@ -203,7 +314,7 @@ CREATE TABLE `user` (
   `auth` bigint(20) NOT NULL DEFAULT '0',
   `tel` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -225,4 +336,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-02  3:39:17
+-- Dump completed on 2016-05-04  7:00:17

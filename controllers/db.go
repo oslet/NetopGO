@@ -59,7 +59,8 @@ func (this *DBController) Add() {
 		if err != nil {
 			beego.Error(err)
 		}
-
+		db.Passwd, _ = models.AESDecode(db.Passwd, models.AesKey)
+		//beego.Info(db.Passwd)
 		this.Data["DB"] = db
 		this.Data["Path1"] = "DB列表"
 		this.Data["Path2"] = "修改DB"
@@ -88,13 +89,19 @@ func (this *DBController) Post() {
 	uuid := this.Input().Get("uuid")
 	comment := this.Input().Get("comment")
 	size := this.Input().Get("size")
+	roleType := this.Input().Get("role")
+	user := this.Input().Get("user")
+	password := this.Input().Get("password")
+	port := this.Input().Get("port")
+	schema := this.Input().Get("schema")
+	beego.Info(password)
 	if len(id) > 0 {
-		err := models.ModifyDB(id, name, uuid, comment, size)
+		err := models.ModifyDB(id, name, uuid, comment, size, roleType, user, password, port, schema)
 		if err != nil {
 			beego.Error(err)
 		}
 	} else {
-		err := models.AddDB(name, uuid, comment, size)
+		err := models.AddDB(name, uuid, comment, size, roleType, user, password, port, schema)
 		if err != nil {
 			beego.Error(err)
 		}
@@ -307,14 +314,78 @@ func (this *DBController) Detail() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	times, sizes, err := models.GetAllSize()
+	this.Data["Category"] = "db"
+	name := this.Input().Get("name")
+	time, size, total, err := models.GetSizeView(name)
+	slowTime, count, err := models.GetSlowView(name)
+	qpsTiem, qps, tps, err := models.GetQpsView(name)
 	if err != nil {
 		beego.Error(err)
 	}
-	this.Data["TotalTimes"] = times
-	this.Data["TotalSizes"] = sizes
+	this.Data["SizeTimes"] = time
+	this.Data["CurrSizes"] = size
+	this.Data["TotalSizes"] = total
+	this.Data["SlowTimes"] = slowTime
+	this.Data["SlowCounts"] = count
+	this.Data["QpsTimes"] = qpsTiem
+	this.Data["Qps"] = qps
+	this.Data["Tps"] = tps
 	this.Data["Path1"] = "DB列表"
 	this.Data["Path2"] = "图表展示"
 	this.Data["Href"] = "/db/list"
 	this.TplName = "db_detail.html"
+}
+
+func (this *DBController) SlowLog() {
+	var page string
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "db"
+	name := this.Input().Get("name")
+	roleType := this.Input().Get("role")
+
+	if len(this.Input().Get("page")) == 0 {
+		page = "1"
+	} else {
+		page = this.Input().Get("page")
+	}
+	currPage, _ := strconv.ParseInt(page, 10, 64)
+	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
+	total, err := models.GetSlowCount(name)
+	logs, err := models.GetSlowLogs(int(currPage), int(pageSize), name)
+	if err != nil {
+		beego.Error(err)
+	}
+	res := models.Paginator(int(currPage), int(pageSize), total)
+	this.Data["IsSlowLog"] = true
+	this.Data["RoleType"] = roleType
+	this.Data["paginator"] = res
+	this.Data["totals"] = total
+	this.Data["Logs"] = logs
+	this.Data["Path1"] = "DB列表"
+	this.Data["Path2"] = "慢查询列表"
+	this.Data["Href"] = "/db/list"
+	this.TplName = "db_slowlog.html"
+}
+
+func (this *DBController) Explain() {
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "db"
+	name := this.Input().Get("name")
+	sqltext := this.Input().Get("sql")
+
+	plain, total, err := models.SqlExplain(name, sqltext)
+	if err != nil {
+		beego.Error(err)
+	}
+	this.Data["Sql"] = sqltext
+	this.Data["Name"] = name
+	this.Data["Plain"] = plain
+	this.Data["Total"] = total
+	this.TplName = "explain.html"
 }

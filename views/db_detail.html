@@ -1,9 +1,11 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
-    <br>
-    <div class="col-sm-7 white-bg" id="top10" style="width: 100%; height: 346px;padding: 0px 0px 0px 0px;"></div>
-    <br>
-    <div class="col-sm-7 white-bg" id="top11" style="width: 100%;height: 346px;padding: 0px 0px 0px 0px;"></div>
+<br>    
+    <div class="col-sm-7 white-bg" id="top10" style="width: 100%; height: 320px;padding: 15px 0px 15px 0px;"></div>
+    <div>-</div>
+    <div class="col-sm-7 white-bg" id="top11" style="width: 100%;height: 320px;padding: 15px 0px 15px 0px;"></div>
+    <div>-</div>
+    <div class="col-sm-7 white-bg" id="top12" style="width: 100%;height: 320px;padding: 15px 0px 15px 0px;"></div>
     <script src="/static/js/echarts/echarts.js"></script>
     <script>
         require.config({
@@ -38,7 +40,7 @@
                         {
                             type : 'category',
                             boundaryGap : false,
-                            data : {{.TotalTimes}}
+                            data : {{.SizeTimes}}
                         }
                     ],
                     yAxis : [
@@ -48,12 +50,17 @@
                     ],
                     series : [
                         {
-                            name:'数据量',
+                            name:'当前数据量',
+                            type:'line',
+                            smooth:true,
+                            data: {{.CurrSizes}}
+                        },
+                        {
+                            name:'存储总容量',
                             type:'line',
                             smooth:true,
                             data: {{.TotalSizes}}
-                        }
-
+                        }    
                     ]
                 };
                 top10Chart.setOption(option);
@@ -75,7 +82,7 @@
                 var top10Chart = ec.init(document.getElementById('top11'));
                 var option = {
                     title : {
-                        text: 'QPS',
+                        text: 'QPS/TPS',
                         x: 'center'
                     },
                     tooltip : {
@@ -91,7 +98,7 @@
                         {
                         type : 'category',
                         boundaryGap : false,
-                        data : {{.TotalTimes}}
+                        data : {{.QpsTimes}}
                     }
                 ],
                 yAxis : [
@@ -101,15 +108,73 @@
                 ],
                 series : [
                     {
-                        name:'数据量',
+                        name:'Qps',
                         type:'line',
                         smooth:true,
-                        data: {{.TotalSizes}}
+                        data: {{.Qps}}
+                    },
+                    {
+                        name:'Tps',
+                        type:'line',
+                        smooth:true,
+                        data: {{.Tps}}
                     }
                 ]
             };
             top10Chart.setOption(option);
         }
-    );
+        );
+        require.config({
+            paths: {
+                'echarts': '/static/js/echarts/chart',
+                'echarts/chart/line': '/static/js/echarts/chart/line'
+                //'echarts/chart/pie': '/static/js/echarts/chart/pie'
+            }
+        });
+        require(
+            [
+                'echarts',
+                'echarts/chart/line'
+            ],
+            function (ec) {
+                var top10Chart = ec.init(document.getElementById('top12'));
+                var option = {
+                    title : {
+                        text: 'Slow Query',
+                        x: 'center'
+                    },
+                    tooltip : {
+                        trigger: 'axis'
+                    },
+                    dataZoom : {
+                        show : true,
+                        start : 20
+                    },
+                    backgroundColor: '#fff',
+                    calculable : true,
+                    xAxis : [
+                        {
+                        type : 'category',
+                        boundaryGap : false,
+                        data : {{.SlowTimes}}
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'慢查询数量',
+                        type:'line',
+                        smooth:true,
+                        data: {{.SlowCounts}}
+                    }
+                ]
+            };
+            top10Chart.setOption(option);
+        }
+        );
     </script>
 {{template "page_buttom"}}
