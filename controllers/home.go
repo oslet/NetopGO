@@ -19,9 +19,31 @@ func (this *MainController) Get() {
 		beego.Error(err)
 	}
 	userNums, err := models.GetUserCount()
+	if err != nil {
+		beego.Error(err)
+	}
 	hostNums, err := models.GetHostCount()
+	if err != nil {
+		beego.Error(err)
+	}
 	dbNums, err := models.GetDBCount()
+	if err != nil {
+		beego.Error(err)
+	}
 	nowSize, err := models.GetNowSize()
+	if err != nil {
+		beego.Error(err)
+	}
+	slows, err := models.GetSlowOverview()
+	if err != nil {
+		beego.Error(err)
+	}
+	sizeChange, err := models.GetSizeChange()
+	if err != nil {
+		beego.Error(err)
+	}
+	this.Data["SizeChange"] = sizeChange
+	this.Data["Slows"] = slows
 	this.Data["NowSize"] = nowSize
 	this.Data["UserNums"] = userNums
 	this.Data["HostNums"] = hostNums

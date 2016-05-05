@@ -69,7 +69,7 @@
                         <div class="ibox float-e-margins">
                             <div class="ibox-title">
                                 <span class="label label-default pull-right">Upgrade</span>
-                                <h5>应用DB变更次数</h5>
+                                <h5>DB本月变更次数</h5>
                             </div>
                             <div class="ibox-content">
                                 <h1 class="no-margins"><a href="#">3</a></h1>
@@ -103,28 +103,31 @@
                     </div>
                 </div>                                              
                 <div class="row">
-                    <div class="col-sm-2 border-bottom white-bg dashboard-header" style="margin-left:10px;height: 346px">
-                        <h3>本月应用变更详情</h3>
+                    <div class="col-sm-2 border-bottom white-bg dashboard-header" style="margin-left:15px;height: 346px">
+                        <h3>慢查询总数TOP10实例</h3>
                         <ul class="list-group clear-list m-t">
+                                {{range .Slows}}
                                 <li class="list-group-item fist-item">
-                                    <span class="label random pull-right">2</span>
+                                    <a href="/db/slowlog?name={{.Name}}"><span class="label label-success pull-right">{{.Count}}</span></a>
                                     <span class="pull-left">
-                                        1次/周
+                                        {{.Name}}
                                     </span>
-                                    
                                 </li>
+                                {{end}}
                         </ul>
                     </div>
-                    <div class="col-sm-7 white-bg" id="top10" style="margin-left: -10px;height: 346px;padding: 0px 0px 0px 0px;"></div>
-                    <div class="col-sm-3 white-bg" id="top1" style="margin-left: -15px;height: 346px;padding: 14px 15px 15px 45px;">
+                    <div class="col-sm-7 white-bg" id="top10" style="margin-left: -10px;height: 346px;padding: 0px 0px 10px 0px;"></div>
+                    <div class="col-sm-3 white-bg" id="top1" style="margin-left: -15px;height: 346px;padding: 20px 15px 15px 45px;">
                          <h3>本月数据增量详情</h3>
                          <ul class="list-group clear-list m-t">
+                                {{range .SizeChange}}
                                  <li class="list-group-item fist-item">
-                                     <span class="label color pull-right">2</span>
+                                     <span class="label label-info pull-right">{{.Size}}GB</span>
                                      <span class="pull-left">
-                                         1次/周
+                                         {{.Name}}
                                      </span>                                     
                                  </li>
+                                {{end}}
                          </ul>
                     </div>
                 </div>

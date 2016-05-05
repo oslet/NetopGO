@@ -190,7 +190,7 @@ func GetQpsView(name string) ([]string, []float64, []float64, error) {
 func GetSlowLogs(currPage, pageSize int, name string) ([]*SlowLog, error) {
 	o := orm.NewOrm()
 	slowLogs := make([]*SlowLog, 0)
-	_, err := o.Raw("select uuid,name,timestamp,sum(query_time)/count(1) as avg_time,count(1) as count,sql_text from sql_info group by name,timestamp,uuid order by avg_time desc,count desc limit ?,?;", (currPage-1)*pageSize, pageSize).QueryRows(&slowLogs)
+	_, err := o.Raw("select uuid,name,timestamp,sum(query_time)/count(1) as avg_time,count(1) as count,sql_text from sql_info where name=? group by name,timestamp,uuid order by timestamp desc, avg_time desc,count desc limit ?,?;", name, (currPage-1)*pageSize, pageSize).QueryRows(&slowLogs)
 
 	return slowLogs, err
 }
@@ -198,7 +198,7 @@ func GetSlowLogs(currPage, pageSize int, name string) ([]*SlowLog, error) {
 func GetSlowCount(name string) (int64, error) {
 	o := orm.NewOrm()
 	var num []int64
-	total, err := o.Raw("select count(1) from sql_info group by name,timestamp,uuid ;").QueryRows(&num)
+	total, err := o.Raw("select count(1) from sql_info where name=? group by name,timestamp,uuid ;", name).QueryRows(&num)
 
 	return total, err
 }
