@@ -9,13 +9,19 @@
                         <a href="/record/db/add" class="btn btn-sm btn-primary "> 添加记录 </a>
                         <a id="del_btn" class="btn btn-sm btn-danger "> 删除所选 </a>
                         {{if .IsSearch}}
-                        <a href="/schema/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        <a href="/record/db/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}
-                        <form id="search_form" method="get" action="/schema/search" class="pull-right mail-search">
+                        <form id="search_form" method="get" action="/record/db/search" class="form-inline pull-right">
                             <div class="input-group">
-                                <input type="text" class="form-control input-sm" id="search_input" name="keyword" placeholder="按记录名称搜索...">
+                                <div class="col-sm-8">
+                                    <select name="keyword" class="form-control">
+                                        {{range .List}}
+                                        <option value="{{.}}">{{.}}</option>
+                                        {{end}}
+                                    </select>
+                                </div>
                                 <div class="input-group-btn">
-                                    <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
+                                    <button id='search_btn' type="submit" class="btn btn-primary">
                                         -搜索-
                                     </button>
                                 </div>
@@ -29,32 +35,32 @@
                                 <th class="text-center">
                                     <input type="checkbox" id="check_all" onclick="checkAll('check_all', 'checked')">
                                 </th>
+                                <th class="text-center">时间</th>
                                 <th class="text-center">Schema</th>
-                                <th class="text-center">备注</th>
-                                <th class="text-center">分区数</th>
-                                <th class="text-center">创建时间</th>                         
+                                <th class="text-center">更新对象</th>
+                                <th class="text-center">操作类型</th>                         
+                                <th class="text-center">是否备份</th>
+                                <th class="text-center">操作人</th>
+                                <th class="text-center">操作说明</th>
                                 <th class="text-center">操作</th>
-                                <th class="text-center">分区监控</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{range .Schemas}}
+                            {{range .DBRecords}}
                             <tr class="gradeX">
                                 <td class="text-center">
                                     <input type="checkbox" name="checked" value="{{.Id}}">
                                 </td>
-                                <td class="text-center"><a href="#">{{.Name}}</a></td>
-                                <td class="text-center">{{.Comment}}</td>
-                                <td class="text-center">{{.Partition}}</td>
                                 <td class="text-center">{{.Created}}</td>
+                                <td class="text-center">{{.Schema}}</td>
+                                <td class="text-center">{{.Object}}</td>
+                                <td class="text-center">{{.Operation}}</td>
+                                <td class="text-center">{{.Isbackup}}</td>
+                                <td class="text-center">{{.Operater}}</td>
+                                <td class="text-center">{{.Comment}}</td>
                                 <td class="text-center">
-                                    <a href="/schema/partition?schema={{.Name}}&flag=min&num={{.Partition}}" class="btn btn-xs btn-primary"{{if eq .Partition 0}}disabled="disabled"{{end}} target="_blank">分钟</a>
-                                    <a href="/schema/partition?schema={{.Name}}&flag=hour&num={{.Partition}}" class="btn btn-xs btn-success"{{if eq .Partition 0}}disabled="disabled"{{end}} target="_blank">小时</a>
-                                    <a href="/schema/partition?schema={{.Name}}&flag=day&num={{.Partition}}" class="btn btn-xs btn-warning"{{if eq .Partition 0}}disabled="disabled"{{end}} target="_blank">天</a>
-                                </td>
-                                <td class="text-center">
-                                    <a href="/schema/add?id={{.Id}}" class="btn btn-xs btn-info">编辑</a>
-                                    <a href="/schema/del?id={{.Id}}" class="btn btn-xs btn-danger" onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                    <a href="/record/db/detail?id={{.Id}}" class="btn btn-xs btn-info">操作内容</a>
+                                    <a href="/record/db/del?id={{.Id}}" class="btn btn-xs btn-danger" onclick="if(confirm('确定删除?')==false)return false;">删除</a>
                                 </td>
                             </tr>
                             {{end}}
@@ -85,12 +91,12 @@
                     check_array.push($(this).attr("value"))
                 });
                 console.log(check_array.join(","));
-                $.post("/schema/bitchDel",
+                $.post("/record/db/bitchDel",
                         {ids: check_array.join(",")},
                         function(data){
                             //console.log(data);
                             //$(".gradeX input:checked").closest("tr").remove();                            
-                            window.location.href="/schema/list"                            
+                            window.location.href="/record/db/list"                            
                             //alert(data);
                         }
                 )

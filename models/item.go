@@ -61,3 +61,11 @@ func GetSizeChange() ([]*SizeChange, error) {
 	_, err := o.Raw("select  a.name,(b.size-a.size) as size from  (select `schema` name,sum(size)/2 size from inst_info where timestamp=? group by `schema`) a join  (select `schema` name,sum(size)/2 size from inst_info where timestamp=? group by `schema`) b on a.name=b.name order by size desc", firstDay, today).QueryRows(&sizeChange)
 	return sizeChange, err
 }
+
+func GetDBRecordMonth() (float64, error) {
+	var num float64
+	firstDay := time.Now().String()[:8] + "01 00:00:00"
+	o := orm.NewOrm()
+	err := o.Raw("select count(*) from dbrecord where created>=?", firstDay).QueryRow(&num)
+	return num, err
+}

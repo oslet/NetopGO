@@ -63,4 +63,19 @@ func init() {
 
 	beego.Router("/record/db/list", &controllers.RecordController{})
 	beego.Router("/record/db/add", &controllers.RecordController{}, "get:Add")
+	beego.Router("/record/db/add", &controllers.RecordController{}, "post:Post")
+	beego.Router("/record/db/del", &controllers.RecordController{}, "get:Delete")
+	beego.Router("/record/db/bitchDel", &controllers.RecordController{}, "post:BitchDelete")
+	beego.Router("/record/db/detail", &controllers.RecordController{}, "get:Post")
+	beego.Router("/record/db/search", &controllers.RecordController{}, "get:Search")
+
+	beego.Router("/record/app/list", &controllers.AppRecordController{})
+	beego.Router("/record/app/add", &controllers.AppRecordController{}, "get:Add")
+	beego.Router("/record/app/add", &controllers.AppRecordController{}, "post:Post")
+	beego.Router("/record/app/del", &controllers.AppRecordController{}, "get:Delete")
+	beego.Router("/record/app/bitchDel", &controllers.AppRecordController{}, "post:BitchDelete")
+	beego.Router("/record/app/detail", &controllers.AppRecordController{}, "get:Post")
+	beego.Router("/record/app/search", &controllers.AppRecordController{}, "get:Search")
+
+	beego.Router("/attachment/:all", &controllers.AttachController{})
 }

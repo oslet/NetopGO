@@ -1,0 +1,34 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<br>
+                    <div class="ibox-content">
+                        {{with .DBRecord}}
+                        <form method="post" id="userForm" class="form-horizontal" >
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="content" class="col-sm-2 control-label">操作内容</label>
+                                <div class="col-sm-8">
+                                    <textarea name="content" class="form-control" rows="6">{{.Content}}</textarea>
+                                </div>
+                            </div>                                                                                 
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="attachment" class="col-sm-2 control-label">附件</label>
+                                <div class="col-sm-8">
+                                    （<a target="_blank" href="/attachment/{{.Attachment}}">{{.Attachment}}</a>）
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <a href="/record/db/list" class="btn btn-white pull-center"> 返回列表 </a>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{template "page_buttom" .}}

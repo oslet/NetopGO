@@ -36,7 +36,7 @@
             <li id="record">
                 <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">记录管理</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li class="upload"><a href="#">系统升级</a></li>
+                    <li class="upload"><a href="/record/app/list">系统升级</a></li>
                     <li class="download"><a href="/record/db/list">DB升级</a></li>
                     <li class="download"><a href="#">故障记录</a></li>
                     <li class="download"><a href="#">知识库</a></li>

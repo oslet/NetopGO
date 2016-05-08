@@ -42,6 +42,11 @@ func (this *MainController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
+	dbRecordNums, err := models.GetDBRecordMonth()
+	if err != nil {
+		beego.Error(err)
+	}
+	this.Data["DBRecordNums"] = dbRecordNums
 	this.Data["SizeChange"] = sizeChange
 	this.Data["Slows"] = slows
 	this.Data["NowSize"] = nowSize
