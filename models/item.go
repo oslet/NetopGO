@@ -69,3 +69,11 @@ func GetDBRecordMonth() (float64, error) {
 	err := o.Raw("select count(*) from dbrecord where created>=?", firstDay).QueryRow(&num)
 	return num, err
 }
+
+func GetAppRecordMonth() (float64, error) {
+	var num float64
+	firstDay := time.Now().String()[:8] + "01 00:00:00"
+	o := orm.NewOrm()
+	err := o.Raw("select count(*) from apprecord where created>=?", firstDay).QueryRow(&num)
+	return num, err
+}
