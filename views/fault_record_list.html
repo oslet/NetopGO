@@ -1,0 +1,115 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="">
+                        <a href="/record/fault/add" class="btn btn-sm btn-primary "> 添加记录 </a>
+                        <a id="del_btn" class="btn btn-sm btn-danger "> 删除所选 </a>
+                        {{if .IsSearch}}
+                        <a href="/record/fault/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        {{else}}
+                        <form id="search_form" method="get" action="/record/fault/search" class="form-inline pull-right">
+                            <div class="input-group">
+                                <div class="col-sm-8">
+                                    <select name="keyword" class="form-control">
+                                        <option value="1">--请选择故障归类--</option>
+                                        <option value="应用">应用</option>
+                                        <option value="数据库">数据库</option>
+                                        <option value="网络">网络</option>
+                                    </select>
+                                </div>
+                                <div class="input-group-btn">
+                                    <button id='search_btn' type="submit" class="btn btn-primary">
+                                        -搜索-
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+                    <table class="table table-striped table-bordered table-hover " id="editable" >
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    <input type="checkbox" id="check_all" onclick="checkAll('check_all', 'checked')">
+                                </th>
+                                <th class="text-center">内部编号</th>
+                                <th class="text-center">发生时间</th>
+                                <th class="text-center">恢复时间</th>
+                                <th class="text-center">事件级别</th>
+                                <th class="text-center">所属系统</th>                         
+                                <th class="text-center">应用名称</th>
+                                <th class="text-center">故障归类</th>
+                                <th class="text-center">是否解决</th>
+                                <th class="text-center">操作人</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{range .FaultRecords}}
+                            <tr class="gradeX">
+                                <td class="text-center">
+                                    <input type="checkbox" name="checked" value="{{.Id}}">
+                                </td>
+                                <td class="text-center">{{.Name}}</td>
+                                <td class="text-center">{{.Starttime}}</td>
+                                <td class="text-center">{{.Endtime}}</td>
+                                <td class="text-center">{{.Level}}</td>
+                                <td class="text-center">{{.System}}</td>
+                                <td class="text-center">{{.Appname}}</td>
+                                <td class="text-center">{{.Category}}</td>
+                                <td class="text-center">{{.Issolute}}</td>
+                                <td class="text-center">{{.Operater}}</td>
+                                <td class="text-center">
+                                    <a href="/record/fault/detail?id={{.Id}}" class="btn btn-xs btn-info">详细内容</a>
+                                    <a href="/record/fault/del?id={{.Id}}" class="btn btn-xs btn-danger" onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                </td>
+                            </tr>
+                            {{end}}
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                                Total {{.totals}} entries
+                            </div>
+                        </div>
+                        {{template "paginator" .}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/jquery.shiftcheckbox.js"></script>
+<script>
+    $(document).ready(function(){
+
+        $('#del_btn').click(function(){
+            var check_array = [];
+            if (confirm("确定删除")) {
+                $(".gradeX input:checked").each(function() {
+                    check_array.push($(this).attr("value"))
+                });
+                console.log(check_array.join(","));
+                $.post("/record/fault/bitchDel",
+                        {ids: check_array.join(",")},
+                        function(data){
+                            //console.log(data);
+                            //$(".gradeX input:checked").closest("tr").remove();                            
+                            window.location.href="/record/fault/list"                            
+                            //alert(data);
+                        }
+                )
+            }
+
+        });
+
+    });
+
+</script>
+{{template "page_buttom"}}

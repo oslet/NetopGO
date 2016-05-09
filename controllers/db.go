@@ -61,6 +61,11 @@ func (this *DBController) Add() {
 		}
 		db.Passwd, _ = models.AESDecode(db.Passwd, models.AesKey)
 		//beego.Info(db.Passwd)
+		schemas, err := models.GetSchemaNames()
+		if err != nil {
+			beego.Error(err)
+		}
+		this.Data["Schemas"] = schemas
 		this.Data["DB"] = db
 		this.Data["Path1"] = "DB列表"
 		this.Data["Path2"] = "修改DB"
@@ -69,6 +74,11 @@ func (this *DBController) Add() {
 		//this.TplName = "test.html"
 		return
 	}
+	schemas, err := models.GetSchemaNames()
+	if err != nil {
+		beego.Error(err)
+	}
+	this.Data["Schemas"] = schemas
 	this.Data["Path1"] = "DB列表"
 	this.Data["Path2"] = "添加DB"
 	this.Data["Href"] = "/db/list"
@@ -205,11 +215,11 @@ func (this *DBController) Query() {
 	// if ok {
 	// 	roleFinal = rolestr
 	// }
+	operater := uname.(string)
 	fmt.Printf("******role type %v\n", this.Input().Get("role"))
 	if "result" == flag {
-
 		if "2" == this.Input().Get("role") && 1 == schemaIns.Status {
-			values, columns, total, msg, isAffected, num := models.QueryServer(schema, sqltext)
+			values, columns, total, msg, isAffected, num := models.QueryServer(schema, sqltext, operater)
 			if msg != nil {
 				error = 1
 				this.Data["Schema"] = schema
@@ -246,7 +256,7 @@ func (this *DBController) Query() {
 			this.TplName = "query_result.html"
 			return
 		} else if "2" == this.Input().Get("role") && 2 == schemaIns.Status {
-			values, columns, total, msg := models.QueryProxy(schema, sqltext)
+			values, columns, total, msg := models.QueryProxy(schema, sqltext, operater)
 			if msg != nil {
 				error = 1
 				this.Data["Schema"] = schema
@@ -268,7 +278,7 @@ func (this *DBController) Query() {
 			this.TplName = "query_result.html"
 			return
 		} else {
-			values, columns, total, msg := models.Query(schema, sqltext)
+			values, columns, total, msg := models.Query(schema, sqltext, operater)
 			if msg != nil {
 				error = 1
 				this.Data["Schema"] = schema

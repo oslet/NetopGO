@@ -2,6 +2,7 @@
 {{template "nav_cat_bar" .}}
 <br>
                     <div class="ibox-content">
+                        {{$Schemas := .Schemas}}
                         {{with .DB}}
                         <form method="post" id="userForm" class="form-horizontal" action="/db/modify?id={{.Id}}">
                             <div class="form-group">
@@ -75,7 +76,11 @@
                             <div class="form-group">
                                 <label for="schema" class="col-sm-2 control-label">Schema<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
-                                    <input id="schema" name="schema" placeholder="" type="text" class="form-control"  value="{{.Schema}}">
+                                    <select name="schema" class="form-control">
+                                        {{range $Schemas}}
+                                        <option value="{{.Name}}" {{if eq .Name .DB.Schema}}selected{{end}}>{{.Name}}</option>
+                                        {{end}}
+                                    </select>
                                 </div>
                             </div>         
                             <div class="hr-line-dashed"></div>

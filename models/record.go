@@ -32,8 +32,26 @@ type Apprecord struct {
 	Created   string `orm:size(19)`
 }
 
+type Faultrecord struct {
+	Id        int64
+	Name      string `orm:size(20)`
+	Starttime string `orm:size(19)`
+	Endtime   string `orm:size(19)`
+	Level     string `orm:size(20)`
+	System    string `orm:size(20)`
+	Appname   string `orm:size(50)`
+	Category  string `orm:size(20)`
+	Issolute  string `orm:size(10)`
+	Operater  string `orm:size(30)`
+	Desc      string `orm:size(1000)`
+	Solution  string `orm:size(1000)`
+	Effection string `orm:size(1000)`
+	Analysis  string `orm:size(1000)`
+	Nextstep  string `orm:size(1000)`
+}
+
 func init() {
-	orm.RegisterModel(new(Dbrecord), new(Apprecord))
+	orm.RegisterModel(new(Dbrecord), new(Apprecord), new(Faultrecord))
 }
 
 func GetDBRecordCount() (int64, error) {
@@ -178,4 +196,80 @@ func SearchAppRecByName(currPage, pageSize int, appname string) ([]*Apprecord, e
 	appRecs := make([]*Apprecord, 0)
 	_, err := o.QueryTable("apprecord").Filter("appname__icontains", appname).OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&appRecs)
 	return appRecs, err
+}
+
+func GetFaultRecordCount() (int64, error) {
+	o := orm.NewOrm()
+	faultRecs := make([]*Faultrecord, 0)
+	total, err := o.QueryTable("faultrecord").All(&faultRecs)
+	if err != nil {
+		return 0, err
+	}
+	return total, err
+}
+
+func GetFaultRecords(currPage, pageSize int) ([]*Faultrecord, int64, error) {
+	o := orm.NewOrm()
+	faultRecs := make([]*Faultrecord, 0)
+	total, err := o.QueryTable("faultrecord").OrderBy("-starttime").Limit(pageSize, (currPage-1)*pageSize).All(&faultRecs)
+	if err != nil {
+		return nil, 0, err
+	}
+	return faultRecs, total, err
+}
+
+func AddFaultRecord(name, level, system, appname, category, issolu, operater, starttime, endtime, solution, effection, analysis, nextstep string) error {
+	o := orm.NewOrm()
+	record := &Faultrecord{
+		Name:      name,
+		Level:     level,
+		System:    system,
+		Appname:   appname,
+		Category:  category,
+		Issolute:  issolu,
+		Operater:  operater,
+		Starttime: starttime,
+		Endtime:   endtime,
+		Solution:  solution,
+		Effection: effection,
+		Analysis:  analysis,
+		Nextstep:  nextstep,
+	}
+	_, err := o.Insert(record)
+	return err
+}
+
+func DeleteFaultRecord(id string) error {
+	o := orm.NewOrm()
+	aid, err := strconv.ParseInt(id, 10, 64)
+	faultRec := &Faultrecord{
+		Id: aid,
+	}
+	_, err = o.Delete(faultRec)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func FaultRecordDetail(id string) (*Faultrecord, error) {
+	o := orm.NewOrm()
+	fid, err := strconv.ParseInt(id, 10, 64)
+	faultRec := &Faultrecord{}
+	err = o.QueryTable("faultrecord").Filter("id", fid).One(faultRec)
+	return faultRec, err
+}
+
+func SearchFaultRecCount(cate string) (int64, error) {
+	o := orm.NewOrm()
+	faultRecs := make([]*Faultrecord, 0)
+	total, err := o.QueryTable("faultrecord").Filter("category__icontains", cate).All(&faultRecs)
+	return total, err
+}
+
+func SearchFaultRecByName(currPage, pageSize int, cate string) ([]*Faultrecord, error) {
+	o := orm.NewOrm()
+	faultRecs := make([]*Faultrecord, 0)
+	_, err := o.QueryTable("faultrecord").Filter("category__icontains", cate).OrderBy("-starttime").Limit(pageSize, (currPage-1)*pageSize).All(&faultRecs)
+	return faultRecs, err
 }

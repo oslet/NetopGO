@@ -1,0 +1,193 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<br>   发生时间 恢复时间
+                    <div class="ibox-content">
+                        <form method="post" id="userForm" class="form-horizontal" action="/record/fault/add">
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">内部编号<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="name" name="name" placeholder="" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="level" class="col-sm-2 control-label">事件级别<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <select name="level" class="form-control">
+                                        <option value="事件">事件</option>
+                                        <option value="一般故障">一般故障</option>
+                                        <option value="主要故障">主要故障</option>
+                                        <option value="严重故障">严重故障</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="system" class="col-sm-2 control-label">所属系统<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <select name="system" class="form-control">
+                                        <option value="app">app</option>
+                                        <option value="server">server</option>
+                                        <option value="browser">browser</option>
+                                        <option value="network">network</option>
+                                        <option value="saas">saas</option>
+                                        <option value="rpc">rpc</option>
+                                    </select>
+                                </div>
+                            </div>       
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="appname" class="col-sm-2 control-label">应用名称<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <select name="appname" class="form-control">
+                                        {{range .List}}
+                                        <option value="{{.}}">{{.}}</option>
+                                        {{end}}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="category" class="col-sm-2 control-label">故障归类<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <select name="category" class="form-control">
+                                        <option value="应用">应用</option>
+                                        <option value="数据库">数据库</option>
+                                        <option value="网络">网络</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="issolu" class="col-sm-2 control-label">是否解决<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <select name="issolu" class="form-control">
+                                        <option value="是">是</option>
+                                        <option value="否">否</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="operater" class="col-sm-2 control-label">操作人<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="operater" name="operater" placeholder="" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="starttime" class="col-md-2 control-label">发生时间</label>
+                                <div class="input-group date form_datetime col-md-7" data-date="2016-01-01 00:00" data-date-format="yyyy-mm-dd hh:ii" data-link-field="starttime">
+                                    <input class="form-control" size="16" type="text" name="starttime" id="starttime" readonly>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="endtime" class="col-md-2 control-label">恢复时间</label>
+                                <div class="input-group date form_datetime col-md-7" data-date="2016-01-01 00:00" data-date-format="yyyy-mm-dd hh:ii" data-link-field="endtime">
+                                    <input class="form-control" size="16" type="text" name="endtime" id="endtime" readonly>
+                                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="analysis" class="col-sm-2 control-label">原因分析</label>
+                                <div class="col-sm-8">
+                                    <textarea name="analysis" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="solution" class="col-sm-2 control-label">解决办法</label>
+                                <div class="col-sm-8">
+                                    <textarea name="solution" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="effection" class="col-sm-2 control-label">造成影响</label>
+                                <div class="col-sm-8">
+                                    <textarea name="effection" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="nextstep" class="col-sm-2 control-label">后续措施</label>
+                                <div class="col-sm-8">
+                                    <textarea name="nextstep" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white" type="reset">重置</button>
+                                    <button id="submit_button" class="btn btn-primary" type="submit">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+$('#userForm').validator({
+    timely: 2,
+    theme: "yellow_right_effect",
+    fields: {
+        "group": {
+            rule: "required;",
+            tip: "请选择业务类别",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "operation": {
+            rule: "required;",
+            tip: "请选择升级类型",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },    
+        "appname": {
+            rule: "required;",
+            tip: "请选择应用名称",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },            
+        "disthost": {
+            rule: "required;",
+            tip: "输入目标服务器",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },                       
+        "isauto": {
+            rule: "required;",
+            tip: "请选择是否一键升级",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },                       
+        "applicant": {
+            rule: "required;",
+            tip: "输入申请人",
+            ok: "",
+            msg: {required: "必须填写!"}
+        }
+    },
+    valid: function(form) {
+        form.submit();
+    }
+});
+$('.form_datetime').datetimepicker({
+    //language:  'fr',
+    weekStart: 1,
+    todayBtn:  1,
+    autoclose: 1,
+    todayHighlight: 1,
+    startView: 2,
+    forceParse: 0,
+    showMeridian: 1
+});
+</script>
+{{template "page_buttom" .}}

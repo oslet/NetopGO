@@ -1,0 +1,48 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<br>
+                    <div class="ibox-content">
+                        {{with .FaultRecord}}
+                        <form method="post" id="userForm" class="form-horizontal" >
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="content" class="col-sm-2 control-label">原因分析</label>
+                                <div class="col-sm-8">
+                                    <textarea name="content" class="form-control" rows="3">{{.Analysis}}</textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="content" class="col-sm-2 control-label">解决办法</label>
+                                <div class="col-sm-8">
+                                    <textarea name="content" class="form-control" rows="3">{{.Solution}}</textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="content" class="col-sm-2 control-label">造成影响</label>
+                                <div class="col-sm-8">
+                                    <textarea name="content" class="form-control" rows="3">{{.Effection}}</textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="content" class="col-sm-2 control-label">后续措施</label>
+                                <div class="col-sm-8">
+                                    <textarea name="content" class="form-control" rows="3">{{.Nextstep}}</textarea>
+                                </div>
+                            </div>                                                                                 
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <a href="/record/fault/list" class="btn btn-white pull-center"> 返回列表 </a>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{template "page_buttom" .}}

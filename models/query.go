@@ -10,7 +10,7 @@ import (
 	"strings"
 )
 
-func Query(alias, sqltext string) (*map[int64][]string, []string, int64, error) {
+func Query(alias, sqltext, operater string) (*map[int64][]string, []string, int64, error) {
 	result := make(map[int64][]string)
 	var total int64
 	var columns []string
@@ -37,18 +37,25 @@ func Query(alias, sqltext string) (*map[int64][]string, []string, int64, error) 
 	beego.Info(sqlTrim)
 
 	if "delete" == strings.ToLower(sqlPrefix) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("您没有delete权限，请联系DBAs！")
 	} else if "update" == strings.ToLower(sqlPrefix) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("您没有update权限，请联系DBAs！")
 	} else if "optimize" == strings.ToLower(sqlPrefix) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("您没有optimize权限，请联系DBAs！")
 	} else if "insert" == strings.ToLower(sqlPrefix) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("您没有insert权限，请联系DBAs！")
 	} else if "truncate" == strings.ToLower(sqlTrun) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("您没有truncate权限，请联系DBAs！")
 	} else if "drop" == strings.ToLower(sqlDrop) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("您没有drop权限，请联系DBAs！")
 	} else if "alter" == strings.ToLower(sqlAlter) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("您没有alter权限，请联系DBAs！")
 	} else {
 		rows, err := conn.Query(sqlTrim)
@@ -74,11 +81,14 @@ func Query(alias, sqltext string) (*map[int64][]string, []string, int64, error) 
 			result[total] = row
 		}
 		beego.Info(result)
+		if err == nil {
+			WriteAuditLog(alias, operater, sqlTrim, "成功")
+		}
 		return &result, columns, total, nil
 	}
 }
 
-func QueryServer(alias, sqltext string) (*map[int64][]string, []string, int64, error, bool, int64) {
+func QueryServer(alias, sqltext, operater string) (*map[int64][]string, []string, int64, error, bool, int64) {
 	result := make(map[int64][]string)
 	var total int64
 	var columns []string
@@ -112,6 +122,9 @@ func QueryServer(alias, sqltext string) (*map[int64][]string, []string, int64, e
 		}
 		num, _ := res.RowsAffected()
 		isAffected = true
+		if err == nil {
+			WriteAuditLog(alias, operater, sqlTrim, "成功")
+		}
 		return &result, columns, total, nil, isAffected, num
 	} else if "update" == strings.ToLower(sqlPrefix) {
 		res, err := o.Raw(sqlTrim).Exec()
@@ -120,6 +133,9 @@ func QueryServer(alias, sqltext string) (*map[int64][]string, []string, int64, e
 		}
 		num, _ := res.RowsAffected()
 		isAffected = true
+		if err == nil {
+			WriteAuditLog(alias, operater, sqlTrim, "成功")
+		}
 		return &result, columns, total, nil, isAffected, num
 	} else if "optimize" == strings.ToLower(sqlPrefix) {
 		res, err := o.Raw(sqlTrim).Exec()
@@ -128,6 +144,9 @@ func QueryServer(alias, sqltext string) (*map[int64][]string, []string, int64, e
 		}
 		num, _ := res.RowsAffected()
 		isAffected = true
+		if err == nil {
+			WriteAuditLog(alias, operater, sqlTrim, "成功")
+		}
 		return &result, columns, total, nil, isAffected, num
 	} else if "insert" == strings.ToLower(sqlPrefix) {
 		res, err := o.Raw(sqlTrim).Exec()
@@ -136,6 +155,9 @@ func QueryServer(alias, sqltext string) (*map[int64][]string, []string, int64, e
 		}
 		num, _ := res.RowsAffected()
 		isAffected = true
+		if err == nil {
+			WriteAuditLog(alias, operater, sqlTrim, "成功")
+		}
 		return &result, columns, total, nil, isAffected, num
 	} else if "truncate" == strings.ToLower(sqlTrun) {
 		res, err := o.Raw(sqlTrim).Exec()
@@ -144,6 +166,9 @@ func QueryServer(alias, sqltext string) (*map[int64][]string, []string, int64, e
 		}
 		num, _ := res.RowsAffected()
 		isAffected = true
+		if err == nil {
+			WriteAuditLog(alias, operater, sqlTrim, "成功")
+		}
 		return &result, columns, total, nil, isAffected, num
 	} else if "drop" == strings.ToLower(sqlDrop) {
 		res, err := o.Raw(sqlTrim).Exec()
@@ -152,6 +177,9 @@ func QueryServer(alias, sqltext string) (*map[int64][]string, []string, int64, e
 		}
 		num, _ := res.RowsAffected()
 		isAffected = true
+		if err == nil {
+			WriteAuditLog(alias, operater, sqlTrim, "成功")
+		}
 		return &result, columns, total, nil, isAffected, num
 	} else if "alter" == strings.ToLower(sqlAlter) {
 		res, err := o.Raw(sqlTrim).Exec()
@@ -160,6 +188,9 @@ func QueryServer(alias, sqltext string) (*map[int64][]string, []string, int64, e
 		}
 		num, _ := res.RowsAffected()
 		isAffected = true
+		if err == nil {
+			WriteAuditLog(alias, operater, sqlTrim, "成功")
+		}
 		return &result, columns, total, nil, isAffected, num
 	} else if "create" == strings.ToLower(sqlPrefix) {
 		res, err := o.Raw(sqlTrim).Exec()
@@ -168,6 +199,9 @@ func QueryServer(alias, sqltext string) (*map[int64][]string, []string, int64, e
 		}
 		num, _ := res.RowsAffected()
 		isAffected = true
+		if err == nil {
+			WriteAuditLog(alias, operater, sqlTrim, "成功")
+		}
 		return &result, columns, total, nil, isAffected, num
 	} else {
 		rows, err := conn.Query(sqlTrim)
@@ -193,11 +227,14 @@ func QueryServer(alias, sqltext string) (*map[int64][]string, []string, int64, e
 			result[total] = row
 		}
 		beego.Info(result)
+		if err == nil {
+			WriteAuditLog(alias, operater, sqlTrim, "成功")
+		}
 		return &result, columns, total, nil, isAffected, 0
 	}
 }
 
-func QueryProxy(alias, sqltext string) (*map[int64][]string, []string, int64, error) {
+func QueryProxy(alias, sqltext, operater string) (*map[int64][]string, []string, int64, error) {
 	result := make(map[int64][]string)
 	var total int64
 	var columns []string
@@ -225,20 +262,28 @@ func QueryProxy(alias, sqltext string) (*map[int64][]string, []string, int64, er
 	beego.Info(sqlTrim)
 
 	if "delete" == strings.ToLower(sqlPrefix) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("后端是代理，为保证数据一致性，暂不支持DML、DDL操作！")
 	} else if "update" == strings.ToLower(sqlPrefix) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("后端是代理，为保证数据一致性，暂不支持DML、DDL操作！")
 	} else if "optimize" == strings.ToLower(sqlPrefix) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("后端是代理，为保证数据一致性，暂不支持DML、DDL操作！")
 	} else if "insert" == strings.ToLower(sqlPrefix) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("后端是代理，为保证数据一致性，暂不支持DML、DDL操作！")
 	} else if "truncate" == strings.ToLower(sqlTrun) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("后端是代理，为保证数据一致性，暂不支持DML、DDL操作！")
 	} else if "drop" == strings.ToLower(sqlDrop) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("后端是代理，为保证数据一致性，暂不支持DML、DDL操作！")
 	} else if "alter" == strings.ToLower(sqlAlter) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("后端是代理，为保证数据一致性，暂不支持DML、DDL操作！")
 	} else if "create" == strings.ToLower(sqlPrefix) {
+		WriteAuditLog(alias, operater, sqlTrim, "失败")
 		return &result, columns, total, errors.New("后端是代理，为保证数据一致性，暂不支持DML、DDL操作！")
 	} else if "select" == strings.ToLower(sqlPrefix) {
 		rows, err := conn.Query(sqlTrim)
@@ -264,6 +309,9 @@ func QueryProxy(alias, sqltext string) (*map[int64][]string, []string, int64, er
 			result[total] = row
 		}
 		beego.Info(result)
+		if err == nil {
+			WriteAuditLog(alias, operater, sqlTrim, "成功")
+		}
 	}
 	return &result, columns, total, nil
 }

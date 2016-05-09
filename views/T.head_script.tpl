@@ -8,6 +8,10 @@
 
 <!-- validator js -->
 <script src="/static/js/validator/jquery.validator.js"></script>
+<script src="/static/js/bootstrap-datetimepicker.js"></script>
+<script src="/static/js/bootstrap-datetimepicker.fr.js"></script>
 <script src="/static/js/validator/zh_CN.js"></script>
 <script src="/static/js/datapicker/bootstrap-datepicker.js"></script>
 {{end}}
+
+

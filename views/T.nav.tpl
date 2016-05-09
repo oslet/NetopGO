@@ -38,15 +38,12 @@
                 <ul class="nav nav-second-level">
                     <li class="upload"><a href="/record/app/list">系统升级</a></li>
                     <li class="download"><a href="/record/db/list">DB升级</a></li>
-                    <li class="download"><a href="#">故障记录</a></li>
+                    <li class="download"><a href="/record/fault/list">故障记录</a></li>
                     <li class="download"><a href="#">知识库</a></li>
                 </ul>
             </li>
             <li id="log">
-               <a href="#"><i class="fa fa-files-o"></i> <span class="nav-label">日志审计</span><span class="label label-info pull-right"></span></a>
-            </li>
-            <li class="special_link">
-                <a href="http://www.tingyun.com" target="_blank"><i class="fa fa-database"></i> <span class="nav-label">访问官网</span></a>
+               <a href="/audit/list"><i class="fa fa-files-o"></i> <span class="nav-label">日志审计</span><span class="label label-info pull-right"></span></a>
             </li>
         </ul>
 

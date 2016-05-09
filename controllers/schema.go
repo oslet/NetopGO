@@ -114,7 +114,6 @@ func (this *SchemaController) Delete() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "schema"
-
 	id := this.Input().Get("id")
 	err := models.DeleteSchema(id)
 	if err != nil {

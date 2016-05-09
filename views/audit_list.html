@@ -1,0 +1,104 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="">
+                        <a id="del_btn" class="btn btn-sm btn-danger "> 删除所选 </a>
+                        {{if .IsSearch}}
+                        <a href="/audit/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        {{else}}
+                        <form id="search_form" method="get" action="/audit/search" class="form-inline pull-right">
+                            <div class="input-group">
+                                <div class="col-sm-8">
+                                    <select name="keyword" class="form-control">
+                                        <option value="1">--请选择Schema--</option>
+                                        {{range .Schemas}}
+                                        <option value="{{.Name}}">{{.Name}}</option>
+                                        {{end}}
+                                    </select>
+                                </div>
+                                <div class="input-group-btn">
+                                    <button id='search_btn' type="submit" class="btn btn-primary">
+                                        -搜索-
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+                    <table class="table table-striped table-bordered table-hover " id="editable" >
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    <input type="checkbox" id="check_all" onclick="checkAll('check_all', 'checked')">
+                                </th>
+                                <th class="text-center">时间</th>
+                                <th class="text-center">操作人</th>
+                                <th class="text-center">Schema</th>
+                                <th class="text-center">状态</th>                         
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{range .Audits}}
+                            <tr class="gradeX">
+                                <td class="text-center">
+                                    <input type="checkbox" name="checked" value="{{.Id}}">
+                                </td>
+                                <td class="text-center">{{.Created}}</td>
+                                <td class="text-center">{{.Operater}}</td>
+                                <td class="text-center">{{.Schema}}</td>
+                                <td class="text-center">{{.Status}}</td>
+                                <td class="text-center">
+                                    <a href="/audit/detail?id={{.Id}}" class="btn btn-xs btn-info">sqltext</a>
+                                    <a href="/audit/del?id={{.Id}}" class="btn btn-xs btn-danger" onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                </td>
+                            </tr>
+                            {{end}}
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                                Total {{.totals}} entries
+                            </div>
+                        </div>
+                        {{template "paginator" .}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/static/js/jquery.shiftcheckbox.js"></script>
+<script>
+    $(document).ready(function(){
+
+        $('#del_btn').click(function(){
+            var check_array = [];
+            if (confirm("确定删除")) {
+                $(".gradeX input:checked").each(function() {
+                    check_array.push($(this).attr("value"))
+                });
+                console.log(check_array.join(","));
+                $.post("/audit/bitchDel",
+                        {ids: check_array.join(",")},
+                        function(data){
+                            //console.log(data);
+                            //$(".gradeX input:checked").closest("tr").remove();                            
+                            window.location.href="/audit/list"                            
+                            //alert(data);
+                        }
+                )
+            }
+
+        });
+
+    });
+
+</script>
+{{template "page_buttom"}}
