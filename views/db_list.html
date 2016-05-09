@@ -30,10 +30,11 @@
                                     <input type="checkbox" id="check_all" onclick="checkAll('check_all', 'checked')">
                                 </th>
                                 <th class="text-center">DB名称</th>
-                                <th class="text-center">备注</th>
+                                <th class="text-center">Schema</th>
                                 <th class="text-center">UUID</th>
                                 <th class="text-center">容量</th>
-                                <th class="text-center">角色</th>                                
+                                <th class="text-center">角色</th>     
+                                <th class="text-center">备注</th>                           
                                 <th class="text-center">操作</th>
                                 <th class="text-center">详细信息</th>                                
                             </tr>
@@ -45,10 +46,11 @@
                                     <input type="checkbox" name="checked" value="{{.Id}}">
                                 </td>
                                 <td class="text-center"><a href="#">{{.Name}}</a></td>
-                                <td class="text-center">{{.Comment}}</td>
+                                <td class="text-center">{{.Schema}}</td>
                                 <td class="text-center">{{.Uuid}}</td>
                                 <td class="text-center">{{.Size}}</td>
                                 <td class="text-center">{{.Role}}</td>
+                                <td class="text-center">{{.Comment}}</td>
                                 <td class="text-center">
                                     <a href="/db/detail?name={{.Name}}" class="btn btn-xs btn-warning">图表</a>
                                     <a href="/db/slowlog?name={{.Name}}&role={{.Role}}" class="btn btn-xs btn-success">慢查询</a>

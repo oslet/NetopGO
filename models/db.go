@@ -227,3 +227,11 @@ func SqlExplain(name, sqltext string) ([]*Explain, int64, error) {
 
 	return result, num, err
 }
+
+func GetSizeBySchema(schema string) (float64, error) {
+	o := orm.NewOrm()
+	var size float64
+	today := time.Now().String()[:11] + "00:00:00"
+	err := o.Raw("select sum(size) from inst_info where `schema`=? and timestamp=? and name like '%master%'", schema, today).QueryRow(&size)
+	return size, err
+}

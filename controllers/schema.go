@@ -35,6 +35,10 @@ func (this *SchemaController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
+	for _, val := range schemas {
+		val.Size, _ = models.GetSizeBySchema(val.Name)
+	}
+
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
 	this.Data["paginator"] = res

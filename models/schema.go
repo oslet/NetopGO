@@ -18,6 +18,7 @@ type Schema struct {
 	DBName    string `orm:size(50)`
 	Partition int64
 	Status    int64
+	Size      float64
 	Created   time.Time
 }
 
