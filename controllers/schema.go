@@ -41,6 +41,8 @@ func (this *SchemaController) Get() {
 
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["Schemas"] = schemas
 	this.Data["totals"] = total
@@ -158,7 +160,7 @@ func (this *SchemaController) Search() {
 	this.Data["Category"] = "schema"
 
 	name := this.Input().Get("keyword")
-	beego.Info(name)
+	//beego.Info(name)
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
 	} else {
@@ -172,6 +174,9 @@ func (this *SchemaController) Search() {
 		beego.Error(err)
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
+
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["Schemas"] = schemas
 	this.Data["totals"] = total

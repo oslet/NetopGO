@@ -32,6 +32,9 @@ func (this *UserController) Get() {
 		beego.Error(err)
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
+
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["Users"] = users
 	this.Data["totals"] = total
@@ -150,7 +153,7 @@ func (this *UserController) Search() {
 	this.Data["Category"] = "user"
 
 	name := this.Input().Get("keyword")
-	beego.Info(name)
+	//beego.Info(name)
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
 	} else {
@@ -164,6 +167,9 @@ func (this *UserController) Search() {
 		beego.Error(err)
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
+
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["Users"] = users
 	this.Data["totals"] = total

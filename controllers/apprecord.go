@@ -37,6 +37,8 @@ func (this *AppRecordController) Get() {
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["List"] = arrList
 	this.Data["paginator"] = res
 	this.Data["AppRecords"] = appRecs
@@ -164,7 +166,7 @@ func (this *AppRecordController) Search() {
 		this.Redirect("/record/app/list", 302)
 		return
 	}
-	beego.Info(appname)
+	//beego.Info(appname)
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
 	} else {
@@ -178,6 +180,9 @@ func (this *AppRecordController) Search() {
 		beego.Error(err)
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
+
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["AppRecords"] = appRecs
 	this.Data["totals"] = total

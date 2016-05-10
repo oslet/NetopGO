@@ -2,7 +2,7 @@ package models
 
 import (
 	"bytes"
-	"fmt"
+	//"fmt"
 	"github.com/astaxie/beego"
 	gossh "golang.org/x/crypto/ssh"
 	"golang.org/x/net/websocket"
@@ -48,7 +48,7 @@ func (s *SSH) Exec(cmd string) (string, error) {
 	}
 	defer s.Session.Close()
 	stdout := buf.String()
-	fmt.Printf("Stdout:%v\n", stdout)
+	//fmt.Printf("Stdout:%v\n", stdout)
 	return stdout, nil
 }
 
@@ -60,19 +60,19 @@ func SSHWebSocketHandler(ws *websocket.Conn) {
 	rows := Str2Int(ctx.GetFormValue("rows"))
 	vm_info = strings.Replace(vm_info, " ", "+", 1)
 
-	beego.Info(vm_info)
-	beego.Info(cols)
-	beego.Info(rows)
+	//beego.Info(vm_info)
+	//beego.Info(cols)
+	//beego.Info(rows)
 
 	de_vm_info, err := AESDecode(vm_info, AesKey)
-	beego.Info(de_vm_info)
+	//beego.Info(de_vm_info)
 	de_vm_info_arr := strings.Split(de_vm_info, "\n")
 	user := strings.TrimSpace(de_vm_info_arr[0])
 	passwd := strings.TrimSpace(de_vm_info_arr[1])
 	vmAddr := strings.TrimSpace(de_vm_info_arr[2])
-	beego.Info(user)
-	beego.Info(passwd)
-	beego.Info(vmAddr)
+	//beego.Info(user)
+	//beego.Info(passwd)
+	//beego.Info(vmAddr)
 
 	sh := &SSH{
 		User: user,

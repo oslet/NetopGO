@@ -18,13 +18,14 @@ type SizeChange struct {
 
 func GetAllSize() ([]string, []float64, error) {
 	o := orm.NewOrm()
+	firstDay := time.Now().String()[:8] + "01 00:00:00"
 	var time []string
 	var size []float64
-	_, err := o.Raw("select `timestamp` from all_size").QueryRows(&time)
+	_, err := o.Raw("select `timestamp` from all_size where `timestamp`>=? ", firstDay).QueryRows(&time)
 	if err != nil {
 		beego.Error(err)
 	}
-	_, err = o.Raw("select size from all_size").QueryRows(&size)
+	_, err = o.Raw("select size from all_size where timestamp>=? ", firstDay).QueryRows(&size)
 	if err != nil {
 		beego.Error(err)
 	}
@@ -39,7 +40,7 @@ func GetNowSize() (float64, error) {
 	today := time.Now().String()[:10] + " 00:00:00"
 	o := orm.NewOrm()
 	err := o.Raw("select size from all_size where timestamp>=? limit 1", today).QueryRow(&size)
-	beego.Info(size)
+	//beego.Info(size)
 	return size, err
 }
 
@@ -55,10 +56,10 @@ func GetSizeChange() ([]*SizeChange, error) {
 	o := orm.NewOrm()
 	sizeChange := make([]*SizeChange, 0)
 	firstDay := time.Now().String()[:8] + "01 00:00:00"
-	beego.Info(firstDay)
+	//beego.Info(firstDay)
 	today := time.Now().String()[:10] + " 00:00:00"
-	beego.Info(today)
-	_, err := o.Raw("select  a.name,(b.size-a.size) as size from  (select `schema` name,sum(size)/2 size from inst_info where timestamp=? group by `schema`) a join  (select `schema` name,sum(size)/2 size from inst_info where timestamp=? group by `schema`) b on a.name=b.name order by size desc", firstDay, today).QueryRows(&sizeChange)
+	//beego.Info(today)
+	_, err := o.Raw("select  a.name,(b.size-a.size) as size from  (select `schema` name,sum(size) size from inst_info where timestamp=? and name like '%master%' group by `schema`) a join  (select `schema` name,sum(size) size from inst_info where timestamp=? and name like '%master%' group by `schema`) b on a.name=b.name order by size desc", firstDay, today).QueryRows(&sizeChange)
 	return sizeChange, err
 }
 

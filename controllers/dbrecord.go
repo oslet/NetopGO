@@ -37,6 +37,8 @@ func (this *RecordController) Get() {
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["List"] = arrList
 	this.Data["paginator"] = res
 	this.Data["DBRecords"] = dbRecs
@@ -91,7 +93,7 @@ func (this *RecordController) Post() {
 	var attachment string
 	if fh != nil {
 		attachment = fh.Filename
-		beego.Info(attachment)
+		//beego.Info(attachment)
 		err := this.SaveToFile("attachment", path.Join("attachment", attachment))
 		if err != nil {
 			beego.Error(err)
@@ -170,7 +172,7 @@ func (this *RecordController) Search() {
 	this.Data["Category"] = "record/db"
 
 	schema := this.Input().Get("keyword")
-	beego.Info(schema)
+	//beego.Info(schema)
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
 	} else {
@@ -184,6 +186,9 @@ func (this *RecordController) Search() {
 		beego.Error(err)
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
+
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["DBRecords"] = dbRecs
 	this.Data["totals"] = total

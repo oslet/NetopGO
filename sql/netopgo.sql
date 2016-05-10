@@ -39,6 +39,67 @@ INSERT INTO `all_size` VALUES ('2016-04-30 07:00:00',33.1200),('2016-05-01 07:00
 UNLOCK TABLES;
 
 --
+-- Table structure for table `apprecord`
+--
+
+DROP TABLE IF EXISTS `apprecord`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `apprecord` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `group` varchar(255) NOT NULL DEFAULT '',
+  `operation` varchar(255) NOT NULL DEFAULT '',
+  `appname` varchar(255) NOT NULL DEFAULT '',
+  `disthost` varchar(255) NOT NULL DEFAULT '',
+  `isauto` varchar(255) NOT NULL DEFAULT '',
+  `applicant` varchar(255) NOT NULL DEFAULT '',
+  `operater` varchar(255) NOT NULL DEFAULT '',
+  `content` varchar(255) NOT NULL DEFAULT '',
+  `created` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `apprecord`
+--
+
+LOCK TABLES `apprecord` WRITE;
+/*!40000 ALTER TABLE `apprecord` DISABLE KEYS */;
+INSERT INTO `apprecord` VALUES (1,'app','版本升级','report-app','ucd-ty-app-report-001','是','测试人员1','admin','','2016-05-09 10:15:40'),(2,'app','版本升级','report-server','ucd-ty-server-report-100','是','测试人员2','admin','一键升级','2016-05-09 10:16:25'),(3,'app','修复bug','dc-app-backend/aggr','ucd-ty-app-backend-100','是','测试人员3','admin','','2016-05-09 10:17:20'),(4,'app','版本升级','dc-app-backend/aggr','sadsadsa','是','asdasdas','admin','ddasd','2016-05-09 19:45:25');
+/*!40000 ALTER TABLE `apprecord` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `audit`
+--
+
+DROP TABLE IF EXISTS `audit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `audit` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `schema` varchar(255) NOT NULL DEFAULT '',
+  `operation` varchar(255) NOT NULL DEFAULT '',
+  `operater` varchar(255) NOT NULL DEFAULT '',
+  `status` varchar(255) NOT NULL DEFAULT '',
+  `sqltext` varchar(255) NOT NULL DEFAULT '',
+  `created` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `audit`
+--
+
+LOCK TABLES `audit` WRITE;
+/*!40000 ALTER TABLE `audit` DISABLE KEYS */;
+INSERT INTO `audit` VALUES (4,'lens_conf','','admin','成功','select * from NL_U_ACCOUNT limit 20;','2016-05-09 19:59:24'),(5,'lens_conf','','admin','失败','drop table NL_U_ACCOUNT;','2016-05-09 19:59:44'),(6,'netopgo','','admin','成功','select * from  user;\r\n','2016-05-10 12:00:51');
+/*!40000 ALTER TABLE `audit` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `db`
 --
 
@@ -70,6 +131,75 @@ LOCK TABLES `db` WRITE;
 /*!40000 ALTER TABLE `db` DISABLE KEYS */;
 INSERT INTO `db` VALUES (1,'dbmaster_conf','udb-rwsdk','lens_conf','2016-05-03 12:36:18','500GB','从库','root','6NSYLCGVSQ==','3306','newlens'),(2,'dbslave1_conf','udc-skjdf9','lens_conf','2016-05-03 14:36:37','500GB','从库','root','6NSYLCGVSQ==','',''),(5,'db0slave1_mobapp','udb-2030','app','2016-05-05 10:56:23','500GB','从库','root','6NSYLCGVSQ==','',''),(6,'db0master_mobapp','udb-sdjkj','app','2016-05-04 07:18:41','500GB','主库','root','6NSYLCGVSQ==','','');
 /*!40000 ALTER TABLE `db` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `dbrecord`
+--
+
+DROP TABLE IF EXISTS `dbrecord`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dbrecord` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `schema` varchar(255) NOT NULL DEFAULT '',
+  `object` varchar(255) NOT NULL DEFAULT '',
+  `operation` varchar(255) NOT NULL DEFAULT '',
+  `isbackup` varchar(255) NOT NULL DEFAULT '',
+  `content` varchar(255) NOT NULL DEFAULT '',
+  `attachment` varchar(255) NOT NULL DEFAULT '',
+  `created` datetime NOT NULL,
+  `comment` varchar(255) NOT NULL DEFAULT '',
+  `operater` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `dbrecord`
+--
+
+LOCK TABLES `dbrecord` WRITE;
+/*!40000 ALTER TABLE `dbrecord` DISABLE KEYS */;
+INSERT INTO `dbrecord` VALUES (1,'lens_conf','表','性能优化','否','','netopgo.sql','2016-05-09 10:18:45','dc-browser升级','admin');
+/*!40000 ALTER TABLE `dbrecord` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `faultrecord`
+--
+
+DROP TABLE IF EXISTS `faultrecord`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `faultrecord` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `starttime` varchar(255) NOT NULL DEFAULT '',
+  `endtime` varchar(255) NOT NULL DEFAULT '',
+  `level` varchar(255) NOT NULL DEFAULT '',
+  `system` varchar(255) NOT NULL DEFAULT '',
+  `appname` varchar(255) NOT NULL DEFAULT '',
+  `category` varchar(255) NOT NULL DEFAULT '',
+  `issolute` varchar(255) NOT NULL DEFAULT '',
+  `operater` varchar(255) NOT NULL DEFAULT '',
+  `desc` varchar(255) NOT NULL DEFAULT '',
+  `solution` varchar(255) NOT NULL DEFAULT '',
+  `effection` varchar(255) NOT NULL DEFAULT '',
+  `analysis` varchar(255) NOT NULL DEFAULT '',
+  `nextstep` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `faultrecord`
+--
+
+LOCK TABLES `faultrecord` WRITE;
+/*!40000 ALTER TABLE `faultrecord` DISABLE KEYS */;
+INSERT INTO `faultrecord` VALUES (1,'IE20160509','2016-05-09 16:30:00','2016-05-09 16:55:00','主要故障','server','report-server','应用','是','周金可','','重启服务','前端短暂502','内存跑满','定期重启'),(2,'IE20160508','2016-05-09 02:25:00','2016-05-09 10:30:00','一般故障','app','dc-app-backend/aggr','数据库','是','周金可','','重新添加分区','数据入库失败','分区自动维护程序异常','对分区维护程序进行监控');
+/*!40000 ALTER TABLE `faultrecord` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -130,7 +260,7 @@ CREATE TABLE `host` (
 
 LOCK TABLES `host` WRITE;
 /*!40000 ALTER TABLE `host` DISABLE KEYS */;
-INSERT INTO `host` VALUES (1,'localhost','127.0.0.1','4核','8GB','1TB','Ucloud','88aJdGLcDQ==','88aJdGLcDQ==','flume','2016-05-02 08:55:17','','',''),(3,'amoeba','192.168.2.17','1核','2GB','1TB','百度云','6NSYLCGVSQ==','6NSYLCGVSQ==','amoeba','2016-05-02 17:33:56','root','root','amoeba'),(4,'mycat','192.168.2.18','1核','2GB','50GB','阿里云','6NSYLCGVSQ==','6NSYLCGVSQ==','mycat','2016-05-02 10:35:23','root','root','mycat');
+INSERT INTO `host` VALUES (1,'amoeba','192.168.2.17','4核','8GB','1TB','Ucloud','6NSYLCGVSQ==','6NSYLCGVSQ==','amoeba','2016-05-02 00:55:17','root','root','App amoeba'),(3,'amoeba','192.168.2.17','1核','2GB','1TB','百度云','6NSYLCGVSQ==','6NSYLCGVSQ==','amoeba','2016-05-02 17:33:56','root','root','amoeba'),(4,'mycat','192.168.2.18','1核','2GB','50GB','阿里云','6NSYLCGVSQ==','6NSYLCGVSQ==','mycat','2016-05-02 10:35:23','root','root','mycat');
 /*!40000 ALTER TABLE `host` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -157,7 +287,7 @@ CREATE TABLE `inst_info` (
 
 LOCK TABLES `inst_info` WRITE;
 /*!40000 ALTER TABLE `inst_info` DISABLE KEYS */;
-INSERT INTO `inst_info` VALUES (1,'dbmaster_conf','lens_conf','2016-04-30 16:00:00',300),(3,'dbmaster_conf','lens_conf','2016-05-04 16:00:00',303),(4,'db0master_mobapp','lens_mobapp_data','2016-04-30 16:00:00',600),(5,'db0master_mobapp','lens_mobapp_data','2016-05-04 16:00:00',900),(6,'db1master_mobapp','lens_mobapp_data','2016-04-30 16:00:00',700),(7,'db1master_mobapp','lens_mobapp_data','2016-05-04 16:00:00',720),(8,'dbslave1_conf','lens_conf','2016-04-30 16:00:00',300),(9,'dbslave1_conf','lens_conf','2016-05-04 16:00:00',303),(10,'db0slave1_mobapp','lens_mobapp_data','2016-04-30 16:00:00',600),(11,'db0slave1_mobapp','lens_mobapp_data','2016-05-04 16:00:00',900),(12,'db1slave1_mobapp','lens_mobapp_data','2016-04-30 16:00:00',700),(13,'db1slave1_mobapp','lens_mobapp_data','2016-05-04 16:00:00',720);
+INSERT INTO `inst_info` VALUES (1,'dbmaster_conf','lens_conf','2016-04-30 16:00:00',300),(3,'dbmaster_conf','lens_conf','2016-05-09 16:00:00',303),(4,'db0master_mobapp','lens_mobapp_data','2016-04-30 16:00:00',600),(5,'db0master_mobapp','lens_mobapp_data','2016-05-09 16:00:00',900),(6,'db1master_mobapp','lens_mobapp_data','2016-04-30 16:00:00',700),(7,'db1master_mobapp','lens_mobapp_data','2016-05-09 16:00:00',720),(8,'dbslave1_conf','lens_conf','2016-04-30 16:00:00',300),(9,'dbslave1_conf','lens_conf','2016-05-09 16:00:00',303),(10,'db0slave1_mobapp','lens_mobapp_data','2016-04-30 16:00:00',600),(11,'db0slave1_mobapp','lens_mobapp_data','2016-05-09 16:00:00',900),(12,'db1slave1_mobapp','lens_mobapp_data','2016-04-30 16:00:00',700),(13,'db1slave1_mobapp','lens_mobapp_data','2016-05-09 16:00:00',720);
 /*!40000 ALTER TABLE `inst_info` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -232,6 +362,7 @@ CREATE TABLE `schema` (
   `partition` bigint(20) NOT NULL DEFAULT '0',
   `status` bigint(20) NOT NULL DEFAULT '0',
   `created` datetime NOT NULL,
+  `size` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -242,7 +373,7 @@ CREATE TABLE `schema` (
 
 LOCK TABLES `schema` WRITE;
 /*!40000 ALTER TABLE `schema` DISABLE KEYS */;
-INSERT INTO `schema` VALUES (1,'192.168.2.83','3306','lens_conf','newlens','root','6NSYLCGVSQ==','newlens',84,1,'2016-05-02 15:41:05'),(2,'127.0.0.1','3306','netopgo','netopgo app','root','6NSYLCGVSQ==','netopgo',0,1,'2016-05-02 10:37:27'),(3,'192.168.2.17','8066','lens_mobapp_data','moapp data','lens','6NSYLCGVSQ==','lens_mobapp_data',84,2,'2016-05-02 10:38:21');
+INSERT INTO `schema` VALUES (1,'192.168.2.83','3306','lens_conf','newlens','root','6NSYLCGVSQ==','newlens',84,1,'2016-05-02 07:41:05',0),(2,'127.0.0.1','3306','netopgo','netopgo app','root','6NSYLCGVSQ==','netopgo',0,1,'2016-05-02 10:37:27',0),(3,'192.168.2.17','8066','lens_mobapp_data','moapp data','lens','6NSYLCGVSQ==','lens_mobapp_data',84,2,'2016-05-02 10:38:21',0);
 /*!40000 ALTER TABLE `schema` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -337,4 +468,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-05 20:05:40
+-- Dump completed on 2016-05-10 13:55:07

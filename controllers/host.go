@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"NetopGO/models"
-	"fmt"
+	//"fmt"
 	"github.com/astaxie/beego"
 	"strconv"
 	"strings"
@@ -44,6 +44,8 @@ func (this *HostController) Get() {
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["Hosts"] = hosts
 	this.Data["totals"] = total
@@ -72,7 +74,7 @@ func (this *HostController) Add() {
 		}
 		host.Rootpwd, _ = models.AESDecode(host.Rootpwd, models.AesKey)
 		host.Readpwd, _ = models.AESDecode(host.Readpwd, models.AesKey)
-		fmt.Printf("***root :%v,read :%v\n", host.Rootpwd, host.Readpwd)
+		//fmt.Printf("***root :%v,read :%v\n", host.Rootpwd, host.Readpwd)
 		this.Data["Host"] = host
 		this.Data["HostGroupName"] = host.Group
 		this.Data["Path1"] = "主机列表"
@@ -110,7 +112,7 @@ func (this *HostController) Post() {
 	group := this.Input().Get("group")
 	idc := this.Input().Get("idc")
 	comment := this.Input().Get("comment")
-	beego.Info(idc)
+	//beego.Info(idc)
 	if len(id) > 0 {
 		err := models.ModifyHost(id, name, ip, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
 		if err != nil {
@@ -184,7 +186,7 @@ func (this *HostController) Search() {
 		this.TplName = "host_list.html"
 		return
 	}
-	beego.Info(name)
+	//beego.Info(name)
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
 	} else {
@@ -198,6 +200,9 @@ func (this *HostController) Search() {
 		beego.Error(err)
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
+
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["Hosts"] = hosts
 	this.Data["totals"] = total
@@ -240,14 +245,14 @@ func (this *HostController) WebConsole() {
 	ssh_info = append(ssh_info, user)
 	ssh_info = append(ssh_info, passwd)
 	ssh_info = append(ssh_info, vmAddr)
-	beego.Info(user)
-	beego.Info(passwd)
-	beego.Info(vmAddr)
+	//beego.Info(user)
+	//beego.Info(passwd)
+	//beego.Info(vmAddr)
 
 	b64_ssh_info, err := models.AESEncode(strings.Join(ssh_info, "\n"), models.AesKey)
-	beego.Info(b64_ssh_info)
+	//beego.Info(b64_ssh_info)
 	wsAddr := "ws://" + this.Ctx.Request.Host + "/console/sshws" + "?vm_info=" + b64_ssh_info
-	beego.Info(wsAddr)
+	//beego.Info(wsAddr)
 	this.Data["Uname"] = uname
 	this.Data["WsAddr"] = wsAddr
 	this.TplName = "console.html"

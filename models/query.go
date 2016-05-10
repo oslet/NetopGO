@@ -11,6 +11,7 @@ import (
 )
 
 func Query(alias, sqltext, operater string) (*map[int64][]string, []string, int64, error) {
+	//fmt.Println("call query function!")
 	result := make(map[int64][]string)
 	var total int64
 	var columns []string
@@ -34,7 +35,7 @@ func Query(alias, sqltext, operater string) (*map[int64][]string, []string, int6
 	sqlDrop := sqlTrim[:4]
 	sqlAlter := sqlTrim[:5]
 
-	beego.Info(sqlTrim)
+	//beego.Info(sqlTrim)
 
 	if "delete" == strings.ToLower(sqlPrefix) {
 		WriteAuditLog(alias, operater, sqlTrim, "失败")
@@ -80,7 +81,7 @@ func Query(alias, sqltext, operater string) (*map[int64][]string, []string, int6
 			total = total + 1
 			result[total] = row
 		}
-		beego.Info(result)
+		//beego.Info(result)
 		if err == nil {
 			WriteAuditLog(alias, operater, sqlTrim, "成功")
 		}
@@ -89,6 +90,7 @@ func Query(alias, sqltext, operater string) (*map[int64][]string, []string, int6
 }
 
 func QueryServer(alias, sqltext, operater string) (*map[int64][]string, []string, int64, error, bool, int64) {
+	//fmt.Println("call queryserver function!")
 	result := make(map[int64][]string)
 	var total int64
 	var columns []string
@@ -99,9 +101,10 @@ func QueryServer(alias, sqltext, operater string) (*map[int64][]string, []string
 
 	passwd, _ := AESDecode(schema.Passwd, AesKey)
 	schemaUrl := schema.User + ":" + passwd + "@tcp(" + schema.Addr + ":" + schema.Port + ")/" + schema.DBName + "?charset=utf8"
-	beego.Info(fmt.Sprintf("connect to %v server successfully !", schema.Name))
+	beego.Info(fmt.Sprintf("connect to %v server successfully !url is: %v.", schema.Name, schemaUrl))
 
 	conn, err := sql.Open("mysql", schemaUrl)
+	beego.Error(err)
 	if err != nil {
 		return &result, columns, total, err, isAffected, 0
 	}
@@ -113,10 +116,10 @@ func QueryServer(alias, sqltext, operater string) (*map[int64][]string, []string
 	sqlDrop := sqlTrim[:4]
 	sqlAlter := sqlTrim[:5]
 
-	beego.Info(sqlTrim)
+	//beego.Info(sqlTrim)
 
 	if "delete" == strings.ToLower(sqlPrefix) {
-		res, err := o.Raw(sqlTrim).Exec()
+		res, err := conn.Exec(sqlTrim)
 		if err != nil {
 			return &result, columns, total, err, isAffected, 0
 		}
@@ -127,7 +130,7 @@ func QueryServer(alias, sqltext, operater string) (*map[int64][]string, []string
 		}
 		return &result, columns, total, nil, isAffected, num
 	} else if "update" == strings.ToLower(sqlPrefix) {
-		res, err := o.Raw(sqlTrim).Exec()
+		res, err := conn.Exec(sqlTrim)
 		if err != nil {
 			return &result, columns, total, err, isAffected, 0
 		}
@@ -138,7 +141,7 @@ func QueryServer(alias, sqltext, operater string) (*map[int64][]string, []string
 		}
 		return &result, columns, total, nil, isAffected, num
 	} else if "optimize" == strings.ToLower(sqlPrefix) {
-		res, err := o.Raw(sqlTrim).Exec()
+		res, err := conn.Exec(sqlTrim)
 		if err != nil {
 			return &result, columns, total, err, isAffected, 0
 		}
@@ -149,7 +152,7 @@ func QueryServer(alias, sqltext, operater string) (*map[int64][]string, []string
 		}
 		return &result, columns, total, nil, isAffected, num
 	} else if "insert" == strings.ToLower(sqlPrefix) {
-		res, err := o.Raw(sqlTrim).Exec()
+		res, err := conn.Exec(sqlTrim)
 		if err != nil {
 			return &result, columns, total, err, isAffected, 0
 		}
@@ -160,7 +163,7 @@ func QueryServer(alias, sqltext, operater string) (*map[int64][]string, []string
 		}
 		return &result, columns, total, nil, isAffected, num
 	} else if "truncate" == strings.ToLower(sqlTrun) {
-		res, err := o.Raw(sqlTrim).Exec()
+		res, err := conn.Exec(sqlTrim)
 		if err != nil {
 			return &result, columns, total, err, isAffected, 0
 		}
@@ -171,7 +174,7 @@ func QueryServer(alias, sqltext, operater string) (*map[int64][]string, []string
 		}
 		return &result, columns, total, nil, isAffected, num
 	} else if "drop" == strings.ToLower(sqlDrop) {
-		res, err := o.Raw(sqlTrim).Exec()
+		res, err := conn.Exec(sqlTrim)
 		if err != nil {
 			return &result, columns, total, err, isAffected, 0
 		}
@@ -182,7 +185,7 @@ func QueryServer(alias, sqltext, operater string) (*map[int64][]string, []string
 		}
 		return &result, columns, total, nil, isAffected, num
 	} else if "alter" == strings.ToLower(sqlAlter) {
-		res, err := o.Raw(sqlTrim).Exec()
+		res, err := conn.Exec(sqlTrim)
 		if err != nil {
 			return &result, columns, total, err, isAffected, 0
 		}
@@ -193,7 +196,7 @@ func QueryServer(alias, sqltext, operater string) (*map[int64][]string, []string
 		}
 		return &result, columns, total, nil, isAffected, num
 	} else if "create" == strings.ToLower(sqlPrefix) {
-		res, err := o.Raw(sqlTrim).Exec()
+		res, err := conn.Exec(sqlTrim)
 		if err != nil {
 			return &result, columns, total, err, isAffected, 0
 		}
@@ -226,7 +229,7 @@ func QueryServer(alias, sqltext, operater string) (*map[int64][]string, []string
 			total = total + 1
 			result[total] = row
 		}
-		beego.Info(result)
+		//beego.Info(result)
 		if err == nil {
 			WriteAuditLog(alias, operater, sqlTrim, "成功")
 		}
@@ -235,6 +238,7 @@ func QueryServer(alias, sqltext, operater string) (*map[int64][]string, []string
 }
 
 func QueryProxy(alias, sqltext, operater string) (*map[int64][]string, []string, int64, error) {
+	//fmt.Println("call queryproxy function!")
 	result := make(map[int64][]string)
 	var total int64
 	var columns []string
@@ -259,7 +263,7 @@ func QueryProxy(alias, sqltext, operater string) (*map[int64][]string, []string,
 	sqlDrop := sqlTrim[:4]
 	sqlAlter := sqlTrim[:5]
 
-	beego.Info(sqlTrim)
+	//beego.Info(sqlTrim)
 
 	if "delete" == strings.ToLower(sqlPrefix) {
 		WriteAuditLog(alias, operater, sqlTrim, "失败")
@@ -308,7 +312,7 @@ func QueryProxy(alias, sqltext, operater string) (*map[int64][]string, []string,
 			total = total + 1
 			result[total] = row
 		}
-		beego.Info(result)
+		//beego.Info(result)
 		if err == nil {
 			WriteAuditLog(alias, operater, sqlTrim, "成功")
 		}

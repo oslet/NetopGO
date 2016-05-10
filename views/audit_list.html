@@ -1,5 +1,8 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
+{{if eq .Auth 3}}
+<div><span style="font-size:18px;color:red;">没有相关权限！</span></div>
+{{else}}
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-12">
@@ -73,7 +76,7 @@
         </div>
     </div>
 </div>
-
+{{end}}
 <script src="/static/js/jquery.shiftcheckbox.js"></script>
 <script>
     $(document).ready(function(){

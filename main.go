@@ -7,7 +7,7 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	//"strings"
-	"time"
+	//"time"
 )
 
 func init() {
@@ -16,7 +16,7 @@ func init() {
 }
 
 func main() {
-	orm.Debug = true
+	//orm.Debug = true
 
 	//o := orm.NewOrm()
 	// psw := "nbs2010"
@@ -113,6 +113,5 @@ func main() {
 	// o.Insert(db)
 	// str := "nbs2010"
 	// beego.Info(models.Md5Encode([]byte(str)))
-	beego.Info(time.Now())
 	beego.Run()
 }

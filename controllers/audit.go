@@ -34,6 +34,8 @@ func (this *AuditController) Get() {
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["Schemas"] = schemas
 	this.Data["paginator"] = res
 	this.Data["Audits"] = audits
@@ -128,6 +130,9 @@ func (this *AuditController) Search() {
 		beego.Error(err)
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
+
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["Audits"] = audits
 	this.Data["totals"] = total

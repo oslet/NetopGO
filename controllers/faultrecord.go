@@ -37,6 +37,8 @@ func (this *FaultRecordController) Get() {
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["List"] = arrList
 	this.Data["paginator"] = res
 	this.Data["FaultRecords"] = faultRecs
@@ -169,7 +171,7 @@ func (this *FaultRecordController) Search() {
 		this.Redirect("/record/fault/list", 302)
 		return
 	}
-	beego.Info(cate)
+	//beego.Info(cate)
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
 	} else {
@@ -183,6 +185,9 @@ func (this *FaultRecordController) Search() {
 		beego.Error(err)
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
+
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["FaultRecords"] = faultRecs
 	this.Data["totals"] = total

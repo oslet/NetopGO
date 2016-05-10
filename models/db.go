@@ -79,7 +79,7 @@ func GetDBById(id string) (*Db, error) {
 func AddDB(name, uuid, comment, size, role, user, password, port, schema string) error {
 	o := orm.NewOrm()
 	passwd, _ := AESEncode(password, AesKey)
-	fmt.Printf("***add passwd:%v\n", passwd)
+	//fmt.Printf("***add passwd:%v\n", passwd)
 	db := &Db{
 		Name:    name,
 		Uuid:    uuid,
@@ -105,7 +105,7 @@ func ModifyDB(id, name, uuid, comment, size, role, user, password, port, schema 
 
 	did, err := strconv.ParseInt(id, 10, 64)
 	passwd, _ := AESEncode(password, AesKey)
-	fmt.Printf("***modify passwd:%v\n", passwd)
+	//fmt.Printf("***modify passwd:%v\n", passwd)
 	db := &Db{
 		Id: did,
 	}

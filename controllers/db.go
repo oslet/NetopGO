@@ -4,7 +4,7 @@ import (
 	"NetopGO/models"
 	"github.com/astaxie/beego"
 	//"github.com/astaxie/beego/orm"
-	"fmt"
+	//"fmt"
 	"strconv"
 	"strings"
 )
@@ -39,6 +39,8 @@ func (this *DBController) Get() {
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["DBs"] = dbs
 	this.Data["totals"] = total
@@ -104,7 +106,7 @@ func (this *DBController) Post() {
 	password := this.Input().Get("password")
 	port := this.Input().Get("port")
 	schema := this.Input().Get("schema")
-	beego.Info(password)
+	//beego.Info(password)
 	if len(id) > 0 {
 		err := models.ModifyDB(id, name, uuid, comment, size, roleType, user, password, port, schema)
 		if err != nil {
@@ -182,6 +184,9 @@ func (this *DBController) Search() {
 		beego.Error(err)
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
+
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["DBs"] = dbs
 	this.Data["totals"] = total
@@ -209,14 +214,22 @@ func (this *DBController) Query() {
 	flag := this.Input().Get("flag")
 	sqltext := this.Input().Get("sql")
 	schemaIns, _ := models.GetSchemaByName(schema)
-	fmt.Printf("******schema type %v\n", schemaIns.Status)
-	// rolestr, ok := role.(string)
-	// var roleFinal string
-	// if ok {
-	// 	roleFinal = rolestr
-	// }
+	//fmt.Printf("******schema type %v\n", schemaIns.Status)
+
+	if strings.Trim(sqltext, " ") == "" {
+		this.Data["Error"] = -1
+		this.Data["Schema"] = schema
+		this.Data["Sqltext"] = sqltext
+		this.Data["Schemas"] = schemas
+		this.Data["Path1"] = "查询窗口"
+		this.Data["Path2"] = ""
+		this.Data["Href"] = "/db/query"
+		this.TplName = "query.html"
+		return
+	}
+
 	operater := uname.(string)
-	fmt.Printf("******role type %v\n", this.Input().Get("role"))
+	//fmt.Printf("******role type %v\n", this.Input().Get("role"))
 	if "result" == flag {
 		if "2" == this.Input().Get("role") && 1 == schemaIns.Status {
 			values, columns, total, msg, isAffected, num := models.QueryServer(schema, sqltext, operater)

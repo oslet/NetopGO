@@ -1,13 +1,14 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
+{{$Auth := .Auth}}
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="">
-                        <a href="/host/add" class="btn btn-sm btn-primary "> 添加主机 </a>
-                        <a id="del_btn" class="btn btn-sm btn-danger "> 删除所选 </a>
+                        <a href="/host/add" class="btn btn-sm btn-primary " {{if ne $Auth 1}}disabled="disabled"{{end}}> 添加主机 </a>
+                        <a id="del_btn" class="btn btn-sm btn-danger" {{if ne $Auth 1}}disabled="disabled"{{end}}> 删除所选 </a>
                         {{if .IsSearch}}
                         <a href="/host/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}
@@ -76,12 +77,12 @@
                                 <td class="text-center">{{.Idc}}</td>
                                 <th class="text-center">{{.Group}}</th>
                                 <td class="text-center">
-                                    <a href="/host/webconsole?ip={{.Ip}}&id={{.Id}}&user={{.Root}}&role=1" target="_black" class="btn btn-xs btn-warning">ROOT用户</a>
+                                    <a href="/host/webconsole?ip={{.Ip}}&id={{.Id}}&user={{.Root}}&role=1" target="_black" class="btn btn-xs btn-warning" {{if eq $Auth 3}}disabled="disabled"{{end}}>ROOT用户</a>
                                     <a href="/host/webconsole?ip={{.Ip}}&id={{.Id}}&user={{.Read}}&role=2" target="_black" class="btn btn-xs btn btn-success">只读用户</a>
                                 </td>
                                 <td class="text-center">
-                                    <a href="/host/add?id={{.Id}}" class="btn btn-xs btn-info">编辑</a>
-                                    <a href="/host/del?id={{.Id}}" class="btn btn-xs btn-danger" onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                    <a href="/host/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Auth 1}}disabled="disabled"{{end}}>编辑</a>
+                                    <a href="/host/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Auth 1}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
                                 </td>
 
                             </tr>
