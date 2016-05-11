@@ -101,10 +101,9 @@ func QueryServer(alias, sqltext, operater string) (*map[int64][]string, []string
 
 	passwd, _ := AESDecode(schema.Passwd, AesKey)
 	schemaUrl := schema.User + ":" + passwd + "@tcp(" + schema.Addr + ":" + schema.Port + ")/" + schema.DBName + "?charset=utf8"
-	beego.Info(fmt.Sprintf("connect to %v server successfully !url is: %v.", schema.Name, schemaUrl))
+	beego.Info(fmt.Sprintf("connect to %v server successfully !", schema.Name))
 
 	conn, err := sql.Open("mysql", schemaUrl)
-	beego.Error(err)
 	if err != nil {
 		return &result, columns, total, err, isAffected, 0
 	}

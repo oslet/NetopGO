@@ -162,10 +162,10 @@ func GetPartDetail(flag, schema string) ([]*Partition, int64, error) {
 	var err error
 	if "min" == flag {
 		yesterday := time.Now().AddDate(0, 0, -1).String()[:10]
-		num, err = o.Raw("SELECT instance, timestamp,count FROM `partition` WHERE `schema` = ? and `timestamp` > ? and `type` = ?", schema, yesterday, flag).QueryRows(&parts)
+		num, err = o.Raw("SELECT instance, timestamp,count FROM `partition_info` WHERE `schemaname` = ? and `timestamp` > ? and `type` = ?", schema, yesterday, flag).QueryRows(&parts)
 	} else if "hour" == flag {
 		lastweek := time.Now().AddDate(0, 0, -7).String()[:10]
-		num, err = o.Raw("SELECT instance, timestamp,count FROM `partition` WHERE `schema` = ? and `timestamp` > ? and `type` = ?", schema, lastweek, flag).QueryRows(&parts)
+		num, err = o.Raw("SELECT instance, timestamp,count FROM `partition_info` WHERE `schemaname` = ? and `timestamp` > ? and `type` = ?", schema, lastweek, flag).QueryRows(&parts)
 	} else {
 		var lastquarter string
 		year := time.Now().String()[:5]
@@ -179,8 +179,15 @@ func GetPartDetail(flag, schema string) ([]*Partition, int64, error) {
 		} else if month >= "10" {
 			lastquarter = year + "10-01"
 		}
-		num, err = o.Raw("SELECT instance, timestamp,count FROM `partition` WHERE `schema` = ? and `timestamp` > ? and `type` = ?", schema, lastquarter, flag).QueryRows(&parts)
+		num, err = o.Raw("SELECT instance, timestamp,count FROM `partition_info` WHERE `schemaname`  = ? and `timestamp` > ? and `type` = ?", schema, lastquarter, flag).QueryRows(&parts)
 	}
 
 	return parts, num, err
+}
+func GetSizeBySchema(schema string) (float64, error) {
+	o := orm.NewOrm()
+	var size float64
+	today := time.Now().String()[:11] + "00:00:00"
+	err := o.Raw("select sum(size) from inst_info where schemaname=? and timestamp=? and name like '%master%'", schema, today).QueryRow(&size)
+	return size, err
 }

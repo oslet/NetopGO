@@ -368,6 +368,13 @@ func (this *DBController) SlowLog() {
 	this.Data["Category"] = "db"
 	name := this.Input().Get("name")
 	roleType := this.Input().Get("role")
+	if len(roleType) == 0 {
+		db, err := models.GetDBByName(name)
+		if err != nil {
+			beego.Error(err)
+		}
+		roleType = db.Role
+	}
 
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
@@ -383,6 +390,7 @@ func (this *DBController) SlowLog() {
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 	this.Data["IsSlowLog"] = true
+	this.Data["Schema"] = name
 	this.Data["RoleType"] = roleType
 	this.Data["paginator"] = res
 	this.Data["totals"] = total
@@ -411,4 +419,20 @@ func (this *DBController) Explain() {
 	this.Data["Plain"] = plain
 	this.Data["Total"] = total
 	this.TplName = "explain.html"
+}
+
+func (this *DBController) Sqltext() {
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "db"
+	sqltext := this.Input().Get("sql")
+
+	this.Data["Sql"] = sqltext
+	this.Data["Path1"] = "DB列表"
+	this.Data["Path2"] = "Sqltext"
+	this.Data["Href"] = "/db/list"
+	this.TplName = "db_sqltext.html"
+	return
 }

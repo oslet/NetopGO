@@ -4,7 +4,7 @@
                     <div class="ibox-content">
                         {{$Schemas := .Schemas}}
                         {{with .DB}}
-                        {{$Schema := .Schema}}
+                        {{$Schemaname := .Schemaname}}
                         <form method="post" id="userForm" class="form-horizontal" action="/db/modify?id={{.Id}}">
                             <div class="form-group">
                                 <label for="name" class="col-sm-2 control-label">主机名<span class="red-fonts">*</span></label>
@@ -79,7 +79,7 @@
                                 <div class="col-sm-8">
                                     <select name="schema" class="form-control">
                                         {{range $Schemas}}
-                                        <option value="{{.Name}}" {{if eq .Name $Schema}}selected{{end}}>{{.Name}}</option>
+                                        <option value="{{.Name}}" {{if eq .Name $Schemaname}}selected{{end}}>{{.Name}}</option>
                                         {{end}}
                                     </select>
                                 </div>

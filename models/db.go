@@ -9,17 +9,17 @@ import (
 )
 
 type Db struct {
-	Id      int64
-	Name    string `orm:size(50)`
-	Uuid    string `orm:size(50)`
-	Comment string `orm:size(100)`
-	Size    string `orm:size(10)`
-	Role    string `orm:size(20)`
-	User    string `orm:size(50)`
-	Passwd  string `orm:size(50)`
-	Port    string `orm:size(10)`
-	Schema  string `orm:size(20)`
-	Created time.Time
+	Id         int64
+	Name       string `orm:size(50)`
+	Uuid       string `orm:size(50)`
+	Comment    string `orm:size(100)`
+	Size       string `orm:size(10)`
+	Role       string `orm:size(20)`
+	User       string `orm:size(50)`
+	Passwd     string `orm:size(50)`
+	Port       string `orm:size(10)`
+	Schemaname string `orm:size(20)`
+	Created    time.Time
 }
 
 type SlowLog struct {
@@ -76,21 +76,28 @@ func GetDBById(id string) (*Db, error) {
 	return db, err
 }
 
+func GetDBByName(name string) (*Db, error) {
+	o := orm.NewOrm()
+	db := &Db{}
+	err := o.QueryTable("db").Filter("name", name).One(db)
+	return db, err
+}
+
 func AddDB(name, uuid, comment, size, role, user, password, port, schema string) error {
 	o := orm.NewOrm()
 	passwd, _ := AESEncode(password, AesKey)
 	//fmt.Printf("***add passwd:%v\n", passwd)
 	db := &Db{
-		Name:    name,
-		Uuid:    uuid,
-		Comment: comment,
-		Created: time.Now(),
-		Size:    size,
-		Role:    role,
-		User:    user,
-		Passwd:  passwd,
-		Port:    port,
-		Schema:  schema,
+		Name:       name,
+		Uuid:       uuid,
+		Comment:    comment,
+		Created:    time.Now(),
+		Size:       size,
+		Role:       role,
+		User:       user,
+		Passwd:     passwd,
+		Port:       port,
+		Schemaname: schema,
 	}
 	err := o.QueryTable("db").Filter("name", name).One(db)
 	if err == nil {
@@ -119,7 +126,7 @@ func ModifyDB(id, name, uuid, comment, size, role, user, password, port, schema 
 		db.User = user
 		db.Passwd = passwd
 		db.Port = port
-		db.Schema = schema
+		db.Schemaname = schema
 	}
 	o.Update(db)
 	return err
@@ -181,7 +188,7 @@ func GetQpsView(name string) ([]string, []float64, []float64, error) {
 	var time []string
 	var qps []float64
 	var tps []float64
-	_, err := o.Raw("select date_format(timestamp,'%Y-%m-%d') from qps_tps_overview where name=?", name).QueryRows(&time)
+	_, err := o.Raw("select timestamp from qps_tps_overview where name=?", name).QueryRows(&time)
 	o.Raw("select qps from qps_tps_overview where name=?", name).QueryRows(&qps)
 	o.Raw("select tps from qps_tps_overview where name=?", name).QueryRows(&tps)
 	return time, qps, tps, err
@@ -190,7 +197,7 @@ func GetQpsView(name string) ([]string, []float64, []float64, error) {
 func GetSlowLogs(currPage, pageSize int, name string) ([]*SlowLog, error) {
 	o := orm.NewOrm()
 	slowLogs := make([]*SlowLog, 0)
-	_, err := o.Raw("select uuid,name,timestamp,sum(query_time)/count(1) as avg_time,count(1) as count,sql_text from sql_info where name=? group by name,timestamp,uuid order by timestamp desc, avg_time desc,count desc limit ?,?;", name, (currPage-1)*pageSize, pageSize).QueryRows(&slowLogs)
+	_, err := o.Raw("select uuid,name,timestamp,round(sum(query_time)/count(1),2) as avg_time,count(1) as count,sql_text from sql_info where name=? group by name,timestamp,uuid order by timestamp desc, avg_time desc,count desc limit ?,?;", name, (currPage-1)*pageSize, pageSize).QueryRows(&slowLogs)
 
 	return slowLogs, err
 }
@@ -210,7 +217,7 @@ func SqlExplain(name, sqltext string) ([]*Explain, int64, error) {
 	o.QueryTable("db").Filter("name", name).One(db)
 
 	passwd, _ := AESDecode(db.Passwd, AesKey)
-	schemaUrl := db.User + ":" + passwd + "@tcp(" + db.Name + ":" + db.Port + ")/" + db.Schema + "?charset=utf8"
+	schemaUrl := db.User + ":" + passwd + "@tcp(" + db.Name + ":" + db.Port + ")/" + db.Schemaname + "?charset=utf8"
 	orm.RegisterDriver(_DB_Driver, orm.DRMySQL)
 	sql_db, err := orm.GetDB(db.Name)
 	if sql_db == nil {
@@ -226,12 +233,4 @@ func SqlExplain(name, sqltext string) ([]*Explain, int64, error) {
 	num, err := o.Raw(explainSql).QueryRows(&result)
 
 	return result, num, err
-}
-
-func GetSizeBySchema(schema string) (float64, error) {
-	o := orm.NewOrm()
-	var size float64
-	today := time.Now().String()[:11] + "00:00:00"
-	err := o.Raw("select sum(size) from inst_info where `schema`=? and timestamp=? and name like '%master%'", schema, today).QueryRow(&size)
-	return size, err
 }

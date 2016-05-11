@@ -59,7 +59,7 @@ func GetSizeChange() ([]*SizeChange, error) {
 	//beego.Info(firstDay)
 	today := time.Now().String()[:10] + " 00:00:00"
 	//beego.Info(today)
-	_, err := o.Raw("select  a.name,(b.size-a.size) as size from  (select `schema` name,sum(size) size from inst_info where timestamp=? and name like '%master%' group by `schema`) a join  (select `schema` name,sum(size) size from inst_info where timestamp=? and name like '%master%' group by `schema`) b on a.name=b.name order by size desc", firstDay, today).QueryRows(&sizeChange)
+	_, err := o.Raw("select  a.name,(b.size-a.size) as size from  (select schemaname name,sum(size) size from inst_info where timestamp=? and name like '%master%' group by schemaname) a join  (select schemaname name,sum(size) size from inst_info where timestamp=? and name like '%master%' group by schemaname) b on a.name=b.name order by size desc", firstDay, today).QueryRows(&sizeChange)
 	return sizeChange, err
 }
 
