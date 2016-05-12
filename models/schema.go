@@ -161,10 +161,10 @@ func GetPartDetail(flag, schema string) ([]*Partition, int64, error) {
 	var num int64
 	var err error
 	if "min" == flag {
-		yesterday := time.Now().AddDate(0, 0, -1).String()[:10]
+		yesterday := time.Now().AddDate(0, 0, -1).String()[:10] + "23:59:59"
 		num, err = o.Raw("SELECT instance, timestamp,count FROM `partition_info` WHERE `schemaname` = ? and `timestamp` > ? and `type` = ?", schema, yesterday, flag).QueryRows(&parts)
 	} else if "hour" == flag {
-		lastweek := time.Now().AddDate(0, 0, -7).String()[:10]
+		lastweek := time.Now().AddDate(0, 0, -7).String()[:10] + "23:59:59"
 		num, err = o.Raw("SELECT instance, timestamp,count FROM `partition_info` WHERE `schemaname` = ? and `timestamp` > ? and `type` = ?", schema, lastweek, flag).QueryRows(&parts)
 	} else {
 		var lastquarter string

@@ -48,7 +48,7 @@ func GetSlowOverview() ([]*SlowOverview, error) {
 	o := orm.NewOrm()
 	slows := make([]*SlowOverview, 0)
 	today := time.Now().String()[:10] + " 00:00:00"
-	_, err := o.Raw("select name,count from  slow_overview where timestamp>=? order by count desc limit 10", today).QueryRows(&slows)
+	_, err := o.Raw("select name,count from  slow_overview where timestamp>=? order by count desc limit 12", today).QueryRows(&slows)
 	return slows, err
 }
 
