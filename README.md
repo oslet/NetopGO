@@ -1,12 +1,1 @@
-NetopGO功能简介：
-    1、支持admin、dba、和普通来宾三种角色权限
-    2、数据源、数据库实例的动态添加
-    3、业务组、主机的动态添加
-    4、webshell远程访问主机
-    5、web页面提供各个数据源的数据查询窗口
-    6、数据量、qps|tps、满查询个数的图表展示
-    7、慢sql统计，支持在线查看执行计划
-    8、查询sql审计记录
-    9、升级记录功能，包括数据库、系统、故障
-
-
+<style class="fox_global_style"> div.fox_html_content { line-height: 1.5;} /* 一些默认样式 */ blockquote { margin-Top: 0px; margin-Bottom: 0px; margin-Left: 0.5em } ol, ul { margin-Top: 0px; margin-Bottom: 0px; list-style-position: inside; } p { margin-Top: 0px; margin-Bottom: 0px } </style> <div><span id="_FoxCURSOR"></span><span style="color: rgb(0, 0, 0); background-color: rgba(0, 0, 0, 0);">NetopGO功能简介：<br>&nbsp;&nbsp;&nbsp;&nbsp;1、支持admin、dba、和普通来宾三种角色权限<br>&nbsp;&nbsp;&nbsp;&nbsp;2、数据源、数据库实例的动态添加<br>&nbsp;&nbsp;&nbsp;&nbsp;3、业务组、主机的动态添加<br>&nbsp;&nbsp;&nbsp;&nbsp;4、webshell远程访问主机<br>&nbsp;&nbsp;&nbsp;&nbsp;5、web页面提供各个数据源的数据查询窗口<br>&nbsp;&nbsp;&nbsp;&nbsp;6、数据量、qps|tps、满查询个数的图表展示<br>&nbsp;&nbsp;&nbsp;&nbsp;7、慢sql统计，支持在线查看执行计划<br>&nbsp;&nbsp;&nbsp;&nbsp;8、查询sql审计记录<br>&nbsp;&nbsp;&nbsp;&nbsp;9、升级记录功能，包括数据库、系统、故障</span></div> 
