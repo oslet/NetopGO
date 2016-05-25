@@ -25,8 +25,12 @@ func (this *RecordController) Get() {
 	} else {
 		page = this.Input().Get("page")
 	}
-	list := beego.AppConfig.String("db_record_schema_list")
-	arrList := strings.Split(list, ",")
+	// list := beego.AppConfig.String("db_record_schema_list")
+	// arrList := strings.Split(list, ",")
+	schemas, err := models.GetSchemaNames()
+	if err != nil {
+		beego.Error(err)
+	}
 
 	currPage, _ := strconv.ParseInt(page, 10, 64)
 	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
@@ -39,7 +43,7 @@ func (this *RecordController) Get() {
 
 	auth := role.(int64)
 	this.Data["Auth"] = auth
-	this.Data["List"] = arrList
+	this.Data["Schemas"] = schemas
 	this.Data["paginator"] = res
 	this.Data["DBRecords"] = dbRecs
 	this.Data["totals"] = total

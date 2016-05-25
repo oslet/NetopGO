@@ -18,8 +18,8 @@
                             <div class="input-group">
                                 <div class="col-sm-8">
                                     <select name="keyword" class="form-control">
-                                        {{range .List}}
-                                        <option value="{{.}}">{{.}}</option>
+                                        {{range .Schemas}}
+                                        <option value="{{.Name}}">{{.Name}}</option>
                                         {{end}}
                                     </select>
                                 </div>

@@ -5,8 +5,12 @@ import (
 	"github.com/astaxie/beego"
 	//"github.com/astaxie/beego/orm"
 	//"fmt"
+	"github.com/tealeg/xlsx"
+	"os"
+	"path"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type DBController struct {
@@ -214,6 +218,7 @@ func (this *DBController) Query() {
 	flag := this.Input().Get("flag")
 	sqltext := this.Input().Get("sql")
 	schemaIns, _ := models.GetSchemaByName(schema)
+	auth := role.(int64)
 	//fmt.Printf("******schema type %v\n", schemaIns.Status)
 
 	if strings.Trim(sqltext, " ") == "" {
@@ -261,6 +266,7 @@ func (this *DBController) Query() {
 				this.TplName = "query.html"
 				return
 			}
+			this.Data["Auth"] = auth
 			this.Data["Schema"] = schema
 			this.Data["Values"] = values
 			this.Data["Columns"] = columns
@@ -288,6 +294,7 @@ func (this *DBController) Query() {
 			this.Data["Columns"] = columns
 			this.Data["Total"] = total
 			this.Data["Sqltext"] = sqltext
+			this.Data["Auth"] = auth
 			this.TplName = "query_result.html"
 			return
 		} else {
@@ -310,6 +317,7 @@ func (this *DBController) Query() {
 			this.Data["Columns"] = columns
 			this.Data["Total"] = total
 			this.Data["Sqltext"] = sqltext
+			this.Data["Auth"] = auth
 			this.TplName = "query_result.html"
 			return
 		}
@@ -434,5 +442,45 @@ func (this *DBController) Sqltext() {
 	this.Data["Path2"] = "Sqltext"
 	this.Data["Href"] = "/db/list"
 	this.TplName = "db_sqltext.html"
+	return
+}
+
+func (this *DBController) Export() {
+	uid, uname, role := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "db"
+
+	schema := this.Input().Get("schema")
+	sqltext := this.Input().Get("sql")
+	values, columns, _ := models.Query2Export(schema, sqltext)
+
+	file := xlsx.NewFile()
+	sheet, _ := file.AddSheet("Sheet1")
+	row := sheet.AddRow()
+	for _, val := range columns {
+		cell := row.AddCell()
+		cell.Value = val
+	}
+	sheet.SetColWidth(1, len(columns), 100)
+	for _, val := range *values {
+		row = sheet.AddRow()
+		for _, value := range val {
+			cell := row.AddCell()
+			cell.Value = value
+		}
+	}
+	now := time.Now().String()
+	filename := "result" + now[:4] + now[5:7] + now[8:10] + now[11:13] + now[14:16] + now[17:19] + ".xlsx"
+	filepath := path.Join("export", filename)
+	err := file.Save(filepath)
+	if err != nil {
+		beego.Error(err)
+	}
+	defer func() {
+		os.Remove(filepath)
+	}()
+	this.Ctx.Output.Download(filepath, filename)
 	return
 }

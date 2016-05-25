@@ -30,7 +30,9 @@
     <div class="row">
         <div class="col-sm-12">
             <span class="pull-right" style="font-size:18px;color:yellow;">Total <strong>{{.Total}}</strong> entries</span>
-            <a href="/db/query?sql={{.Sqltext}}&schema={{.Schema}}" class="btn btn-success pull-left"> 返回窗口 </a>
+            <a href="/db/query?sql={{.Sqltext}}&schema={{.Schema}}" class="btn btn-success"> 返回窗口 </a>
+            <span>|</span>
+            <a href="/db/query/export?sql={{.Sqltext}}&schema={{.Schema}}" class="btn btn-warning" {{if eq .Auth 3}}disabled="disabled"{{end}}> 导出结果 </a>
 
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
