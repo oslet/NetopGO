@@ -34,6 +34,15 @@ func (this *AppWOController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
+	for _, appwo := range appwos {
+		appwo.Isapproved = models.IsApproved("app", dept.(string), appwo.Status, appwo.Upgradetype)
+		if "研发" == dept.(string) || "运维" == dept.(string) {
+			appwo.Isedit = appwo.Isapproved
+		} else {
+			appwo.Isedit = "false"
+		}
+
+	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
 	auth := role.(int64)

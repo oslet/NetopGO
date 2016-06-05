@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/astaxie/beego/orm"
 	"strings"
 	"time"
@@ -38,6 +39,7 @@ type Appworkorder struct {
 	Operater    string `orm:size(50)`
 	Status      string `orm:size(50)`
 	DbStatus    string `orm:size(50)`
+	Isapproved  string `orm:size(50)`
 	Isedit      string `orm:size(5)`
 	Created     string `orm:size(20)`
 }
@@ -94,4 +96,162 @@ func GetAppOrders(currPage, pageSize int) ([]*Appworkorder, int64, error) {
 		return nil, 0, err
 	}
 	return appwo, total, err
+}
+
+func IsApproved(cate, dept, status, upgradeType string) string {
+	fmt.Printf("cate: %v;dept: %v;status: %v;upgradeType: %v;", cate, dept, status, upgradeType)
+	var flag string
+	if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "测试流程中" {
+		flag = "true"
+	} else if cate == "app" && dept == "测试" && upgradeType == "产品发布" && status == "测试流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "测试" && upgradeType == "系统运维" && status == "测试流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "测试" && upgradeType == "产品发布" && status == "审批流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "审批流程中" {
+		flag = "true"
+	} else if cate == "app" && dept == "测试" && upgradeType == "系统运维" && status == "审批流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "实施流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "测试" && upgradeType == "产品发布" && status == "实施流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "测试" && upgradeType == "系统运维" && status == "实施流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "验证流程中" {
+		flag = "true"
+	} else if cate == "app" && dept == "测试" && upgradeType == "产品发布" && status == "验证流程中" {
+		flag = "true"
+	} else if cate == "app" && dept == "测试" && upgradeType == "系统运维" && status == "验证流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "工单已关闭" {
+		flag = "false"
+	} else if cate == "app" && dept == "测试" && upgradeType == "产品发布" && status == "工单已关闭" {
+		flag = "false"
+	} else if cate == "app" && dept == "测试" && upgradeType == "系统运维" && status == "工单已关闭" {
+		flag = "false"
+	} else if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "异常已回滚" {
+		flag = "true"
+	} else if cate == "app" && dept == "测试" && upgradeType == "产品发布" && status == "异常已回滚" {
+		flag = "true"
+	} else if cate == "app" && dept == "测试" && upgradeType == "系统运维" && status == "异常已回滚" {
+		flag = "false"
+	}
+
+	if cate == "app" && dept == "研发" && upgradeType == "修复bug" && status == "测试流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "产品发布" && status == "测试流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "系统运维" && status == "测试流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "修复bug" && status == "审批流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "产品发布" && status == "审批流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "系统运维" && status == "审批流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "修复bug" && status == "实施流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "产品发布" && status == "实施流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "系统运维" && status == "实施流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "修复bug" && status == "验证流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "产品发布" && status == "验证流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "系统运维" && status == "验证流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "修复bug" && status == "工单已关闭" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "产品发布" && status == "工单已关闭" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "系统运维" && status == "工单已关闭" {
+		flag = "false"
+	} else if cate == "app" && dept == "研发" && upgradeType == "修复bug" && status == "异常已回滚" {
+		flag = "true"
+	} else if cate == "app" && dept == "研发" && upgradeType == "产品发布" && status == "异常已回滚" {
+		flag = "true"
+	} else if cate == "app" && dept == "研发" && upgradeType == "系统运维" && status == "异常已回滚" {
+		flag = "false"
+	}
+
+	if cate == "app" && dept == "产品" && upgradeType == "修复bug" && status == "测试流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "产品" && upgradeType == "产品发布" && status == "测试流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "产品" && upgradeType == "系统运维" && status == "测试流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "产品" && upgradeType == "修复bug" && status == "审批流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "产品" && upgradeType == "产品发布" && status == "审批流程中" {
+		flag = "true"
+	} else if cate == "app" && dept == "产品" && upgradeType == "系统运维" && status == "审批流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "产品" && upgradeType == "修复bug" && status == "实施流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "产品" && upgradeType == "产品发布" && status == "实施流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "产品" && upgradeType == "系统运维" && status == "实施流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "产品" && upgradeType == "修复bug" && status == "验证流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "产品" && upgradeType == "产品发布" && status == "验证流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "产品" && upgradeType == "系统运维" && status == "验证流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "产品" && upgradeType == "修复bug" && status == "工单已关闭" {
+		flag = "false"
+	} else if cate == "app" && dept == "产品" && upgradeType == "产品发布" && status == "工单已关闭" {
+		flag = "false"
+	} else if cate == "app" && dept == "产品" && upgradeType == "系统运维" && status == "工单已关闭" {
+		flag = "false"
+	} else if cate == "app" && dept == "产品" && upgradeType == "修复bug" && status == "异常已回滚" {
+		flag = "true"
+	} else if cate == "app" && dept == "产品" && upgradeType == "产品发布" && status == "异常已回滚" {
+		flag = "true"
+	} else if cate == "app" && dept == "产品" && upgradeType == "系统运维" && status == "异常已回滚" {
+		flag = "false"
+	}
+
+	if cate == "app" && dept == "运维" && upgradeType == "修复bug" && status == "测试流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "运维" && upgradeType == "产品发布" && status == "测试流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "运维" && upgradeType == "系统运维" && status == "测试流程中" {
+		flag = "true"
+	} else if cate == "app" && dept == "运维" && upgradeType == "修复bug" && status == "审批流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "运维" && upgradeType == "产品发布" && status == "审批流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "运维" && upgradeType == "系统运维" && status == "审批流程中" {
+		flag = "true"
+	} else if cate == "app" && dept == "运维" && upgradeType == "修复bug" && status == "实施流程中" {
+		flag = "true"
+	} else if cate == "app" && dept == "运维" && upgradeType == "产品发布" && status == "实施流程中" {
+		flag = "true"
+	} else if cate == "app" && dept == "运维" && upgradeType == "系统运维" && status == "实施流程中" {
+		flag = "true"
+	} else if cate == "app" && dept == "运维" && upgradeType == "修复bug" && status == "验证流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "运维" && upgradeType == "产品发布" && status == "验证流程中" {
+		flag = "false"
+	} else if cate == "app" && dept == "运维" && upgradeType == "系统运维" && status == "验证流程中" {
+		flag = "true"
+	} else if cate == "app" && dept == "运维" && upgradeType == "修复bug" && status == "工单已关闭" {
+		flag = "false"
+	} else if cate == "app" && dept == "运维" && upgradeType == "产品发布" && status == "工单已关闭" {
+		flag = "false"
+	} else if cate == "app" && dept == "运维" && upgradeType == "系统运维" && status == "工单已关闭" {
+		flag = "false"
+	} else if cate == "app" && dept == "运维" && upgradeType == "修复bug" && status == "异常已回滚" {
+		flag = "true"
+	} else if cate == "app" && dept == "运维" && upgradeType == "产品发布" && status == "异常已回滚" {
+		flag = "true"
+	} else if cate == "app" && dept == "运维" && upgradeType == "系统运维" && status == "异常已回滚" {
+		flag = "true"
+	}
+	fmt.Println(flag)
+	return flag
 }

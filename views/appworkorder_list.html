@@ -65,17 +65,15 @@
                                 </td>
                                 <td class="text-center">
                                     <a href="#" class="btn btn-xs btn-primary" >详情</a>
-                                    {{if eq $Dept "研发"}}
-                                        <a href="#" class="btn btn-xs btn-danger" {{if ne .Isedit "true"}}disabled="disabled"{{end}}>编辑</a>
+                                    {{if eq $Dept "研发"}} 
+                                    <a href="#" class="btn btn-xs btn-danger" {{if eq .Isedit "false"}}disabled="disabled"{{end}}>编辑</a>
                                     {{end}}
-                                    {{if eq $Dept "测试"}}
-                                        <a href="#" class="btn btn-xs btn-info" >审批</a>
+                                    {{if eq $Dept "运维"}} 
+                                    <a href="#" class="btn btn-xs btn-danger" {{if eq .Isedit "false"}}disabled="disabled"{{end}}>编辑</a>
                                     {{end}}
-                                    {{if eq $Dept "产品"}}
-                                        <a href="#" class="btn btn-xs btn-info" {{if eq .Status "审批流程中"}}disabled="disabled"{{end}}>审批</a>
-                                    {{end}}
+                                    <a href="#" class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>审批</a>
                                     {{if eq $Dept "运维"}}
-                                        <a href="#" class="btn btn-xs btn-info">实施</a>
+                                    <a href="#" class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>实施</a>
                                     {{end}}
                                 </td>
                             </tr>
