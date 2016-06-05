@@ -93,5 +93,9 @@ func init() {
 	beego.Router("/audit/detail", &controllers.AuditController{}, "get:Detail")
 	beego.Router("/audit/search", &controllers.AuditController{}, "get:Search")
 
+	beego.Router("/workorder/app", &controllers.AppWOController{}, "get:AppOrder")
+	beego.Router("/workorder/app", &controllers.AppWOController{}, "post:AppOrderPost")
+	beego.Router("/workorder/my", &controllers.AppWOController{}, "get:Get")
+
 	beego.Router("/attachment/:all", &controllers.AttachController{})
 }

@@ -13,7 +13,7 @@ type SchemaController struct {
 
 func (this *SchemaController) Get() {
 	var page string
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -52,7 +52,7 @@ func (this *SchemaController) Get() {
 }
 
 func (this *SchemaController) Add() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -80,7 +80,7 @@ func (this *SchemaController) Add() {
 }
 
 func (this *SchemaController) Post() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -115,7 +115,7 @@ func (this *SchemaController) Post() {
 }
 
 func (this *SchemaController) Delete() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -133,7 +133,7 @@ func (this *SchemaController) Delete() {
 }
 
 func (this *SchemaController) BitchDelete() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -153,7 +153,7 @@ func (this *SchemaController) BitchDelete() {
 
 func (this *SchemaController) Search() {
 	var page string
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -190,7 +190,7 @@ func (this *SchemaController) Search() {
 }
 
 func (this *SchemaController) Partition() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role

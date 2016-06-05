@@ -12,11 +12,19 @@
         <li>
             <span class="m-r-sm text-muted welcome-message">欢迎使用听云NetopGO系统</span>
         </li>
+        <!--
         <li class="dropdown">
             <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                  <span class="m-r-sm text-muted welcome-message">帮助</span>
             </a>
         </li>
+        -->
+        <li role="presentation"><a href="#"><span style="color:blue;">流程工单 </span><span class="badge" style="color:red;">3</span></a></li>
+        <!--
+        <button class="btn btn-primary" type="button">
+          流程工单 <span class="badge">4</span>
+        </button>
+        -->
         <li>
             <a href="/logout">
                 <i class="fa fa-sign-out"></i> Log out

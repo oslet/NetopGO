@@ -31,6 +31,7 @@ func (this *LoginController) Post() {
 	this.SetSession("uname", user.Name)
 	this.SetSession("passwd", user.Passwd)
 	this.SetSession("auth", user.Auth)
+	this.SetSession("dept", user.Dept)
 
 	this.Redirect("/", 302)
 }

@@ -1,0 +1,125 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="">
+                        {{if .IsSearch}}
+                        <a href="/record/db/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        {{else}}
+                        <form id="search_form" method="get" action="/record/db/search" class="form-inline pull-right">
+                            <div class="input-group">
+                                <div class="col-sm-8">
+                                    <select name="keyword" class="form-control">
+                                        {{range .AppNameList}}
+                                        <option value="{{.}}">{{.}}</option>
+                                        {{end}}
+                                    </select>
+                                </div>
+                                <div class="input-group-btn">
+                                    <button id='search_btn' type="submit" class="btn btn-primary">
+                                        -搜索-
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+                    <table class="table table-striped table-bordered table-hover " id="editable" >
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    <input type="checkbox" id="check_all" onclick="checkAll('check_all', 'checked')">
+                                </th>
+                                <th class="text-center">时间</th>
+                                <th class="text-center">应用名称</th>
+                                <th class="text-center">迭代版本</th>
+                                <th class="text-center">业务类型</th>                         
+                                <th class="text-center">发布类型</th>
+                                <th class="text-center">发起人</th>
+                                <th class="text-center">工单状态</th>
+                                <th class="text-center">DB状态</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{$Dept := .Dept}}
+                            {{range .AppWorkOrders}}
+                            <tr class="gradeX">
+                                <td class="text-center">
+                                    <input type="checkbox" name="checked" value="{{.Id}}">
+                                </td>
+                                <td class="text-center">{{.Created}}</td>
+                                <td class="text-center">{{.Appname}}</td>
+                                <td class="text-center">{{.Verion}}</td>
+                                <td class="text-center">{{.Apptype}}</td>
+                                <td class="text-center">{{.Upgradetype}}</td>
+                                <td class="text-center">{{.Sponsor}}</td>
+                                <td class="text-center" >
+                                    <a href="#" {{if eq .Status "测试流程中"}} class="btn btn-xs btn-success"{{else if eq .Status "审批流程中"}} class="btn btn-xs btn-warning"{{else if eq .Status "实施流程中"}} class="btn btn-xs btn-primary"{{else if eq .Status "验证流程中"}} class="btn btn-xs btn-info"{{else if eq .Status "工单已关闭"}} class="btn btn-xs btn-default"{{else if eq .Status "异常已回滚"}} class="btn btn-xs btn-danger"{{end}}>{{.Status}}</a>
+                                </td>
+                                <td class="text-center">
+                                <a href="#" {{if eq .DbStatus "准备就绪"}} class="btn btn-xs btn-success"{{else if eq .DbStatus "正在实施"}}class="btn btn-xs btn-info"{{else if eq .DbStatus "无DB变更"}}class="btn btn-xs btn-primary"{{end}}>{{.DbStatus}}</a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="#" class="btn btn-xs btn-primary" >详情</a>
+                                    {{if eq $Dept "研发"}}
+                                        <a href="#" class="btn btn-xs btn-danger" {{if ne .Isedit "true"}}disabled="disabled"{{end}}>编辑</a>
+                                    {{end}}
+                                    {{if eq $Dept "测试"}}
+                                        <a href="#" class="btn btn-xs btn-info" >审批</a>
+                                    {{end}}
+                                    {{if eq $Dept "产品"}}
+                                        <a href="#" class="btn btn-xs btn-info" {{if eq .Status "审批流程中"}}disabled="disabled"{{end}}>审批</a>
+                                    {{end}}
+                                    {{if eq $Dept "运维"}}
+                                        <a href="#" class="btn btn-xs btn-info">实施</a>
+                                    {{end}}
+                                </td>
+                            </tr>
+                            {{end}}
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                                Total {{.totals}} entries
+                            </div>
+                        </div>
+                        {{template "paginator" .}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery.shiftcheckbox.js"></script>
+<script>
+    $(document).ready(function(){
+
+        $('#del_btn').click(function(){
+            var check_array = [];
+            if (confirm("确定删除")) {
+                $(".gradeX input:checked").each(function() {
+                    check_array.push($(this).attr("value"))
+                });
+                console.log(check_array.join(","));
+                $.post("/record/db/bitchDel",
+                        {ids: check_array.join(",")},
+                        function(data){
+                            //console.log(data);
+                            //$(".gradeX input:checked").closest("tr").remove();                            
+                            window.location.href="/record/db/list"                            
+                            //alert(data);
+                        }
+                )
+            }
+
+        });
+
+    });
+
+</script>
+{{template "page_buttom"}}

@@ -13,7 +13,7 @@ type AuditController struct {
 
 func (this *AuditController) Get() {
 	var page string
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -50,7 +50,7 @@ func (this *AuditController) Get() {
 }
 
 func (this *AuditController) Detail() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -71,7 +71,7 @@ func (this *AuditController) Detail() {
 }
 
 func (this *AuditController) Delete() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -90,7 +90,7 @@ func (this *AuditController) Delete() {
 }
 
 func (this *AuditController) BitchDelete() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -110,7 +110,7 @@ func (this *AuditController) BitchDelete() {
 
 func (this *AuditController) Search() {
 	var page string
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role

@@ -10,7 +10,7 @@ type MainController struct {
 }
 
 func (this *MainController) Get() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role

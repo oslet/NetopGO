@@ -14,7 +14,7 @@ type HostController struct {
 
 func (this *HostController) Get() {
 	var page string
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -54,7 +54,7 @@ func (this *HostController) Get() {
 	return
 }
 func (this *HostController) Add() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -92,7 +92,7 @@ func (this *HostController) Add() {
 }
 
 func (this *HostController) Post() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -131,7 +131,7 @@ func (this *HostController) Post() {
 }
 
 func (this *HostController) Delete() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -150,7 +150,7 @@ func (this *HostController) Delete() {
 }
 
 func (this *HostController) BitchDelete() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -170,7 +170,7 @@ func (this *HostController) BitchDelete() {
 
 func (this *HostController) Search() {
 	var page string
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -218,7 +218,7 @@ func (this *HostController) Search() {
 }
 
 func (this *HostController) WebConsole() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role

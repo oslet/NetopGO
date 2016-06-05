@@ -34,6 +34,14 @@
                 </ul>
             </li>
             <li id="record">
+                <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">系统发布</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li class="myorder"><a href="/workorder/my">我的工单</a></li>
+                    <li class="apporder"><a href="/workorder/app">提交应用工单</a></li>
+                    <li class="dborder"><a href="/workorder/db">提交数据库工单</a></li>
+                </ul>
+            </li>            
+            <li id="record">
                 <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">记录管理</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li class="upload"><a href="/record/app/list">系统升级</a></li>
@@ -44,6 +52,9 @@
             </li>
             <li id="log">
                <a href="/audit/list"><i class="fa fa-files-o"></i> <span class="nav-label">日志审计</span><span class="label label-info pull-right"></span></a>
+            </li>
+            <li class="special_link">
+                <a href="http://www.tingyun.com" target="_blank"><i class="fa fa-database"></i> <span class="nav-label">访问官网</span></a>
             </li>
         </ul>
 

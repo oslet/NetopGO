@@ -14,7 +14,7 @@ type FaultRecordController struct {
 
 func (this *FaultRecordController) Get() {
 	var page string
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -53,7 +53,7 @@ func (this *FaultRecordController) Get() {
 }
 
 func (this *FaultRecordController) Add() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -70,7 +70,7 @@ func (this *FaultRecordController) Add() {
 }
 
 func (this *FaultRecordController) Post() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -118,7 +118,7 @@ func (this *FaultRecordController) Post() {
 }
 
 func (this *FaultRecordController) Delete() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -137,7 +137,7 @@ func (this *FaultRecordController) Delete() {
 }
 
 func (this *FaultRecordController) BitchDelete() {
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -157,7 +157,7 @@ func (this *FaultRecordController) BitchDelete() {
 
 func (this *FaultRecordController) Search() {
 	var page string
-	uid, uname, role := this.IsLogined()
+	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
