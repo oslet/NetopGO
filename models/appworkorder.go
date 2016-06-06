@@ -3,6 +3,7 @@ package models
 import (
 	"fmt"
 	"github.com/astaxie/beego/orm"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -96,6 +97,14 @@ func GetAppOrders(currPage, pageSize int) ([]*Appworkorder, int64, error) {
 		return nil, 0, err
 	}
 	return appwo, total, err
+}
+
+func GetAppwoById(id string) (*Appworkorder, error) {
+	o := orm.NewOrm()
+	aid, err := strconv.ParseInt(id, 10, 64)
+	appwo := &Appworkorder{}
+	err = o.QueryTable("appworkorder").Filter("id", aid).One(appwo)
+	return appwo, err
 }
 
 func IsApproved(cate, dept, status, upgradeType string) string {

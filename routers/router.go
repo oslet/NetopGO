@@ -96,6 +96,7 @@ func init() {
 	beego.Router("/workorder/app", &controllers.AppWOController{}, "get:AppOrder")
 	beego.Router("/workorder/app", &controllers.AppWOController{}, "post:AppOrderPost")
 	beego.Router("/workorder/my", &controllers.AppWOController{}, "get:Get")
+	beego.Router("/workorder/approve", &controllers.AppWOController{}, "get:Approve")
 
 	beego.Router("/attachment/:all", &controllers.AttachController{})
 }

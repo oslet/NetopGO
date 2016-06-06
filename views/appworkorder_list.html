@@ -46,6 +46,7 @@
                         </thead>
                         <tbody>
                             {{$Dept := .Dept}}
+                            {{$Auth := .Auth}}
                             {{range .AppWorkOrders}}
                             <tr class="gradeX">
                                 <td class="text-center">
@@ -71,7 +72,7 @@
                                     {{if eq $Dept "运维"}} 
                                     <a href="#" class="btn btn-xs btn-danger" {{if eq .Isedit "false"}}disabled="disabled"{{end}}>编辑</a>
                                     {{end}}
-                                    <a href="#" class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>审批</a>
+                                    <a href="/workorder/approve?id={{.Id}}" class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>审批</a>
                                     {{if eq $Dept "运维"}}
                                     <a href="#" class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>实施</a>
                                     {{end}}

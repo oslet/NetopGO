@@ -132,3 +132,19 @@ func (this *AppWOController) AppOrderPost() {
 	this.TplName = "index.html"
 	return
 }
+
+func (this *AppWOController) Approve() {
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Dept"] = dept
+	this.Data["IsSearch"] = false
+	id := this.Input().Get("id")
+	appwo, err := models.GetAppwoById(id)
+
+	this.Data["Appwo"] = appwo
+	this.Data["Auth"] = role.(string)
+	this.TplName = "approve.html"
+	return
+}
