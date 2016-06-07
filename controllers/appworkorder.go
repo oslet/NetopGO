@@ -81,7 +81,7 @@ func (this *AppWOController) AppOrder() {
 }
 
 func (this *AppWOController) AppOrderPost() {
-	uid, uname, role, _ := this.IsLogined()
+	uid, uname, role, dept := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -96,7 +96,7 @@ func (this *AppWOController) AppOrderPost() {
 	relayapp := this.Input().Get("relayapp")
 	upgradetype := this.Input().Get("upgradetype")
 	sponsor := uname.(string)
-
+	currDept := dept.(string)
 	_, fh, err := this.GetFile("attachment")
 	if err != nil {
 		beego.Error(err)
@@ -124,7 +124,7 @@ func (this *AppWOController) AppOrderPost() {
 		}
 	}
 
-	err = models.AddAppOrder(apptype, appname, version, jenkinsname, buildnum, featurelist, modifycfg, relayapp, upgradetype, sponsor, attachment, sqlfile)
+	err = models.AddAppOrder(apptype, appname, version, jenkinsname, buildnum, featurelist, modifycfg, relayapp, upgradetype, sponsor, attachment, sqlfile, currDept)
 	if err != nil {
 		beego.Error(err)
 	}
@@ -134,17 +134,99 @@ func (this *AppWOController) AppOrderPost() {
 }
 
 func (this *AppWOController) Approve() {
-	uid, uname, role, _ := this.IsLogined()
+	uid, uname, role, dept := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Dept"] = dept
 	this.Data["IsSearch"] = false
+
+	appTypeList := strings.Split(beego.AppConfig.String("AppType"), ",")
+	appNameList := strings.Split(beego.AppConfig.String("AppName"), ",")
+
 	id := this.Input().Get("id")
 	appwo, err := models.GetAppwoById(id)
-
+	if err != nil {
+		beego.Error(err)
+	}
+	test, product, op, final, testReadonly, productReadonly, opReadonly, finalReadonly := models.IsViewDiv(dept.(string), appwo.Status, appwo.Upgradetype)
+	this.Data["Test"] = test
+	this.Data["Product"] = product
+	this.Data["Op"] = op
+	this.Data["Final"] = final
+	this.Data["TestReadonly"] = testReadonly
+	this.Data["ProductReadonly"] = productReadonly
+	this.Data["OpReadonly"] = opReadonly
+	this.Data["FinalReadonly"] = finalReadonly
+	this.Data["AppTypeList"] = appTypeList
+	this.Data["AppNameList"] = appNameList
 	this.Data["Appwo"] = appwo
-	this.Data["Auth"] = role.(string)
+	this.Data["Auth"] = dept.(string)
+	this.Data["Path1"] = "我的工单"
+	this.Data["Path2"] = "工单审批"
+	this.Data["Href"] = "/workorder/my"
+	this.Data["Category"] = "workorder/app"
 	this.TplName = "approve.html"
+	return
+}
+
+func (this *AppWOController) ApproveCommit() {
+	uid, uname, role, dept := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Dept"] = dept
+	//id := this.Input().Get("id")
+	// appwo, err := models.GetAppwoById(id)
+	// if err != nil {
+	// 	beego.Error(err)
+	// }
+
+	this.Redirect("/workorder/my", 302)
+	return
+}
+
+func (this *AppWOController) ApproveRollback() {
+	uid, uname, role, dept := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Dept"] = dept
+	//id := this.Input().Get("id")
+	// appwo, err := models.GetAppwoById(id)
+	// if err != nil {
+	// 	beego.Error(err)
+	// }
+
+	this.Redirect("/workorder/my", 302)
+	return
+}
+
+func (this *AppWOController) Detail() {
+	uid, uname, role, dept := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Dept"] = dept
+	this.Data["IsSearch"] = false
+
+	appTypeList := strings.Split(beego.AppConfig.String("AppType"), ",")
+	appNameList := strings.Split(beego.AppConfig.String("AppName"), ",")
+
+	id := this.Input().Get("id")
+	appwo, err := models.GetAppwoById(id)
+	if err != nil {
+		beego.Error(err)
+	}
+
+	this.Data["AppTypeList"] = appTypeList
+	this.Data["AppNameList"] = appNameList
+	this.Data["Appwo"] = appwo
+	//this.Data["Auth"] = dept.(string)
+	this.Data["Path1"] = "我的工单"
+	this.Data["Path2"] = "工单详情"
+	this.Data["Href"] = "/workorder/my"
+	this.Data["Category"] = "workorder/app"
+	this.TplName = "appworkorder_detail.html"
 	return
 }
