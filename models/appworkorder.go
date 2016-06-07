@@ -38,6 +38,7 @@ type Appworkorder struct {
 	Tester       string `orm:size(50)`
 	Approver     string `orm:size(50)`
 	Operater     string `orm:size(50)`
+	Finalchker   string `orm:size(50)`
 	TestOutcome  string `orm:size(1024)`
 	PrdtOutcome  string `orm:size(1024)`
 	OpOutcome    string `orm:size(1024)`
@@ -117,12 +118,89 @@ func GetAppwoById(id string) (*Appworkorder, error) {
 	return appwo, err
 }
 
+func ApproveCommit(id, nextStatus, outcome, outcomevalue, who, uname string) error {
+	o := orm.NewOrm()
+	aid, err := strconv.ParseInt(id, 10, 64)
+	appwo := &Appworkorder{
+		Id: aid,
+	}
+
+	err = o.Read(appwo)
+	if err == nil {
+		appwo.Status = nextStatus
+		if who == "tester" {
+			appwo.Tester = uname
+		} else if who == "approver" {
+			appwo.Approver = uname
+		} else if who == "finalchker" {
+			appwo.Finalchker = uname
+		} else if who == "operater" {
+			appwo.Operater = uname
+		}
+		if outcome == "testoutcome" {
+			appwo.TestOutcome = outcomevalue
+		} else if outcome == "prdtoutcome" {
+			appwo.PrdtOutcome = outcomevalue
+		} else if outcome == "opoutcome" {
+			appwo.OpOutcome = outcomevalue
+		} else if outcome == "finaloutcome" {
+			appwo.FinalOutcome = outcomevalue
+		}
+	}
+	o.Update(appwo)
+	return err
+}
+
+func NextStatus(cate, dept, status, upgradeType string) (string, string, string) {
+	var nextStatus string
+	var who string
+	var outcome string
+	if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "测试流程中" {
+		nextStatus = "审批流程中"
+		who = "tester"
+		outcome = "testoutcome"
+	} else if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "审批流程中" {
+		nextStatus = "实施流程中"
+		who = "approver"
+		outcome = "testoutcome"
+	} else if cate == "app" && dept == "测试" && upgradeType == "产品发布" && status == "测试流程中" {
+		nextStatus = "审批流程中"
+		who = "tester"
+		outcome = "testoutcome"
+	} else if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "验证流程中" {
+		nextStatus = "工单已关闭"
+		who = "finalchker"
+		outcome = "finaloutcome"
+	} else if cate == "app" && dept == "测试" && upgradeType == "产品发布" && status == "验证流程中" {
+		nextStatus = "工单已关闭"
+		who = "finalchker"
+		outcome = "finaloutcome"
+	} else if cate == "app" && dept == "产品" && upgradeType == "产品发布" && status == "审批流程中" {
+		nextStatus = "实施流程中"
+		who = "approver"
+		outcome = "prdtoutcome"
+	} else if cate == "app" && dept == "运维" && upgradeType == "修复bug" && status == "实施流程中" {
+		nextStatus = "验证流程中"
+		who = "operater"
+		outcome = "opoutcome"
+	} else if cate == "app" && dept == "运维" && upgradeType == "产品发布" && status == "实施流程中" {
+		nextStatus = "验证流程中"
+		who = "operater"
+		outcome = "opoutcome"
+	} else if cate == "app" && dept == "运维" && upgradeType == "系统运维" && status == "实施流程中" {
+		nextStatus = "工单已关闭"
+		who = "operater"
+		outcome = "opoutcome"
+	}
+	return nextStatus, who, outcome
+}
+
 func IsApproved(cate, dept, status, upgradeType string) string {
 	var flag string
 	if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "测试流程中" {
 		flag = "true"
 	} else if cate == "app" && dept == "测试" && upgradeType == "产品发布" && status == "测试流程中" {
-		flag = "false"
+		flag = "true"
 	} else if cate == "app" && dept == "测试" && upgradeType == "系统运维" && status == "测试流程中" {
 		flag = "false"
 	} else if cate == "app" && dept == "测试" && upgradeType == "产品发布" && status == "审批流程中" {

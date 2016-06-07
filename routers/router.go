@@ -98,8 +98,8 @@ func init() {
 	beego.Router("/workorder/my", &controllers.AppWOController{}, "get:Get")
 	beego.Router("/workorder/approve", &controllers.AppWOController{}, "get:Approve")
 	beego.Router("/workorder/approveDetail", &controllers.AppWOController{}, "get:Detail")
-	beego.Router("/workorder/approveRollback", &controllers.AppWOController{}, "get:ApproveRollback")
-	beego.Router("/workorder/approveCommit", &controllers.AppWOController{}, "get:ApproveCommit")
+	beego.Router("/workorder/approveRollback", &controllers.AppWOController{}, "post:ApproveRollback")
+	beego.Router("/workorder/approveCommit", &controllers.AppWOController{}, "post:ApproveCommit")
 
 	beego.Router("/attachment/:all", &controllers.AttachController{})
 }

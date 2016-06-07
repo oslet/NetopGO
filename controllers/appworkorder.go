@@ -176,12 +176,19 @@ func (this *AppWOController) ApproveCommit() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Dept"] = dept
-	//id := this.Input().Get("id")
-	// appwo, err := models.GetAppwoById(id)
-	// if err != nil {
-	// 	beego.Error(err)
-	// }
+	id := this.Input().Get("id")
 
+	beego.Info(id)
+	appwo, err := models.GetAppwoById(id)
+	if err != nil {
+		beego.Error(err)
+	}
+	nextStatus, who, outcome := models.NextStatus("app", dept.(string), appwo.Status, appwo.Upgradetype)
+	outcomevalue := this.Input().Get(outcome)
+	err = models.ApproveCommit(id, nextStatus, outcome, outcomevalue, who, uname.(string))
+	if err != nil {
+		beego.Error(err)
+	}
 	this.Redirect("/workorder/my", 302)
 	return
 }

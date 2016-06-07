@@ -1,6 +1,7 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
 <br>
+    {{.Auth}}
                     {{$AppTypeList := .AppTypeList}}
                     {{$AppNameList := .AppNameList}}
                     {{$Test := .Test}}
@@ -15,7 +16,8 @@
                     {{$AppName := .Appname}}
                     {{$AppType := .Apptype}}
                     <div class="ibox-content">
-                        <form method="post" id="userForm" class="form-horizontal" action="/workorder/app" enctype="multipart/form-data"> 
+                        <form method="post" name="userForm" id="userForm" class="form-horizontal" action="/workorder/approveCommit" enctype="multipart/form-data"> 
+                            <input name="id" type="hidden" value="{{.Id}}"></input>
                             <div class="form-group">
                                 <label for="apptype" class="col-sm-2 control-label">业务类别<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
@@ -98,7 +100,7 @@
                             <div class="form-group">
                                 <label for="testoutcome" class="col-sm-2 control-label">测试意见<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
-                                    <textarea name="testoutcome" class="form-control" placeholder="请根据实际测试情况给出测试结论！" rows="2" {{if eq $TestReadonly "true"}}readonly{{end}}>{{.TestOutcome}}</textarea>
+                                    <textarea id="testoutcome" name="testoutcome" class="form-control" placeholder="请根据实际测试情况给出测试结论！" rows="2" {{if eq $TestReadonly "true"}}readonly{{end}}>{{.TestOutcome}}</textarea>
                                 </div>
                             </div>
                             {{end}}
@@ -128,8 +130,7 @@
                             {{end}}
                             <div class="form-group">
                                 <div class="col-sm-4 col-sm-offset-2">
-                                    <button class="btn btn-danger" ><a href="/workorder/approveRollback?id={{.Id}}">异常回滚</a></button>
-                                    <button class="btn btn-primary"><a href="/workorder/approveCommit?id={{.Id}}">审批通过</a></button>
+                                    <button class="btn btn-primary" type="submit">审批通过</button>
                                 </div>
                                 <br>
                             </div>
@@ -141,6 +142,7 @@
         </div>
     </div>
 <script>
+
 $('#userForm').validator({
     timely: 2,
     theme: "yellow_right_effect",
