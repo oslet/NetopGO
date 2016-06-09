@@ -47,6 +47,7 @@ type Appworkorder struct {
 	DbStatus     string `orm:size(50)`
 	Isapproved   string `orm:size(50)`
 	Isedit       string `orm:size(5)`
+	RequestCount int64
 	Created      string `orm:size(20)`
 }
 
@@ -69,22 +70,23 @@ func AddAppOrder(apptype, appname, version, jenkinsname, buildnum, featurelist, 
 		status = "测试流程中"
 	}
 	appwo := &Appworkorder{
-		Appname:     appname,
-		Version:     version,
-		Apptype:     apptype,
-		Upgradetype: upgradetype,
-		FeatureList: featurelist,
-		ModifyCfg:   modifycfg,
-		RelayApp:    relayapp,
-		Sqlfile:     sqlfile,
-		Attachment:  attachment,
-		JenkinsName: jenkinsname,
-		BuildNum:    buildnum,
-		Sponsor:     sponsor,
-		Status:      status,
-		Isedit:      "true",
-		DbStatus:    dbstatus,
-		Created:     time.Now().String()[:18],
+		Appname:      appname,
+		Version:      version,
+		Apptype:      apptype,
+		Upgradetype:  upgradetype,
+		FeatureList:  featurelist,
+		ModifyCfg:    modifycfg,
+		RelayApp:     relayapp,
+		Sqlfile:      sqlfile,
+		Attachment:   attachment,
+		JenkinsName:  jenkinsname,
+		BuildNum:     buildnum,
+		Sponsor:      sponsor,
+		Status:       status,
+		Isedit:       "false",
+		DbStatus:     dbstatus,
+		RequestCount: 1,
+		Created:      time.Now().String()[:18],
 	}
 	_, err := o.Insert(appwo)
 	return err
@@ -151,12 +153,98 @@ func ApproveCommit(id, nextStatus, outcome, outcomevalue, who, uname string) err
 	return err
 }
 
+func ApproveRollback(id, nextStatus, outcome, outcomevalue, who, uname, status, upgradeType, dept string) error {
+	o := orm.NewOrm()
+	var isEdit string
+	aid, err := strconv.ParseInt(id, 10, 64)
+	appwo := &Appworkorder{
+		Id: aid,
+	}
+
+	if dept == "测试" && upgradeType == "修复bug" && status == "测试流程中" {
+		isEdit = "true"
+	} else if dept == "测试" && upgradeType == "产品发布" && status == "测试流程中" {
+		isEdit = "true"
+	} else if dept == "运维" && upgradeType == "系统运维" && status == "实施流程中" {
+		isEdit = "true"
+	} else {
+		isEdit = "false"
+	}
+
+	err = o.Read(appwo)
+	if err == nil {
+		appwo.Status = nextStatus
+		if who == "tester" {
+			appwo.Tester = uname
+		} else if who == "approver" {
+			appwo.Approver = uname
+		} else if who == "finalchker" {
+			appwo.Finalchker = uname
+		} else if who == "operater" {
+			appwo.Operater = uname
+		}
+		if outcome == "testoutcome" {
+			appwo.TestOutcome = outcomevalue
+		} else if outcome == "prdtoutcome" {
+			appwo.PrdtOutcome = outcomevalue
+		} else if outcome == "opoutcome" {
+			appwo.OpOutcome = outcomevalue
+		} else if outcome == "finaloutcome" {
+			appwo.FinalOutcome = outcomevalue
+		}
+		appwo.Isedit = isEdit
+	}
+	o.Update(appwo)
+	return err
+}
+
+func ApproveModify(id, apptype, appname, upgradetype, version, jenkinsname, buildnum, featurelist, modifycfg, relayapp, final_attachment, final_sqlfile, dept string) error {
+	var status string
+	o := orm.NewOrm()
+	aid, err := strconv.ParseInt(id, 10, 64)
+	appwo := &Appworkorder{
+		Id: aid,
+	}
+	err = o.Read(appwo)
+	if upgradetype == "系统运维" && dept == "运维" && appwo.Status == "异常已回滚" {
+		status = "实施流程中"
+	} else {
+		status = "测试流程中"
+	}
+	if err == nil {
+		appwo.Apptype = apptype
+		appwo.Appname = appname
+		appwo.Upgradetype = upgradetype
+		appwo.Version = version
+		appwo.JenkinsName = jenkinsname
+		appwo.BuildNum = buildnum
+		appwo.FeatureList = featurelist
+		appwo.ModifyCfg = modifycfg
+		appwo.RelayApp = relayapp
+		appwo.Attachment = final_attachment
+		appwo.Sqlfile = final_sqlfile
+		appwo.Status = status
+		appwo.RequestCount = appwo.RequestCount + 1
+		appwo.TestOutcome = ""
+		appwo.PrdtOutcome = ""
+		appwo.OpOutcome = ""
+		appwo.FinalOutcome = ""
+		appwo.Tester = ""
+		appwo.Approver = ""
+		appwo.Operater = ""
+		appwo.Finalchker = ""
+		appwo.Isedit = "false"
+	}
+	o.Update(appwo)
+	return err
+}
+
 func NextStatus(cate, dept, status, upgradeType string) (string, string, string) {
 	var nextStatus string
 	var who string
 	var outcome string
 	if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "测试流程中" {
-		nextStatus = "审批流程中"
+		nextStatus = "实施流程中"
 		who = "tester"
 		outcome = "testoutcome"
 	} else if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "审批流程中" {
@@ -195,6 +283,46 @@ func NextStatus(cate, dept, status, upgradeType string) (string, string, string)
 	return nextStatus, who, outcome
 }
 
+func LastStatus(cate, dept, status, upgradeType string) (string, string, string) {
+	var lastStatus string
+	var who string
+	var outcome string
+	if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "测试流程中" {
+		lastStatus = "异常已回滚"
+		who = "tester"
+		outcome = "testoutcome"
+	} else if cate == "app" && dept == "测试" && upgradeType == "产品发布" && status == "测试流程中" {
+		lastStatus = "异常已回滚"
+		who = "tester"
+		outcome = "testoutcome"
+	} else if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "验证流程中" {
+		lastStatus = "实施流程中"
+		who = "finalchker"
+		outcome = "finaloutcome"
+	} else if cate == "app" && dept == "测试" && upgradeType == "产品发布" && status == "验证流程中" {
+		lastStatus = "实施流程中"
+		who = "finalchker"
+		outcome = "finaloutcome"
+	} else if cate == "app" && dept == "产品" && upgradeType == "产品发布" && status == "审批流程中" {
+		lastStatus = "测试流程中"
+		who = "approver"
+		outcome = "prdtoutcome"
+	} else if cate == "app" && dept == "运维" && upgradeType == "修复bug" && status == "实施流程中" {
+		lastStatus = "测试流程中"
+		who = "operater"
+		outcome = "opoutcome"
+	} else if cate == "app" && dept == "运维" && upgradeType == "产品发布" && status == "实施流程中" {
+		lastStatus = "审批流程中"
+		who = "operater"
+		outcome = "opoutcome"
+	} else if cate == "app" && dept == "运维" && upgradeType == "系统运维" && status == "实施流程中" {
+		lastStatus = "异常已回滚"
+		who = "operater"
+		outcome = "opoutcome"
+	}
+	return lastStatus, who, outcome
+}
+
 func IsApproved(cate, dept, status, upgradeType string) string {
 	var flag string
 	if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "测试流程中" {
@@ -228,9 +356,9 @@ func IsApproved(cate, dept, status, upgradeType string) string {
 	} else if cate == "app" && dept == "测试" && upgradeType == "系统运维" && status == "工单已关闭" {
 		flag = "false"
 	} else if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "异常已回滚" {
-		flag = "true"
+		flag = "false"
 	} else if cate == "app" && dept == "测试" && upgradeType == "产品发布" && status == "异常已回滚" {
-		flag = "true"
+		flag = "false"
 	} else if cate == "app" && dept == "测试" && upgradeType == "系统运维" && status == "异常已回滚" {
 		flag = "false"
 	}
@@ -304,9 +432,9 @@ func IsApproved(cate, dept, status, upgradeType string) string {
 	} else if cate == "app" && dept == "产品" && upgradeType == "系统运维" && status == "工单已关闭" {
 		flag = "false"
 	} else if cate == "app" && dept == "产品" && upgradeType == "修复bug" && status == "异常已回滚" {
-		flag = "true"
+		flag = "false"
 	} else if cate == "app" && dept == "产品" && upgradeType == "产品发布" && status == "异常已回滚" {
-		flag = "true"
+		flag = "false"
 	} else if cate == "app" && dept == "产品" && upgradeType == "系统运维" && status == "异常已回滚" {
 		flag = "false"
 	}
@@ -342,11 +470,11 @@ func IsApproved(cate, dept, status, upgradeType string) string {
 	} else if cate == "app" && dept == "运维" && upgradeType == "系统运维" && status == "工单已关闭" {
 		flag = "false"
 	} else if cate == "app" && dept == "运维" && upgradeType == "修复bug" && status == "异常已回滚" {
-		flag = "true"
+		flag = "false"
 	} else if cate == "app" && dept == "运维" && upgradeType == "产品发布" && status == "异常已回滚" {
-		flag = "true"
+		flag = "false"
 	} else if cate == "app" && dept == "运维" && upgradeType == "系统运维" && status == "异常已回滚" {
-		flag = "true"
+		flag = "false"
 	}
 	return flag
 }
@@ -374,11 +502,11 @@ func IsViewDiv(dept, status, upgradeType string) (testOutcome, prdtOutcome, opOu
 		finalReadonly = "false"
 	} else if dept == "测试" && status == "验证流程中" && upgradeType == "修复bug" {
 		test = "true"
-		product = "true"
+		product = "false"
 		op = "true"
 		final = "true"
 		testReadonly = "true"
-		productReadonly = "true"
+		productReadonly = "false"
 		opReadonly = "true"
 		finalReadonly = "false"
 	} else if dept == "测试" && status == "验证流程中" && upgradeType == "产品发布" {
@@ -419,11 +547,11 @@ func IsViewDiv(dept, status, upgradeType string) (testOutcome, prdtOutcome, opOu
 		finalReadonly = "false"
 	} else if dept == "运维" && status == "实施流程中" && upgradeType == "修复bug" {
 		test = "true"
-		product = "true"
+		product = "false"
 		op = "true"
 		final = "false"
 		testReadonly = "true"
-		productReadonly = "true"
+		productReadonly = "false"
 		opReadonly = "false"
 		finalReadonly = "false"
 	} else if dept == "运维" && status == "实施流程中" && upgradeType == "产品发布" {
@@ -440,8 +568,8 @@ func IsViewDiv(dept, status, upgradeType string) (testOutcome, prdtOutcome, opOu
 		product = "false"
 		op = "true"
 		final = "false"
-		testReadonly = "flase"
-		productReadonly = "flase"
+		testReadonly = "false"
+		productReadonly = "false"
 		opReadonly = "false"
 		finalReadonly = "false"
 	}

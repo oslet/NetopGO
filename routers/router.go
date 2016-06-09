@@ -97,9 +97,12 @@ func init() {
 	beego.Router("/workorder/app", &controllers.AppWOController{}, "post:AppOrderPost")
 	beego.Router("/workorder/my", &controllers.AppWOController{}, "get:Get")
 	beego.Router("/workorder/approve", &controllers.AppWOController{}, "get:Approve")
+	beego.Router("/workorder/rollback", &controllers.AppWOController{}, "get:Rollback")
 	beego.Router("/workorder/approveDetail", &controllers.AppWOController{}, "get:Detail")
 	beego.Router("/workorder/approveRollback", &controllers.AppWOController{}, "post:ApproveRollback")
 	beego.Router("/workorder/approveCommit", &controllers.AppWOController{}, "post:ApproveCommit")
+	beego.Router("/workorder/approve/modify", &controllers.AppWOController{}, "get:ApproveModify")
+	beego.Router("/workorder/approve/modify", &controllers.AppWOController{}, "post:ApproveModifyPost")
 
 	beego.Router("/attachment/:all", &controllers.AttachController{})
 }

@@ -1,6 +1,7 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
 <br>
+    {{.Auth}}
                     {{$AppTypeList := .AppTypeList}}
                     {{$AppNameList := .AppNameList}}
                     {{$Test := .Test}}
@@ -15,7 +16,7 @@
                     {{$AppName := .Appname}}
                     {{$AppType := .Apptype}}
                     <div class="ibox-content">
-                        <form method="post" name="userForm" id="userForm" class="form-horizontal" action="/workorder/approveCommit" enctype="multipart/form-data"> 
+                        <form method="post" name="userForm" id="userForm" class="form-horizontal" action="/workorder/approveRollback" enctype="multipart/form-data"> 
                             <input name="id" type="hidden" value="{{.Id}}"></input>
                             <div class="form-group">
                                 <label for="apptype" class="col-sm-2 control-label">业务类别<span class="red-fonts">*</span></label>
@@ -129,7 +130,7 @@
                             {{end}}
                             <div class="form-group">
                                 <div class="col-sm-4 col-sm-offset-2">
-                                    <button class="btn btn-primary" type="submit">审批通过</button>
+                                    <button class="btn btn-danger" type="submit">异常回滚</button>
                                 </div>
                                 <br>
                             </div>

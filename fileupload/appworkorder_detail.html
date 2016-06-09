@@ -6,7 +6,7 @@
                     {{$AppName := .Appname}}
                     {{$AppType := .Apptype}}
                     <div class="ibox-content">
-                        <form method="post" id="userForm" class="form-horizontal" action="" enctype="multipart/form-data"> 
+                        <form method="post" id="userForm" class="form-horizontal" action="/workorder/app" enctype="multipart/form-data"> 
                             <div class="form-group">
                                 <label for="apptype" class="col-sm-2 control-label">业务类别</label>
                                 <div class="col-sm-8">
@@ -85,36 +85,30 @@
                                     （<a target="_blank" href="#">{{.Sqlfile}}</a>）
                                 </div>
                             </div>
-                            {{if ne .Upgradetype "系统运维"}}
                             <div class="form-group">
                                 <label for="testoutcome" class="col-sm-2 control-label">测试意见</label>
                                 <div class="col-sm-8">
                                     <textarea name="testoutcome" class="form-control" placeholder="" rows="2" readonly>{{.TestOutcome}}</textarea>
                                 </div>
                             </div>
-                            {{end}}
-                            {{if eq .Upgradetype "产品发布"}}
                             <div class="form-group">
                                 <label for="prdtoutcome" class="col-sm-2 control-label">产品意见</label>
                                 <div class="col-sm-8">
                                     <textarea name="prdtoutcome" class="form-control" placeholder="" rows="2" readonly>{{.PrdtOutcome}}</textarea>
                                 </div>
                             </div>
-                            {{end}}
                             <div class="form-group">
                                 <label for="opoutcome" class="col-sm-2 control-label">运维意见</label>
                                 <div class="col-sm-8">
                                     <textarea name="opoutcome" class="form-control" placeholder="" rows="2" readonly>{{.OpOutcome}}</textarea>
                                 </div>
                             </div>
-                            {{if ne .Upgradetype "系统运维"}}
                             <div class="form-group">
                                 <label for="finaloutcome" class="col-sm-2 control-label">最终意见</label>
                                 <div class="col-sm-8">
                                     <textarea name="finaloutcome" class="form-control" placeholder="" rows="2" readonly>{{.FinalOutcome}}</textarea>
                                 </div>
                             </div>
-                            {{end}}
                             <div class="form-group">
                                 <div class="col-sm-4 col-sm-offset-2">
                                     <button id="submit_button" class="btn btn-primary"><a href="/workorder/my">返回列表</a></button>
