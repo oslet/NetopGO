@@ -104,5 +104,16 @@ func init() {
 	beego.Router("/workorder/approve/modify", &controllers.AppWOController{}, "get:ApproveModify")
 	beego.Router("/workorder/approve/modify", &controllers.AppWOController{}, "post:ApproveModifyPost")
 
+	beego.Router("/workorder/db", &controllers.DBWOController{}, "get:DBOrder")
+	beego.Router("/workorder/db", &controllers.DBWOController{}, "post:DBOrderPost")
+	beego.Router("/workorder/mydb", &controllers.DBWOController{}, "get:Get")
+	beego.Router("/workorder/dbInApp", &controllers.DBWOController{}, "get:DBInApp")
+	beego.Router("/workorder/dbInApp", &controllers.DBWOController{}, "post:DBInAppPost")
+	beego.Router("/workorder/dbDetail", &controllers.DBWOController{}, "get:Detail")
+	beego.Router("/workorder/dbApprove", &controllers.DBWOController{}, "get:DBApprove")
+	beego.Router("/workorder/dbCommit", &controllers.DBWOController{}, "post:DBCommit")
+	beego.Router("/workorder/dbRollback", &controllers.DBWOController{}, "get:DBRollback")
+	beego.Router("/workorder/dbRollback", &controllers.DBWOController{}, "Post:DBRollbackPost")
+
 	beego.Router("/attachment/:all", &controllers.AttachController{})
 }

@@ -1,7 +1,7 @@
 package models
 
 import (
-	//"fmt"
+	"fmt"
 	"github.com/astaxie/beego/orm"
 	"strconv"
 	"strings"
@@ -17,9 +17,10 @@ import (
 5-工单已关闭
 6-异常已回滚（回滚后工单状态可编辑）
 附带DB状态
-1-准备就绪
+1-无DB变更
 2-正在实施
-3-无DB变更
+3-实施完毕
+4-异常回滚
 */
 type Appworkorder struct {
 	Id           int64
@@ -92,23 +93,43 @@ func AddAppOrder(apptype, appname, version, jenkinsname, buildnum, featurelist, 
 	return err
 }
 
-func GetAppOrderCount() (int64, error) {
+func GetAppOrderCount(auth int64) (int64, error) {
+	var total int64
+	var err error
 	o := orm.NewOrm()
 	appwo := make([]*Appworkorder, 0)
-	total, err := o.QueryTable("appworkorder").All(&appwo)
-	if err != nil {
-		return 0, err
+	if auth == 2 {
+		total, err = o.QueryTable("appworkorder").Filter("status", "实施流程中").Filter("db_status", "正在实施").All(&appwo)
+		if err != nil {
+			return 0, err
+		}
+	} else {
+		total, err = o.QueryTable("appworkorder").All(&appwo)
+		if err != nil {
+			return 0, err
+		}
 	}
+
 	return total, err
 }
 
-func GetAppOrders(currPage, pageSize int) ([]*Appworkorder, int64, error) {
+func GetAppOrders(currPage, pageSize int, auth int64) ([]*Appworkorder, int64, error) {
+	var total int64
+	var err error
 	o := orm.NewOrm()
 	appwo := make([]*Appworkorder, 0)
-	total, err := o.QueryTable("appworkorder").OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&appwo)
-	if err != nil {
-		return nil, 0, err
+	if auth == 2 {
+		total, err = o.QueryTable("appworkorder").Filter("status", "实施流程中").Filter("db_status", "正在实施").OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&appwo)
+		if err != nil {
+			return nil, 0, err
+		}
+	} else {
+		total, err = o.QueryTable("appworkorder").OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&appwo)
+		if err != nil {
+			return nil, 0, err
+		}
 	}
+
 	return appwo, total, err
 }
 
@@ -323,7 +344,8 @@ func LastStatus(cate, dept, status, upgradeType string) (string, string, string)
 	return lastStatus, who, outcome
 }
 
-func IsApproved(cate, dept, status, upgradeType string) string {
+func IsApproved(cate, dept, status, upgradeType, dbStatus string) string {
+	fmt.Printf("*****this :%v", dbStatus)
 	var flag string
 	if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "测试流程中" {
 		flag = "true"
@@ -452,11 +474,23 @@ func IsApproved(cate, dept, status, upgradeType string) string {
 	} else if cate == "app" && dept == "运维" && upgradeType == "系统运维" && status == "审批流程中" {
 		flag = "true"
 	} else if cate == "app" && dept == "运维" && upgradeType == "修复bug" && status == "实施流程中" {
-		flag = "true"
+		if dbStatus == "正在实施" {
+			flag = "false"
+		} else {
+			flag = "true"
+		}
 	} else if cate == "app" && dept == "运维" && upgradeType == "产品发布" && status == "实施流程中" {
-		flag = "true"
+		if dbStatus == "正在实施" {
+			flag = "false"
+		} else {
+			flag = "true"
+		}
 	} else if cate == "app" && dept == "运维" && upgradeType == "系统运维" && status == "实施流程中" {
-		flag = "true"
+		if dbStatus == "正在实施" {
+			flag = "false"
+		} else {
+			flag = "true"
+		}
 	} else if cate == "app" && dept == "运维" && upgradeType == "修复bug" && status == "验证流程中" {
 		flag = "false"
 	} else if cate == "app" && dept == "运维" && upgradeType == "产品发布" && status == "验证流程中" {

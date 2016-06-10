@@ -1,0 +1,88 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="">
+                        {{if .IsSearch}}
+                        <a href="/record/db/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        {{else}}
+                        <form id="search_form" method="get" action="/record/db/search" class="form-inline pull-right">
+                            <div class="input-group">
+                                <div class="col-sm-8">
+                                    <select name="keyword" class="form-control">
+                                        {{range .Schemas}}
+                                        <option value="{{.Name}}">{{.Name}}</option>
+                                        {{end}}
+                                    </select>
+                                </div>
+                                <div class="input-group-btn">
+                                    <button id='search_btn' type="submit" class="btn btn-primary">
+                                        -搜索-
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+                    <table class="table table-striped table-bordered table-hover " id="editable" >
+                        <thead>
+                            <tr>
+                                <th class="text-center">时间</th>
+                                <th class="text-center">Schema</th>
+                                <th class="text-center">升级对象</th>
+                                <th class="text-center">升级类型</th>                         
+                                <th class="text-center">发起人</th>
+                                <th class="text-center">请求次数</th>
+                                <th class="text-center">运维</th>
+                                <th class="text-center">验证</th>
+                                <th class="text-center">操作备注</th>
+                                <th class="text-center">工单状态</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{$Dept := .Dept}}
+                            {{$Auth := .Auth}}
+                            {{range .DBWorkOrders}}
+                            <tr class="gradeX">
+                                <td class="text-center">{{.Created}}</td>
+                                <td class="text-center">{{.Schemaname}}</td>
+                                <td class="text-center">{{.Upgradeobj}}</td>
+                                <td class="text-center">{{.Upgradetype}}</td>
+                                <td class="text-center">{{.Sponsor}}</td>
+                                <td class="text-center">{{.RequestCount}}</td>
+                                <td class="text-center">{{if eq (.Operater|len) 0}}无{{else}}{{.Operater}}{{end}}</td>
+                                <td class="text-center">{{if eq (.Finalchker|len) 0}}无{{else}}{{.Finalchker}}{{end}}</td>
+                                <td class="text-center">{{.Comment}}</td>
+                                <td class="text-center">
+                                <a href="#" {{if eq .Status "实施完毕"}} class="btn btn-xs btn-success"{{else if eq .Status "正在实施"}}class="btn btn-xs btn-info"{{else if eq .Status "无DB变更"}}class="btn btn-xs btn-primary"{{else if eq .Status "异常回滚"}}class="btn btn-xs btn-danger"{{end}}>{{.Status}}</a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/workorder/dbDetail?id={{.Id}}" class="btn btn-xs btn-primary" >详情</a>
+                                    <a href="/workorder/approve/modify?id={{.Id}}" class="btn btn-xs btn-danger" {{if eq .Isedit "false"}}disabled="disabled"{{end}}>编辑</a>
+                                    <a href="/workorder/dbApprove?id={{.Id}}" class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}} >实施</a>
+                                    <a href="/workorder/dbRollback?id={{.Id}}" class="btn btn-xs btn-danger" {{if eq .Isapproved "false"}}disabled="disabled"{{end}} >回滚</a>
+                                </td>
+                            </tr>
+                            {{end}}
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                                Total {{.totals}} entries
+                            </div>
+                        </div>
+                        {{template "paginator" .}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/jquery.shiftcheckbox.js"></script>
+
+{{template "page_buttom"}}

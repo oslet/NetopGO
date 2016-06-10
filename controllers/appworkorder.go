@@ -20,6 +20,7 @@ func (this *AppWOController) Get() {
 	this.Data["Role"] = role
 	this.Data["Dept"] = dept
 	this.Data["IsSearch"] = false
+	auth := role.(int64)
 
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
@@ -29,13 +30,13 @@ func (this *AppWOController) Get() {
 
 	currPage, _ := strconv.ParseInt(page, 10, 64)
 	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
-	total, err := models.GetAppOrderCount()
-	appwos, _, err := models.GetAppOrders(int(currPage), int(pageSize))
+	total, err := models.GetAppOrderCount(auth)
+	appwos, _, err := models.GetAppOrders(int(currPage), int(pageSize), auth)
 	if err != nil {
 		beego.Error(err)
 	}
 	for _, appwo := range appwos {
-		appwo.Isapproved = models.IsApproved("app", dept.(string), appwo.Status, appwo.Upgradetype)
+		appwo.Isapproved = models.IsApproved("app", dept.(string), appwo.Status, appwo.Upgradetype, appwo.DbStatus)
 		// if "研发" == dept.(string) || "运维" == dept.(string) {
 		// 	appwo.Isedit = appwo.Isapproved
 		// } else {
@@ -45,7 +46,6 @@ func (this *AppWOController) Get() {
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
-	auth := role.(int64)
 	appNameList := strings.Split(beego.AppConfig.String("AppName"), ",")
 	this.Data["AppNameList"] = appNameList
 	this.Data["Auth"] = auth
@@ -110,7 +110,7 @@ func (this *AppWOController) AppOrderPost() {
 	if fh != nil {
 		attachment = fh.Filename
 		//beego.Info(attachment)
-		err := this.SaveToFile("attachment", path.Join("fileupload", attachment))
+		err := this.SaveToFile("attachment", path.Join("attachment", attachment))
 		if err != nil {
 			beego.Error(err)
 		}
@@ -118,7 +118,7 @@ func (this *AppWOController) AppOrderPost() {
 	if sql != nil {
 		sqlfile = sql.Filename
 		//beego.Info(attachment)
-		err := this.SaveToFile("sqlfile", path.Join("fileupload", sqlfile))
+		err := this.SaveToFile("sqlfile", path.Join("attachment", sqlfile))
 		if err != nil {
 			beego.Error(err)
 		}
@@ -344,7 +344,7 @@ func (this *AppWOController) ApproveModifyPost() {
 	if fh != nil {
 		final_attachment = fh.Filename
 		//beego.Info(attachment)
-		err := this.SaveToFile("attachment", path.Join("fileupload", final_attachment))
+		err := this.SaveToFile("attachment", path.Join("attachment", final_attachment))
 		if err != nil {
 			beego.Error(err)
 		}
@@ -354,7 +354,7 @@ func (this *AppWOController) ApproveModifyPost() {
 	if sql != nil {
 		final_sqlfile = sql.Filename
 		//beego.Info(attachment)
-		err := this.SaveToFile("sqlfile", path.Join("fileupload", final_sqlfile))
+		err := this.SaveToFile("sqlfile", path.Join("attachment", final_sqlfile))
 		if err != nil {
 			beego.Error(err)
 		}

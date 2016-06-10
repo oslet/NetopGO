@@ -1,0 +1,121 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<br>
+                    <div class="ibox-content">
+                        <form method="post" id="userForm" class="form-horizontal" action="/workorder/dbInApp" enctype="multipart/form-data">
+                        <input name="id" type="hidden" value="{{.Id}}"></input>
+                        <input name="sql" type="hidden" value="{{.Sqlfile}}"></input>
+                            <div class="form-group">
+                                <label for="schema" class="col-sm-2 control-label">Schem<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <select name="schema" class="form-control">
+                                        {{range .Schemas}}
+                                        <option value="{{.Name}}">{{.Name}}</option>
+                                        {{end}}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="upgradeobj" class="col-sm-2 control-label">升级对象<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <select name="upgradeobj" class="form-control">
+                                        <option value="记录">记录</option>
+                                        <option value="表">表</option>
+                                        <option value="库">库</option>
+                                        <option value="实例">实例</option>
+                                    </select>
+                                </div>
+                            </div>       
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="upgradetype" class="col-sm-2 control-label">升级类型<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <select name="upgradetype" class="form-control">
+                                        <option value="提取数据">提取数据</option>
+                                        <option value="修改数据">修改数据</option>
+                                        <option value="分拆扩容">分拆扩容</option>
+                                        <option value="性能优化">性能优化</option>
+                                        <option value="性能优化">增加新表</option>
+                                        <option value="性能优化">表结构变更</option>
+                                        <option value="性能优化">存储过程变更</option>
+                                    </select>
+                                </div>
+                            </div>                              
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="comment" class="col-sm-2 control-label">操作备注<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="comment" name="comment" placeholder="" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="sqlfile" class="col-sm-2 control-label">上传附件</label>
+                                <div class="col-sm-8">
+                                    （<a target="_blank" href="/attachment/{{.Sqlfile}}">{{.Sqlfile}}</a>）
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="step" class="col-sm-2 control-label">操作步骤</label>
+                                <div class="col-sm-8">
+                                    <textarea name="step" class="form-control" placeholder="如果sql比较简单请直接写在这里并给出查询的详细步骤，无需上传附件！！" rows="4"></textarea>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white" type="reset">重置</button>
+                                    <button id="submit_button" class="btn btn-primary" type="submit">审批</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+$('#userForm').validator({
+    timely: 2,
+    theme: "yellow_right_effect",
+    fields: {
+        "schema": {
+            rule: "required;",
+            tip: "请选择Schema",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "upgradeobj": {
+            rule: "required;",
+            tip: "请选择升级对象",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },    
+        "upgradetype": {
+            rule: "required;",
+            tip: "请选择升级类型",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },            
+        "backup": {
+            rule: "required;",
+            tip: "请选择是否备份",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },                       
+        "comment": {
+            rule: "required;length[3~15]",
+            tip: "输入备注",
+            ok: "",
+            msg: {required: "必须填写!"}
+        }
+    },
+    valid: function(form) {
+        form.submit();
+    }
+});
+</script>
+{{template "page_buttom" .}}
