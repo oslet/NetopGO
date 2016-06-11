@@ -56,7 +56,7 @@ func (this *AppWOController) Get() {
 	this.Data["Path1"] = "系统发布"
 	this.Data["Path2"] = "我的工单"
 	this.Data["Href"] = ""
-	this.Data["Category"] = "record/app"
+	this.Data["Category"] = "workorder/my"
 	this.TplName = "appworkorder_list.html"
 	return
 }
@@ -75,7 +75,7 @@ func (this *AppWOController) AppOrder() {
 	this.Data["Path1"] = "系统发布"
 	this.Data["Path2"] = "提交应用工单"
 	this.Data["Href"] = "/workorder/my"
-	this.Data["Category"] = "workorder/app"
+	this.Data["Category"] = "workorder/my"
 	this.TplName = "appworkorder.html"
 	return
 }
@@ -128,8 +128,8 @@ func (this *AppWOController) AppOrderPost() {
 	if err != nil {
 		beego.Error(err)
 	}
-	this.Data["Category"] = "workorder/app"
-	this.TplName = "index.html"
+	this.Data["Category"] = "workorder/my"
+	this.TplName = "appworkorder_list.html"
 	return
 }
 
@@ -165,7 +165,7 @@ func (this *AppWOController) Approve() {
 	this.Data["Path1"] = "我的工单"
 	this.Data["Path2"] = "工单审批"
 	this.Data["Href"] = "/workorder/my"
-	this.Data["Category"] = "workorder/app"
+	this.Data["Category"] = "workorder/my"
 	this.TplName = "approve.html"
 	return
 }
@@ -202,7 +202,7 @@ func (this *AppWOController) Rollback() {
 	this.Data["Path1"] = "我的工单"
 	this.Data["Path2"] = "异常回滚"
 	this.Data["Href"] = "/workorder/my"
-	this.Data["Category"] = "workorder/app"
+	this.Data["Category"] = "workorder/my"
 	this.TplName = "approllback.html"
 	return
 }
@@ -277,7 +277,7 @@ func (this *AppWOController) Detail() {
 	this.Data["Path1"] = "我的工单"
 	this.Data["Path2"] = "工单详情"
 	this.Data["Href"] = "/workorder/my"
-	this.Data["Category"] = "workorder/app"
+	this.Data["Category"] = "workorder/my"
 	this.TplName = "appworkorder_detail.html"
 	return
 }
@@ -307,7 +307,7 @@ func (this *AppWOController) ApproveModify() {
 	this.Data["Path1"] = "我的工单"
 	this.Data["Path2"] = "重新发布"
 	this.Data["Href"] = "/workorder/my"
-	this.Data["Category"] = "workorder/app"
+	this.Data["Category"] = "workorder/my"
 	this.TplName = "appworkorder_modify.html"
 	return
 }
