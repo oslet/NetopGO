@@ -61,7 +61,7 @@ func (this *DBWOController) Get() {
 }
 
 func (this *DBWOController) DBOrder() {
-	uid, uname, role, _ := this.IsLogined()
+	uid, uname, role, dept := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -70,6 +70,13 @@ func (this *DBWOController) DBOrder() {
 	if err != nil {
 		beego.Error(err)
 	}
+	var flag bool
+	if dept.(string) == "研发" || dept.(string) == "运维" || dept.(string) == "测试" {
+		flag = true
+	} else {
+		flag = false
+	}
+	this.Data["Flag"] = flag
 	this.Data["Schemas"] = schemas
 	this.Data["Path1"] = "系统发布"
 	this.Data["Path2"] = "提交DB工单"
@@ -91,12 +98,11 @@ func (this *DBWOController) DBOrderPost() {
 	upgradetype := this.Input().Get("upgradetype")
 	comment := this.Input().Get("comment")
 	step := this.Input().Get("step")
-
+	var sqlfile string
 	_, sql, err := this.GetFile("sqlfile")
 	if err != nil {
 		beego.Error(err)
 	}
-	var sqlfile string
 	if sql != nil {
 		sqlfile = sql.Filename
 		//beego.Info(attachment)
@@ -105,11 +111,11 @@ func (this *DBWOController) DBOrderPost() {
 			beego.Error(err)
 		}
 	}
-
-	err = models.AddDBOrder(schema, upgradeobj, upgradetype, comment, sqlfile, step, uname.(string))
+	err = models.AddDBOrder(schema, upgradeobj, upgradetype, comment, step, sqlfile, uname.(string), dept.(string))
 	if err != nil {
 		beego.Error(err)
 	}
+
 	this.Data["Category"] = "workorder/mydb"
 	this.Redirect("/workorder/mydb", 302)
 	return
@@ -179,7 +185,14 @@ func (this *DBWOController) Detail() {
 	if err != nil {
 		beego.Error(err)
 	}
-
+	approver := models.GetUserByName(dbwo.Sponsor)
+	var flag bool
+	if approver.Dept == "研发" || approver.Dept == "运维" || approver.Dept == "测试" {
+		flag = false
+	} else {
+		flag = true
+	}
+	this.Data["Flag"] = flag
 	this.Data["Schemas"] = schemas
 	this.Data["Dbwo"] = dbwo
 	//this.Data["Auth"] = dept.(string)
@@ -209,6 +222,12 @@ func (this *DBWOController) DBApprove() {
 	if err != nil {
 		beego.Error(err)
 	}
+	approver := models.GetUserByName(dbwo.Sponsor)
+	dev, op, devReadonly, opReadonly := models.IsViewDBApprove(approver.Dept, dbwo.Status)
+	this.Data["Dev"] = dev
+	this.Data["Op"] = op
+	this.Data["DevReadonly"] = devReadonly
+	this.Data["OpReadonly"] = opReadonly
 	this.Data["Schemas"] = schemas
 	this.Data["Dbwo"] = dbwo
 	this.Data["Auth"] = dept.(string)
@@ -255,6 +274,12 @@ func (this *DBWOController) DBRollback() {
 	if err != nil {
 		beego.Error(err)
 	}
+	approver := models.GetUserByName(dbwo.Sponsor)
+	dev, op, devReadonly, opReadonly := models.IsViewDBApprove(approver.Dept, dbwo.Status)
+	this.Data["Dev"] = dev
+	this.Data["Op"] = op
+	this.Data["DevReadonly"] = devReadonly
+	this.Data["OpReadonly"] = opReadonly
 	this.Data["Schemas"] = schemas
 	this.Data["Dbwo"] = dbwo
 	this.Data["Auth"] = dept.(string)
@@ -278,6 +303,151 @@ func (this *DBWOController) DBRollbackPost() {
 
 	err := models.DBRollback(id, lastStatus, opoutcome, uname.(string))
 	if err != nil {
+		beego.Error(err)
+	}
+	this.Redirect("/workorder/mydb", 302)
+	return
+}
+
+func (this *DBWOController) DevApprove() {
+	uid, uname, role, dept := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Dept"] = dept
+	this.Data["IsSearch"] = false
+
+	schemas, err := models.GetSchemaNamesArray()
+	if err != nil {
+		beego.Error(err)
+	}
+
+	id := this.Input().Get("id")
+	dbwo, err := models.GetDBwoById(id)
+	if err != nil {
+		beego.Error(err)
+	}
+	// approver := models.GetUserByName(dbwo.Sponsor)
+	// dev, op, devReadonly, opReadonly := models.IsViewDBApprove(approver.Dept, dbwo.Status)
+	// this.Data["Dev"] = dev
+	// this.Data["Op"] = op
+	// this.Data["DevReadonly"] = devReadonly
+	// this.Data["OpReadonly"] = opReadonly
+	this.Data["Schemas"] = schemas
+	this.Data["Dbwo"] = dbwo
+	this.Data["Auth"] = dept.(string)
+	this.Data["Path1"] = "数据库工单"
+	this.Data["Path2"] = "研发审批"
+	this.Data["Href"] = "/workorder/mydb"
+	this.Data["Category"] = "workorder/mydb"
+	this.TplName = "devapprove.html"
+	return
+}
+
+func (this *DBWOController) DevCommit() {
+	uid, uname, role, dept := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Dept"] = dept
+	id := this.Input().Get("id")
+	step := this.Input().Get("step")
+	_, sql, err := this.GetFile("sqlfile")
+	if err != nil {
+		beego.Error(err)
+	}
+	var sqlfile string
+	if sql != nil {
+		sqlfile = sql.Filename
+		//beego.Info(attachment)
+		err := this.SaveToFile("sqlfile", path.Join("attachment", sqlfile))
+		if err != nil {
+			beego.Error(err)
+		}
+	}
+
+	devOutcome := this.Input().Get("devoutcome")
+	nextStatus := "正在实施"
+
+	err = models.DevCommit(id, nextStatus, step, devOutcome, sqlfile, uname.(string))
+	if err != nil {
+		beego.Error(err)
+	}
+	this.Redirect("/workorder/mydb", 302)
+	return
+}
+
+func (this *DBWOController) DBApproveModify() {
+	uid, uname, role, dept := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Dept"] = dept
+
+	schemas, err := models.GetSchemaNamesArray()
+	if err != nil {
+		beego.Error(err)
+	}
+
+	id := this.Input().Get("id")
+	dbwo, err := models.GetDBwoById(id)
+	if err != nil {
+		beego.Error(err)
+	}
+	approver := models.GetUserByName(dbwo.Sponsor)
+	var flag bool
+	if approver.Dept == "研发" || approver.Dept == "运维" || approver.Dept == "测试" {
+		flag = false
+	} else {
+		flag = true
+	}
+	this.Data["Flag"] = flag
+	this.Data["Schemas"] = schemas
+	this.Data["Dbwo"] = dbwo
+	this.Data["Auth"] = dept.(string)
+	this.Data["Path1"] = "我的工单"
+	this.Data["Path2"] = "重新发布"
+	this.Data["Href"] = "/workorder/mydb"
+	this.Data["Category"] = "workorder/mydb"
+	this.TplName = "dbworkorder_modify.html"
+	return
+}
+
+func (this *DBWOController) DBApproveModifyPost() {
+	uid, uname, role, dept := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Dept"] = dept
+	id := this.Input().Get("id")
+	schema := this.Input().Get("schema")
+	upgradeobj := this.Input().Get("upgradeobj")
+	upgradetype := this.Input().Get("upgradetype")
+	comment := this.Input().Get("comment")
+	step := this.Input().Get("step")
+	devoutcome := this.Input().Get("devoutcome")
+
+	old_sqlfile := this.Input().Get("old_sqlfile")
+
+	_, sql, err := this.GetFile("new_sqlfile")
+	if err != nil {
+		beego.Error(err)
+	}
+	var new_sqlfile string
+
+	if sql != nil {
+		new_sqlfile = sql.Filename
+		//beego.Info(attachment)
+		err := this.SaveToFile("new_sqlfile", path.Join("attachment", new_sqlfile))
+		if err != nil {
+			beego.Error(err)
+		}
+	} else {
+		new_sqlfile = old_sqlfile
+	}
+
+	err = models.DBApproveModify(id, schema, upgradeobj, upgradetype, comment, new_sqlfile, step, devoutcome, dept.(string))
+	if err == nil {
 		beego.Error(err)
 	}
 	this.Redirect("/workorder/mydb", 302)

@@ -17,5 +17,6 @@ func init() {
 
 func main() {
 	orm.Debug = true
+	models.IsViewDBApprove("产品", "研发审批")
 	beego.Run()
 }

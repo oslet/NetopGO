@@ -2,7 +2,10 @@
 {{template "nav_cat_bar" .}}
 <br>
                     {{$Schemas := .Schemas}}
-                    
+                    {{$Dev := .Dev}}
+                    {{$Op := .Op}}
+                    {{$DevReadonly := .DevReadonly}}
+                    {{$OpReadonly := .OpReadonly}}
                     <div class="ibox-content">
                     {{with .Dbwo}}
                     {{$Schemaname := .Schemaname}}
@@ -66,13 +69,24 @@
                                     <textarea name="step" class="form-control" placeholder="" rows="4" readonly>{{.Step}}</textarea>
                                 </div>
                             </div>
+                            {{if eq $Dev "true"}}
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="devoutcome" class="col-sm-2 control-label">研发意见<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <textarea name="devoutcome" class="form-control" placeholder="" rows="2"{{if eq $DevReadonly "false"}}readonly{{end}}>{{.DevOutcome}}</textarea>
+                                </div>
+                            </div>
+                            {{end}}
+                            {{if eq $Op "true"}}
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
                                 <label for="opoutcome" class="col-sm-2 control-label">运维意见<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
-                                    <textarea name="opoutcome" class="form-control" placeholder="" rows="2">{{.OpOutcome}}</textarea>
+                                    <textarea name="opoutcome" class="form-control" placeholder="" rows="2" {{if eq $OpReadonly "false"}}readonly{{end}}>{{.OpOutcome}}</textarea>
                                 </div>
                             </div>
+                            {{end}}
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
                                 <div class="col-sm-4 col-sm-offset-2">

@@ -36,8 +36,8 @@
                                 <th class="text-center">升级类型</th>                         
                                 <th class="text-center">发起人</th>
                                 <th class="text-center">请求次数</th>
+                                <th class="text-center">审批</th>
                                 <th class="text-center">运维</th>
-                                <th class="text-center">验证</th>
                                 <th class="text-center">操作备注</th>
                                 <th class="text-center">工单状态</th>
                                 <th class="text-center">操作</th>
@@ -54,17 +54,25 @@
                                 <td class="text-center">{{.Upgradetype}}</td>
                                 <td class="text-center">{{.Sponsor}}</td>
                                 <td class="text-center">{{.RequestCount}}</td>
+                                <td class="text-center">{{if eq (.Approver|len) 0}}无{{else}}{{.Approver}}{{end}}</td>
                                 <td class="text-center">{{if eq (.Operater|len) 0}}无{{else}}{{.Operater}}{{end}}</td>
-                                <td class="text-center">{{if eq (.Finalchker|len) 0}}无{{else}}{{.Finalchker}}{{end}}</td>
                                 <td class="text-center">{{.Comment}}</td>
                                 <td class="text-center">
-                                <a href="#" {{if eq .Status "实施完毕"}} class="btn btn-xs btn-success"{{else if eq .Status "正在实施"}}class="btn btn-xs btn-info"{{else if eq .Status "无DB变更"}}class="btn btn-xs btn-primary"{{else if eq .Status "异常回滚"}}class="btn btn-xs btn-danger"{{end}}>{{.Status}}</a>
+                                <a href="#" {{if eq .Status "实施完毕"}} class="btn btn-xs btn-success"{{else if eq .Status "研发审批"}} class="btn btn-xs btn-warning"{{else if eq .Status "正在实施"}}class="btn btn-xs btn-info"{{else if eq .Status "无DB变更"}}class="btn btn-xs btn-primary"{{else if eq .Status "异常回滚"}}class="btn btn-xs btn-danger"{{end}}>{{.Status}}</a>
                                 </td>
                                 <td class="text-center">
                                     <a href="/workorder/dbDetail?id={{.Id}}" class="btn btn-xs btn-primary" >详情</a>
-                                    <a href="/workorder/approve/modify?id={{.Id}}" class="btn btn-xs btn-danger" {{if eq .Isedit "false"}}disabled="disabled"{{end}}>编辑</a>
-                                    <a href="/workorder/dbApprove?id={{.Id}}" class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}} >实施</a>
+                                    <a href="/workorder/dbapprove/modify?id={{.Id}}" class="btn btn-xs btn-danger" {{if eq .Isedit "false"}}disabled="disabled"{{end}}>编辑</a>
+
+                                    {{if eq $Dept "运维"}}
+                                    <a href="/workorder/dbApprove?id={{.Id}}"class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>实施</a>
+                                    {{end}}
+                                    {{if eq $Dept "研发"}}
+                                    <a href="/workorder/devApprove?id={{.Id}}"class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>审批</a>
+                                    {{end}}
+                                    {{if eq $Dept "运维"}}
                                     <a href="/workorder/dbRollback?id={{.Id}}" class="btn btn-xs btn-danger" {{if eq .Isapproved "false"}}disabled="disabled"{{end}} >回滚</a>
+                                    {{end}}
                                 </td>
                             </tr>
                             {{end}}

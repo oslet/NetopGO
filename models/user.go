@@ -118,6 +118,13 @@ func GetUserById(id string) (*User, error) {
 	return user, err
 }
 
+func GetUserByName(name string) *User {
+	o := orm.NewOrm()
+	user := &User{}
+	o.QueryTable("user").Filter("name", name).One(user)
+	return user
+}
+
 func SearchUserCount(name string) (int64, error) {
 	o := orm.NewOrm()
 	users := make([]*User, 0)

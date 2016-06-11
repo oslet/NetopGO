@@ -114,6 +114,10 @@ func init() {
 	beego.Router("/workorder/dbCommit", &controllers.DBWOController{}, "post:DBCommit")
 	beego.Router("/workorder/dbRollback", &controllers.DBWOController{}, "get:DBRollback")
 	beego.Router("/workorder/dbRollback", &controllers.DBWOController{}, "Post:DBRollbackPost")
+	beego.Router("/workorder/devApprove", &controllers.DBWOController{}, "get:DevApprove")
+	beego.Router("/workorder/devCommit", &controllers.DBWOController{}, "post:DevCommit")
+	beego.Router("/workorder/dbapprove/modify", &controllers.DBWOController{}, "get:DBApproveModify")
+	beego.Router("/workorder/dbapprove/modify", &controllers.DBWOController{}, "post:DBApproveModifyPost")
 
 	beego.Router("/attachment/:all", &controllers.AttachController{})
 }
