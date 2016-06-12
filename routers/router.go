@@ -103,7 +103,8 @@ func init() {
 	beego.Router("/workorder/approveCommit", &controllers.AppWOController{}, "post:ApproveCommit")
 	beego.Router("/workorder/approve/modify", &controllers.AppWOController{}, "get:ApproveModify")
 	beego.Router("/workorder/approve/modify", &controllers.AppWOController{}, "post:ApproveModifyPost")
-	beego.Router("/workorder/my/search", &controllers.DBWOController{}, "get:Search")
+	beego.Router("/workorder/my/search", &controllers.AppWOController{}, "get:Search")
+	beego.Router("/workorder/my/export", &controllers.AppWOController{}, "get:Export")
 
 	beego.Router("/workorder/db", &controllers.DBWOController{}, "get:DBOrder")
 	beego.Router("/workorder/db", &controllers.DBWOController{}, "post:DBOrderPost")
@@ -120,6 +121,7 @@ func init() {
 	beego.Router("/workorder/dbapprove/modify", &controllers.DBWOController{}, "get:DBApproveModify")
 	beego.Router("/workorder/dbapprove/modify", &controllers.DBWOController{}, "post:DBApproveModifyPost")
 	beego.Router("/workorder/mydb/search", &controllers.DBWOController{}, "get:Search")
+	beego.Router("/workorder/mydb/export", &controllers.DBWOController{}, "get:Export")
 
 	beego.Router("/attachment/:all", &controllers.AttachController{})
 }

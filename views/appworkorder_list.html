@@ -7,37 +7,34 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="">
-                        <a href="#" class="btn btn-sm btn-primary "> 本月导出 </a>
-                        <a href="#" class="btn btn-sm btn-info "> 全量导出 </a>
-                        {{if .IsSearch}}
-                        <a href="/record/db/list" class="btn btn-white pull-right"> 返回列表 </a>
-                        {{else}}
-                        <form id="search_form" method="get" action="/record/db/search" class="form-inline pull-right">
-                            <div class="input-group">
-                                <div class="col-sm-8">
-                                    <select name="apptype" class="form-control">
-                                        {{range .AppTypeList}}
-                                        <option value="{{.}}">{{.}}</option>
-                                        {{end}}
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <div class="col-sm-8">
-                                    <select name="appname" class="form-control">
-                                        {{range .AppNameList}}
-                                        <option value="{{.}}">{{.}}</option>
-                                        {{end}}
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="input-group-btn">
-                                <button id='search_btn' type="submit" class="btn btn-primary">
-                                    -搜索-
-                                </button>
-                            </div>                            
-                        </form>
-                        {{end}}
+                      {{if .IsSearch}}
+                      <a href="/workorder/my/list" class="btn btn-white pull-right"> 返回列表 </a>
+                      {{else}}
+                      <form id="search_form" method="get" action="/workorder/my/search" class="form-inline pull-right">
+                          <input name="auth" type="hidden" value="2"></input>
+                          <div class="input-group">
+                              <select name="apptype" class="form-control">
+                                  {{range .AppTypeList}}
+                                  <option value="{{.}}">{{.}}</option>
+                                  {{end}}
+                              </select>
+                          </div>
+                          <div class="form-group">                            
+                            <select name="appname" class="form-control">
+                                {{range .AppNameList}}
+                                <option value="{{.}}">{{.}}</option>
+                                {{end}}
+                            </select>
+                          </div>                             
+                          <div class="input-group">
+                              <div class="input-group-btn">
+                                  <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
+                                      -搜索-
+                                  </button>
+                              </div>
+                          </div>
+                      </form>
+                      {{end}}
                     </div>
                     <table class="table table-striped table-bordered table-hover " id="editable" >
                         <thead>
@@ -108,26 +105,35 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="">
-                        {{if .IsSearch}}
-                        <a href="/record/db/list" class="btn btn-white pull-right"> 返回列表 </a>
-                        {{else}}
-                        <form id="search_form" method="get" action="/record/db/search" class="form-inline pull-right">
-                            <div class="input-group">
-                                <div class="col-sm-8">
-                                    <select name="keyword" class="form-control">
-                                        {{range .AppNameList}}
-                                        <option value="{{.}}">{{.}}</option>
-                                        {{end}}
-                                    </select>
-                                </div>
-                                <div class="input-group-btn">
-                                    <button id='search_btn' type="submit" class="btn btn-primary">
-                                        -搜索-
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                        {{end}}
+                      <a href="/workorder/my/export?method=month" class="btn btn-sm btn-primary "> 本月导出 </a>
+                      <a href="/workorder/my/export?method=all" class="btn btn-sm btn-info "> 全量导出 </a>
+                      {{if .IsSearch}}
+                      <a href="/workorder/my/list" class="btn btn-white pull-right"> 返回列表 </a>
+                      {{else}}
+                      <form id="search_form" method="get" action="/workorder/my/search" class="form-inline pull-right">
+                          <div class="input-group">
+                              <select name="apptype" class="form-control">
+                                  {{range .AppTypeList}}
+                                  <option value="{{.}}">{{.}}</option>
+                                  {{end}}
+                              </select>
+                          </div>
+                          <div class="form-group">                            
+                            <select name="appname" class="form-control">
+                                {{range .AppNameList}}
+                                <option value="{{.}}">{{.}}</option>
+                                {{end}}
+                            </select>
+                          </div>                             
+                          <div class="input-group">
+                              <div class="input-group-btn">
+                                  <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
+                                      -搜索-
+                                  </button>
+                              </div>
+                          </div>
+                      </form>
+                      {{end}}
                     </div>
                     <table class="table table-striped table-bordered table-hover " id="editable" >
                         <thead>

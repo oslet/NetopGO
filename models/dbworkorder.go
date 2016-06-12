@@ -1,10 +1,13 @@
 package models
 
 import (
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"strconv"
 	//"strings"
 	//"fmt"
+	"database/sql"
+	_ "github.com/go-sql-driver/mysql"
 	"time"
 )
 
@@ -351,16 +354,79 @@ func DBApproveModify(id, schema, upgradeobj, upgradetype, comment, new_sqlfile, 
 	return err
 }
 
-func SearchCount(schema string) (int64, error) {
+func SearchDbwoCount(schema string) (int64, error) {
 	o := orm.NewOrm()
-	dbRecs := make([]*Dbrecord, 0)
-	total, err := o.QueryTable("dbrecord").Filter("schema__icontains", schema).All(&dbRecs)
+	dbwos := make([]*Dbworkorder, 0)
+	total, err := o.QueryTable("dbworkorder").Filter("schemaname__icontains", schema).All(&dbwos)
 	return total, err
 }
 
-func Search(currPage, pageSize int, schema string) ([]*Dbrecord, error) {
+func SearchDbwo(currPage, pageSize int, schema string) ([]*Dbworkorder, error) {
 	o := orm.NewOrm()
-	dbRecs := make([]*Dbrecord, 0)
-	_, err := o.QueryTable("dbrecord").Filter("schema__icontains", schema).OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&dbRecs)
-	return dbRecs, err
+	dbwos := make([]*Dbworkorder, 0)
+	_, err := o.QueryTable("dbworkorder").Filter("schemaname__icontains", schema).OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&dbwos)
+	return dbwos, err
+}
+
+func QueryDBwosExport(method string) (*map[int64][]string, []string, int64) {
+	result := make(map[int64][]string)
+	var columns []string
+	var total int64
+	schemaUrl := beego.AppConfig.String("db_user") + ":" + beego.AppConfig.String("db_passwd") + "@tcp(" + beego.AppConfig.String("db_host") + ":" + beego.AppConfig.String("db_port") + ")/" + beego.AppConfig.String("db_schema") + "?charset=utf8"
+
+	conn, err := sql.Open("mysql", schemaUrl)
+	if err != nil {
+		return &result, columns, total
+	}
+
+	defer conn.Close()
+	if method == "month" {
+		rows, err := conn.Query("select created,schemaname,upgradeobj,upgradetype,comment,status,sponsor,operater from dbworkorder where created>=date_add(curdate(),interval -day(curdate())+1 day) and created<date_add(curdate()-day(curdate())+1,interval 1 month)")
+		if err != nil {
+			return &result, columns, total
+		}
+		defer rows.Close()
+		columns, err = rows.Columns()
+		values := make([]sql.RawBytes, len(columns))
+		scans := make([]interface{}, len(columns))
+
+		for i := range values {
+			scans[i] = &values[i]
+		}
+
+		for rows.Next() {
+			var row []string
+			_ = rows.Scan(scans...)
+			for _, col := range values {
+				row = append(row, string(col))
+			}
+			total = total + 1
+			result[total] = row
+		}
+	} else if method == "all" {
+		rows, err := conn.Query("select created,schemaname,upgradeobj,upgradetype,comment,status,sponsor,operater from dbworkorder")
+		if err != nil {
+			return &result, columns, total
+		}
+		defer rows.Close()
+		columns, err = rows.Columns()
+		values := make([]sql.RawBytes, len(columns))
+		scans := make([]interface{}, len(columns))
+
+		for i := range values {
+			scans[i] = &values[i]
+		}
+
+		for rows.Next() {
+			var row []string
+			_ = rows.Scan(scans...)
+			for _, col := range values {
+				row = append(row, string(col))
+			}
+			total = total + 1
+			result[total] = row
+		}
+	}
+
+	return &result, columns, total
 }

@@ -6,6 +6,9 @@ import (
 	"path"
 	"strconv"
 	//"strings"
+	"github.com/tealeg/xlsx"
+	"os"
+	"time"
 )
 
 type DBWOController struct {
@@ -456,20 +459,14 @@ func (this *DBWOController) DBApproveModifyPost() {
 
 func (this *DBWOController) Search() {
 	var page string
-	uid, uname, role, _ := this.IsLogined()
+	uid, uname, role, dept := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	this.Data["Category"] = "record/app"
+	this.Data["Category"] = "workorder/mydb"
 
-	appname := this.Input().Get("keyword")
-	if "1" == appname {
-		this.Data["Path1"] = "应用升级记录"
-		this.Data["Path2"] = ""
-		this.Data["Href"] = "/record/app/list"
-		this.Redirect("/record/app/list", 302)
-		return
-	}
+	schema := this.Input().Get("keyword")
+
 	//beego.Info(appname)
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
@@ -478,8 +475,8 @@ func (this *DBWOController) Search() {
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
 	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
-	total, err := models.SearchAppRecCount(appname)
-	appRecs, err := models.SearchAppRecByName(int(currPage), int(pageSize), appname)
+	total, err := models.SearchDbwoCount(schema)
+	dbwos, err := models.SearchDbwo(int(currPage), int(pageSize), schema)
 	if err != nil {
 		beego.Error(err)
 	}
@@ -487,14 +484,60 @@ func (this *DBWOController) Search() {
 
 	auth := role.(int64)
 	this.Data["Auth"] = auth
+	this.Data["Dept"] = dept.(string)
 	this.Data["paginator"] = res
-	this.Data["AppRecords"] = appRecs
+	this.Data["DBWorkOrders"] = dbwos
 	this.Data["totals"] = total
 	this.Data["IsSearch"] = true
-	this.Data["Keyword"] = appname
-	this.Data["Path1"] = "应用升级记录"
-	this.Data["Path2"] = "搜索结果"
-	this.Data["Href"] = "/record/app/list"
-	this.TplName = "app_record_list.html"
+	this.Data["Keyword"] = schema
+	this.Data["Path1"] = "系统发布"
+	this.Data["Path2"] = "数据库工单"
+	this.Data["Href"] = ""
+	this.Data["Category"] = "workorder/mydb"
+	this.TplName = "dbworkorder_list.html"
+	return
+}
+
+func (this *DBWOController) Export() {
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "workorder/mydb"
+	method := this.Input().Get("method")
+	values, columns, _ := models.QueryDBwosExport(method)
+
+	file := xlsx.NewFile()
+	sheet, _ := file.AddSheet("Sheet1")
+	row := sheet.AddRow()
+	for _, val := range columns {
+		cell := row.AddCell()
+		cell.Value = val
+	}
+	//sheet.SetColWidth(1, len(columns), 100)
+	for _, val := range *values {
+		row = sheet.AddRow()
+		for _, value := range val {
+			cell := row.AddCell()
+			cell.Value = value
+		}
+	}
+	now := time.Now().String()
+	var filename string
+	if method == "month" {
+		filename = "month_db" + now[:4] + now[5:7] + now[8:10] + now[11:13] + now[14:16] + now[17:19] + ".xlsx"
+	} else if method == "all" {
+		filename = "all_db" + now[:4] + now[5:7] + now[8:10] + now[11:13] + now[14:16] + now[17:19] + ".xlsx"
+	}
+
+	filepath := path.Join("export", filename)
+	err := file.Save(filepath)
+	if err != nil {
+		beego.Error(err)
+	}
+	defer func() {
+		os.Remove(filepath)
+	}()
+	this.Ctx.Output.Download(filepath, filename)
 	return
 }

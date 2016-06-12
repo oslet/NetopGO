@@ -6,12 +6,12 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="">
-                        <a href="#" class="btn btn-sm btn-primary "> 本月导出 </a>
-                        <a href="#" class="btn btn-sm btn-info "> 全量导出 </a>
+                        <a href="/workorder/mydb/export?method=month" class="btn btn-sm btn-primary "> 本月导出 </a>
+                        <a href="/workorder/mydb/export?method=all" class="btn btn-sm btn-info "> 全量导出 </a>
                         {{if .IsSearch}}
-                        <a href="/record/db/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        <a href="/workorder/mydb/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}
-                        <form id="search_form" method="get" action="/record/mydb/search" class="form-inline pull-right">
+                        <form id="search_form" method="get" action="/workorder/mydb/search" class="form-inline pull-right">
                             <div class="input-group">
                                 <div class="col-sm-8">
                                     <select name="keyword" class="form-control">

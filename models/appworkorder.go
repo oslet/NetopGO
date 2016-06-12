@@ -1,8 +1,11 @@
 package models
 
 import (
+	"database/sql"
 	"fmt"
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	_ "github.com/go-sql-driver/mysql"
 	"strconv"
 	"strings"
 	"time"
@@ -261,18 +264,93 @@ func ApproveModify(id, apptype, appname, upgradetype, version, jenkinsname, buil
 	return err
 }
 
-func SearchCount(schema string) (int64, error) {
+func SearchAppwoCount(apptype, appname, auth string) (int64, error) {
 	o := orm.NewOrm()
-	dbRecs := make([]*Dbrecord, 0)
-	total, err := o.QueryTable("dbrecord").Filter("schema__icontains", schema).All(&dbRecs)
+	var err error
+	var total int64
+	appwos := make([]*Appworkorder, 0)
+	if auth == "2" {
+		total, err = o.QueryTable("appworkorder").Filter("status", "实施流程中").Filter("db_status", "正在实施").Filter("apptype__icontains", apptype).Filter("appname__icontains", appname).All(&appwos)
+	} else {
+		total, err = o.QueryTable("appworkorder").Filter("apptype__icontains", apptype).Filter("appname__icontains", appname).All(&appwos)
+	}
+
 	return total, err
 }
 
-func Search(currPage, pageSize int, schema string) ([]*Dbrecord, error) {
+func SearchAppwo(currPage, pageSize int, apptype, appname, auth string) ([]*Appworkorder, error) {
 	o := orm.NewOrm()
-	dbRecs := make([]*Dbrecord, 0)
-	_, err := o.QueryTable("dbrecord").Filter("schema__icontains", schema).OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&dbRecs)
-	return dbRecs, err
+	var err error
+	appwos := make([]*Appworkorder, 0)
+	if auth == "2" {
+		_, err = o.QueryTable("appworkorder").Filter("status", "实施流程中").Filter("db_status", "正在实施").Filter("apptype__icontains", apptype).Filter("appname__icontains", appname).OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&appwos)
+	} else {
+		_, err = o.QueryTable("appworkorder").Filter("apptype__icontains", apptype).Filter("appname__icontains", appname).OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&appwos)
+	}
+	return appwos, err
+}
+
+func QueryAppwosExport(method string) (*map[int64][]string, []string, int64) {
+	result := make(map[int64][]string)
+	var columns []string
+	var total int64
+	schemaUrl := beego.AppConfig.String("db_user") + ":" + beego.AppConfig.String("db_passwd") + "@tcp(" + beego.AppConfig.String("db_host") + ":" + beego.AppConfig.String("db_port") + ")/" + beego.AppConfig.String("db_schema") + "?charset=utf8"
+
+	conn, err := sql.Open("mysql", schemaUrl)
+	if err != nil {
+		return &result, columns, total
+	}
+
+	defer conn.Close()
+	if method == "month" {
+		rows, err := conn.Query("select created,apptype,appname,upgradetype,sponsor,tester,operater,status from  appworkorder where created>=date_add(curdate(),interval -day(curdate())+1 day) and created<date_add(curdate()-day(curdate())+1,interval 1 month)")
+		if err != nil {
+			return &result, columns, total
+		}
+		defer rows.Close()
+		columns, err = rows.Columns()
+		values := make([]sql.RawBytes, len(columns))
+		scans := make([]interface{}, len(columns))
+
+		for i := range values {
+			scans[i] = &values[i]
+		}
+
+		for rows.Next() {
+			var row []string
+			_ = rows.Scan(scans...)
+			for _, col := range values {
+				row = append(row, string(col))
+			}
+			total = total + 1
+			result[total] = row
+		}
+	} else if method == "all" {
+		rows, err := conn.Query("select created,apptype,appname,upgradetype,sponsor,tester,operater,status from  appworkorder")
+		if err != nil {
+			return &result, columns, total
+		}
+		defer rows.Close()
+		columns, err = rows.Columns()
+		values := make([]sql.RawBytes, len(columns))
+		scans := make([]interface{}, len(columns))
+
+		for i := range values {
+			scans[i] = &values[i]
+		}
+
+		for rows.Next() {
+			var row []string
+			_ = rows.Scan(scans...)
+			for _, col := range values {
+				row = append(row, string(col))
+			}
+			total = total + 1
+			result[total] = row
+		}
+	}
+
+	return &result, columns, total
 }
 
 func NextStatus(cate, dept, status, upgradeType string) (string, string, string) {

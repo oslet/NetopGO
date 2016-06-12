@@ -58,10 +58,11 @@ func (this *FaultRecordController) Add() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "record/fault"
-	list := beego.AppConfig.String("app_name")
-	arrList := strings.Split(list, ",")
+	appTypeList := strings.Split(beego.AppConfig.String("AppType"), ",")
+	appNameList := strings.Split(beego.AppConfig.String("AppName"), ",")
 
-	this.Data["List"] = arrList
+	this.Data["AppTypeList"] = appTypeList
+	this.Data["AppNameList"] = appNameList
 	this.Data["Path1"] = "故障记录"
 	this.Data["Path2"] = "添加记录"
 	this.Data["Href"] = "/record/fault/list"

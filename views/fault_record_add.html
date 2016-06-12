@@ -27,12 +27,9 @@
                                 <label for="system" class="col-sm-2 control-label">所属系统<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
                                     <select name="system" class="form-control">
-                                        <option value="app">app</option>
-                                        <option value="server">server</option>
-                                        <option value="browser">browser</option>
-                                        <option value="network">network</option>
-                                        <option value="saas">saas</option>
-                                        <option value="rpc">rpc</option>
+                                        {{range .AppTypeList}}
+                                        <option value="{{.}}">{{.}}</option>
+                                        {{end}}
                                     </select>
                                 </div>
                             </div>       
@@ -41,7 +38,7 @@
                                 <label for="appname" class="col-sm-2 control-label">应用名称<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
                                     <select name="appname" class="form-control">
-                                        {{range .List}}
+                                        {{range .AppNameList}}
                                         <option value="{{.}}">{{.}}</option>
                                         {{end}}
                                     </select>

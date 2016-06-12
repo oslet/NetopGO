@@ -3,9 +3,12 @@ package controllers
 import (
 	"NetopGO/models"
 	"github.com/astaxie/beego"
+	"github.com/tealeg/xlsx"
+	"os"
 	"path"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type AppWOController struct {
@@ -18,7 +21,7 @@ func (this *AppWOController) Get() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	this.Data["Dept"] = dept
+
 	this.Data["IsSearch"] = false
 	auth := role.(int64)
 
@@ -49,9 +52,15 @@ func (this *AppWOController) Get() {
 	appTypeList := strings.Split(beego.AppConfig.String("AppType"), ",")
 	appNameList := strings.Split(beego.AppConfig.String("AppName"), ",")
 
+	schemas, err := models.GetSchemaNamesArray()
+	if err != nil {
+		beego.Error(err)
+	}
+	this.Data["Schemas"] = schemas
 	this.Data["AppTypeList"] = appTypeList
 	this.Data["AppNameList"] = appNameList
 	this.Data["Auth"] = auth
+	this.Data["Dept"] = dept.(string)
 	this.Data["paginator"] = res
 	this.Data["AppWorkOrders"] = appwos
 	this.Data["totals"] = total
@@ -89,6 +98,7 @@ func (this *AppWOController) AppOrderPost() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
+	this.Data["Auth"] = role.(int64)
 	apptype := this.Input().Get("apptype")
 	appname := this.Input().Get("appname")
 	version := this.Input().Get("version")
@@ -131,8 +141,7 @@ func (this *AppWOController) AppOrderPost() {
 	if err != nil {
 		beego.Error(err)
 	}
-	this.Data["Category"] = "workorder/my"
-	this.TplName = "appworkorder_list.html"
+	this.Redirect("/workorder/my/list", 302)
 	return
 }
 
@@ -216,6 +225,7 @@ func (this *AppWOController) ApproveCommit() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Dept"] = dept
+	this.Data["Auth"] = role.(int64)
 	id := this.Input().Get("id")
 
 	beego.Info(id)
@@ -239,6 +249,7 @@ func (this *AppWOController) ApproveRollback() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Dept"] = dept
+	this.Data["Auth"] = role.(int64)
 	id := this.Input().Get("id")
 
 	beego.Info(id)
@@ -375,15 +386,16 @@ func (this *AppWOController) ApproveModifyPost() {
 
 func (this *AppWOController) Search() {
 	var page string
-	uid, uname, role, _ := this.IsLogined()
+	uid, uname, role, detp := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
+	this.Data["Auth"] = role.(int64)
 	this.Data["Category"] = "workorder/my"
 
 	apptype := this.Input().Get("apptype")
 	appname := this.Input().Get("appname")
-
+	auth := this.Input().Get("auth")
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
 	} else {
@@ -391,23 +403,78 @@ func (this *AppWOController) Search() {
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
 	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
-	total, err := models.SearchCount(apptype, appname)
-	appwos, err := models.SearchAppRecByName(int(currPage), int(pageSize), apptype, appname)
+	total, err := models.SearchAppwoCount(apptype, appname, auth)
+	appwos, err := models.SearchAppwo(int(currPage), int(pageSize), apptype, appname, auth)
 	if err != nil {
 		beego.Error(err)
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
-	auth := role.(int64)
-	this.Data["Auth"] = auth
+	appTypeList := strings.Split(beego.AppConfig.String("AppType"), ",")
+	appNameList := strings.Split(beego.AppConfig.String("AppName"), ",")
+
+	schemas, err := models.GetSchemaNamesArray()
+	if err != nil {
+		beego.Error(err)
+	}
+	this.Data["Schemas"] = schemas
+	this.Data["AppTypeList"] = appTypeList
+	this.Data["AppNameList"] = appNameList
+	this.Data["Dept"] = detp.(string)
 	this.Data["paginator"] = res
 	this.Data["AppWorkOrders"] = appwos
 	this.Data["totals"] = total
 	this.Data["IsSearch"] = true
-	this.Data["Keyword"] = appname
-	this.Data["Path1"] = "应用升级记录"
-	this.Data["Path2"] = "搜索结果"
-	this.Data["Href"] = "/record/app/list"
-	this.TplName = "app_record_list.html"
+	this.Data["AppType"] = apptype
+	this.Data["AppName"] = appname
+	this.Data["Path1"] = "系统发布"
+	this.Data["Path2"] = "我的工单"
+	this.Data["Href"] = ""
+	this.Data["Category"] = "workorder/my"
+	this.TplName = "appworkorder_list.html"
+	return
+}
+
+func (this *AppWOController) Export() {
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "workorder/my"
+	method := this.Input().Get("method")
+	values, columns, _ := models.QueryAppwosExport(method)
+
+	file := xlsx.NewFile()
+	sheet, _ := file.AddSheet("Sheet1")
+	row := sheet.AddRow()
+	for _, val := range columns {
+		cell := row.AddCell()
+		cell.Value = val
+	}
+	//sheet.SetColWidth(1, len(columns), 100)
+	for _, val := range *values {
+		row = sheet.AddRow()
+		for _, value := range val {
+			cell := row.AddCell()
+			cell.Value = value
+		}
+	}
+	now := time.Now().String()
+	var filename string
+	if method == "month" {
+		filename = "month_app" + now[:4] + now[5:7] + now[8:10] + now[11:13] + now[14:16] + now[17:19] + ".xlsx"
+	} else if method == "all" {
+		filename = "all_app" + now[:4] + now[5:7] + now[8:10] + now[11:13] + now[14:16] + now[17:19] + ".xlsx"
+	}
+
+	filepath := path.Join("export", filename)
+	err := file.Save(filepath)
+	if err != nil {
+		beego.Error(err)
+	}
+	defer func() {
+		os.Remove(filepath)
+	}()
+	this.Ctx.Output.Download(filepath, filename)
 	return
 }

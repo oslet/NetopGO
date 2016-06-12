@@ -463,7 +463,7 @@ func (this *DBController) Export() {
 		cell := row.AddCell()
 		cell.Value = val
 	}
-	sheet.SetColWidth(1, len(columns), 100)
+	//sheet.SetColWidth(1, len(columns), 100)
 	for _, val := range *values {
 		row = sheet.AddRow()
 		for _, value := range val {
