@@ -46,7 +46,10 @@ func (this *AppWOController) Get() {
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
+	appTypeList := strings.Split(beego.AppConfig.String("AppType"), ",")
 	appNameList := strings.Split(beego.AppConfig.String("AppName"), ",")
+
+	this.Data["AppTypeList"] = appTypeList
 	this.Data["AppNameList"] = appNameList
 	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
@@ -74,7 +77,7 @@ func (this *AppWOController) AppOrder() {
 	this.Data["AppNameList"] = appNameList
 	this.Data["Path1"] = "系统发布"
 	this.Data["Path2"] = "提交应用工单"
-	this.Data["Href"] = "/workorder/my"
+	this.Data["Href"] = "/workorder/my/list"
 	this.Data["Category"] = "workorder/my"
 	this.TplName = "appworkorder.html"
 	return
@@ -164,7 +167,7 @@ func (this *AppWOController) Approve() {
 	this.Data["Auth"] = dept.(string)
 	this.Data["Path1"] = "我的工单"
 	this.Data["Path2"] = "工单审批"
-	this.Data["Href"] = "/workorder/my"
+	this.Data["Href"] = "/workorder/my/list"
 	this.Data["Category"] = "workorder/my"
 	this.TplName = "approve.html"
 	return
@@ -201,7 +204,7 @@ func (this *AppWOController) Rollback() {
 	this.Data["Auth"] = dept.(string)
 	this.Data["Path1"] = "我的工单"
 	this.Data["Path2"] = "异常回滚"
-	this.Data["Href"] = "/workorder/my"
+	this.Data["Href"] = "/workorder/my/list"
 	this.Data["Category"] = "workorder/my"
 	this.TplName = "approllback.html"
 	return
@@ -226,7 +229,7 @@ func (this *AppWOController) ApproveCommit() {
 	if err != nil {
 		beego.Error(err)
 	}
-	this.Redirect("/workorder/my", 302)
+	this.Redirect("/workorder/my/list", 302)
 	return
 }
 
@@ -249,7 +252,7 @@ func (this *AppWOController) ApproveRollback() {
 	if err != nil {
 		beego.Error(err)
 	}
-	this.Redirect("/workorder/my", 302)
+	this.Redirect("/workorder/my/list", 302)
 	return
 }
 
@@ -276,7 +279,7 @@ func (this *AppWOController) Detail() {
 	//this.Data["Auth"] = dept.(string)
 	this.Data["Path1"] = "我的工单"
 	this.Data["Path2"] = "工单详情"
-	this.Data["Href"] = "/workorder/my"
+	this.Data["Href"] = "/workorder/my/list"
 	this.Data["Category"] = "workorder/my"
 	this.TplName = "appworkorder_detail.html"
 	return
@@ -306,7 +309,7 @@ func (this *AppWOController) ApproveModify() {
 	this.Data["Auth"] = dept.(string)
 	this.Data["Path1"] = "我的工单"
 	this.Data["Path2"] = "重新发布"
-	this.Data["Href"] = "/workorder/my"
+	this.Data["Href"] = "/workorder/my/list"
 	this.Data["Category"] = "workorder/my"
 	this.TplName = "appworkorder_modify.html"
 	return
@@ -366,6 +369,45 @@ func (this *AppWOController) ApproveModifyPost() {
 	if err == nil {
 		beego.Error(err)
 	}
-	this.Redirect("/workorder/my", 302)
+	this.Redirect("/workorder/my/list", 302)
+	return
+}
+
+func (this *AppWOController) Search() {
+	var page string
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "workorder/my"
+
+	apptype := this.Input().Get("apptype")
+	appname := this.Input().Get("appname")
+
+	if len(this.Input().Get("page")) == 0 {
+		page = "1"
+	} else {
+		page = this.Input().Get("page")
+	}
+	currPage, _ := strconv.ParseInt(page, 10, 64)
+	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
+	total, err := models.SearchCount(apptype, appname)
+	appwos, err := models.SearchAppRecByName(int(currPage), int(pageSize), apptype, appname)
+	if err != nil {
+		beego.Error(err)
+	}
+	res := models.Paginator(int(currPage), int(pageSize), total)
+
+	auth := role.(int64)
+	this.Data["Auth"] = auth
+	this.Data["paginator"] = res
+	this.Data["AppWorkOrders"] = appwos
+	this.Data["totals"] = total
+	this.Data["IsSearch"] = true
+	this.Data["Keyword"] = appname
+	this.Data["Path1"] = "应用升级记录"
+	this.Data["Path2"] = "搜索结果"
+	this.Data["Href"] = "/record/app/list"
+	this.TplName = "app_record_list.html"
 	return
 }

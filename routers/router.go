@@ -95,7 +95,7 @@ func init() {
 
 	beego.Router("/workorder/app", &controllers.AppWOController{}, "get:AppOrder")
 	beego.Router("/workorder/app", &controllers.AppWOController{}, "post:AppOrderPost")
-	beego.Router("/workorder/my", &controllers.AppWOController{}, "get:Get")
+	beego.Router("/workorder/my/list", &controllers.AppWOController{}, "get:Get")
 	beego.Router("/workorder/approve", &controllers.AppWOController{}, "get:Approve")
 	beego.Router("/workorder/rollback", &controllers.AppWOController{}, "get:Rollback")
 	beego.Router("/workorder/approveDetail", &controllers.AppWOController{}, "get:Detail")
@@ -103,10 +103,11 @@ func init() {
 	beego.Router("/workorder/approveCommit", &controllers.AppWOController{}, "post:ApproveCommit")
 	beego.Router("/workorder/approve/modify", &controllers.AppWOController{}, "get:ApproveModify")
 	beego.Router("/workorder/approve/modify", &controllers.AppWOController{}, "post:ApproveModifyPost")
+	beego.Router("/workorder/my/search", &controllers.DBWOController{}, "get:Search")
 
 	beego.Router("/workorder/db", &controllers.DBWOController{}, "get:DBOrder")
 	beego.Router("/workorder/db", &controllers.DBWOController{}, "post:DBOrderPost")
-	beego.Router("/workorder/mydb", &controllers.DBWOController{}, "get:Get")
+	beego.Router("/workorder/mydb/list", &controllers.DBWOController{}, "get:Get")
 	beego.Router("/workorder/dbInApp", &controllers.DBWOController{}, "get:DBInApp")
 	beego.Router("/workorder/dbInApp", &controllers.DBWOController{}, "post:DBInAppPost")
 	beego.Router("/workorder/dbDetail", &controllers.DBWOController{}, "get:Detail")
@@ -118,6 +119,7 @@ func init() {
 	beego.Router("/workorder/devCommit", &controllers.DBWOController{}, "post:DevCommit")
 	beego.Router("/workorder/dbapprove/modify", &controllers.DBWOController{}, "get:DBApproveModify")
 	beego.Router("/workorder/dbapprove/modify", &controllers.DBWOController{}, "post:DBApproveModifyPost")
+	beego.Router("/workorder/mydb/search", &controllers.DBWOController{}, "get:Search")
 
 	beego.Router("/attachment/:all", &controllers.AttachController{})
 }

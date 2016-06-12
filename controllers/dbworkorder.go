@@ -80,7 +80,7 @@ func (this *DBWOController) DBOrder() {
 	this.Data["Schemas"] = schemas
 	this.Data["Path1"] = "系统发布"
 	this.Data["Path2"] = "提交DB工单"
-	this.Data["Href"] = "/workorder/mydb"
+	this.Data["Href"] = "/workorder/mydb/list"
 	this.Data["Category"] = "workorder/mydb"
 	this.TplName = "dbworkorder.html"
 	return
@@ -117,7 +117,7 @@ func (this *DBWOController) DBOrderPost() {
 	}
 
 	this.Data["Category"] = "workorder/mydb"
-	this.Redirect("/workorder/mydb", 302)
+	this.Redirect("/workorder/mydb/list", 302)
 	return
 }
 
@@ -138,7 +138,7 @@ func (this *DBWOController) DBInApp() {
 	this.Data["Schemas"] = schemas
 	this.Data["Path1"] = "系统发布"
 	this.Data["Path2"] = "DB审批"
-	this.Data["Href"] = "/workorder/mydb"
+	this.Data["Href"] = "/workorder/mydb/list"
 	this.Data["Category"] = "workorder/mydb"
 	this.TplName = "dbinapprove.html"
 }
@@ -163,7 +163,7 @@ func (this *DBWOController) DBInAppPost() {
 		beego.Error(err)
 	}
 	this.Data["Category"] = "workorder/mydb"
-	this.Redirect("/workorder/mydb", 302)
+	this.Redirect("/workorder/mydb/list", 302)
 	return
 }
 
@@ -198,7 +198,7 @@ func (this *DBWOController) Detail() {
 	//this.Data["Auth"] = dept.(string)
 	this.Data["Path1"] = "数据库工单"
 	this.Data["Path2"] = "工单详情"
-	this.Data["Href"] = "/workorder/mydb"
+	this.Data["Href"] = "/workorder/mydb/list"
 	this.Data["Category"] = "workorder/mydb"
 	this.TplName = "dbworkorder_detail.html"
 	return
@@ -233,7 +233,7 @@ func (this *DBWOController) DBApprove() {
 	this.Data["Auth"] = dept.(string)
 	this.Data["Path1"] = "数据库工单"
 	this.Data["Path2"] = "工单审批"
-	this.Data["Href"] = "/workorder/mydb"
+	this.Data["Href"] = "/workorder/mydb/list"
 	this.Data["Category"] = "workorder/mydb"
 	this.TplName = "dbapprove.html"
 	return
@@ -253,7 +253,7 @@ func (this *DBWOController) DBCommit() {
 	if err != nil {
 		beego.Error(err)
 	}
-	this.Redirect("/workorder/mydb", 302)
+	this.Redirect("/workorder/mydb/list", 302)
 	return
 }
 
@@ -285,7 +285,7 @@ func (this *DBWOController) DBRollback() {
 	this.Data["Auth"] = dept.(string)
 	this.Data["Path1"] = "数据库工单"
 	this.Data["Path2"] = "异常回滚"
-	this.Data["Href"] = "/workorder/mydb"
+	this.Data["Href"] = "/workorder/mydb/list"
 	this.Data["Category"] = "workorder/mydb"
 	this.TplName = "dbrollback.html"
 	return
@@ -305,7 +305,7 @@ func (this *DBWOController) DBRollbackPost() {
 	if err != nil {
 		beego.Error(err)
 	}
-	this.Redirect("/workorder/mydb", 302)
+	this.Redirect("/workorder/mydb/list", 302)
 	return
 }
 
@@ -338,7 +338,7 @@ func (this *DBWOController) DevApprove() {
 	this.Data["Auth"] = dept.(string)
 	this.Data["Path1"] = "数据库工单"
 	this.Data["Path2"] = "研发审批"
-	this.Data["Href"] = "/workorder/mydb"
+	this.Data["Href"] = "/workorder/mydb/list"
 	this.Data["Category"] = "workorder/mydb"
 	this.TplName = "devapprove.html"
 	return
@@ -373,7 +373,7 @@ func (this *DBWOController) DevCommit() {
 	if err != nil {
 		beego.Error(err)
 	}
-	this.Redirect("/workorder/mydb", 302)
+	this.Redirect("/workorder/mydb/list", 302)
 	return
 }
 
@@ -407,7 +407,7 @@ func (this *DBWOController) DBApproveModify() {
 	this.Data["Auth"] = dept.(string)
 	this.Data["Path1"] = "我的工单"
 	this.Data["Path2"] = "重新发布"
-	this.Data["Href"] = "/workorder/mydb"
+	this.Data["Href"] = "/workorder/mydb/list"
 	this.Data["Category"] = "workorder/mydb"
 	this.TplName = "dbworkorder_modify.html"
 	return
@@ -450,6 +450,51 @@ func (this *DBWOController) DBApproveModifyPost() {
 	if err == nil {
 		beego.Error(err)
 	}
-	this.Redirect("/workorder/mydb", 302)
+	this.Redirect("/workorder/mydb/list", 302)
+	return
+}
+
+func (this *DBWOController) Search() {
+	var page string
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "record/app"
+
+	appname := this.Input().Get("keyword")
+	if "1" == appname {
+		this.Data["Path1"] = "应用升级记录"
+		this.Data["Path2"] = ""
+		this.Data["Href"] = "/record/app/list"
+		this.Redirect("/record/app/list", 302)
+		return
+	}
+	//beego.Info(appname)
+	if len(this.Input().Get("page")) == 0 {
+		page = "1"
+	} else {
+		page = this.Input().Get("page")
+	}
+	currPage, _ := strconv.ParseInt(page, 10, 64)
+	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
+	total, err := models.SearchAppRecCount(appname)
+	appRecs, err := models.SearchAppRecByName(int(currPage), int(pageSize), appname)
+	if err != nil {
+		beego.Error(err)
+	}
+	res := models.Paginator(int(currPage), int(pageSize), total)
+
+	auth := role.(int64)
+	this.Data["Auth"] = auth
+	this.Data["paginator"] = res
+	this.Data["AppRecords"] = appRecs
+	this.Data["totals"] = total
+	this.Data["IsSearch"] = true
+	this.Data["Keyword"] = appname
+	this.Data["Path1"] = "应用升级记录"
+	this.Data["Path2"] = "搜索结果"
+	this.Data["Href"] = "/record/app/list"
+	this.TplName = "app_record_list.html"
 	return
 }

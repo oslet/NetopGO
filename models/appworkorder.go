@@ -261,6 +261,20 @@ func ApproveModify(id, apptype, appname, upgradetype, version, jenkinsname, buil
 	return err
 }
 
+func SearchCount(schema string) (int64, error) {
+	o := orm.NewOrm()
+	dbRecs := make([]*Dbrecord, 0)
+	total, err := o.QueryTable("dbrecord").Filter("schema__icontains", schema).All(&dbRecs)
+	return total, err
+}
+
+func Search(currPage, pageSize int, schema string) ([]*Dbrecord, error) {
+	o := orm.NewOrm()
+	dbRecs := make([]*Dbrecord, 0)
+	_, err := o.QueryTable("dbrecord").Filter("schema__icontains", schema).OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&dbRecs)
+	return dbRecs, err
+}
+
 func NextStatus(cate, dept, status, upgradeType string) (string, string, string) {
 	var nextStatus string
 	var who string

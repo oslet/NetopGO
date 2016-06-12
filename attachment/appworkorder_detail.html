@@ -1,0 +1,130 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+                    {{$AppTypeList := .AppTypeList}}
+                    {{$AppNameList := .AppNameList}}
+                    {{with .Appwo}}
+                    {{$AppName := .Appname}}
+                    {{$AppType := .Apptype}}
+                    <div class="ibox-content">
+                        <form method="post" id="userForm" class="form-horizontal" action="" enctype="multipart/form-data"> 
+                            <div class="form-group">
+                                <label for="apptype" class="col-sm-2 control-label">业务类别</label>
+                                <div class="col-sm-8">
+                                    <select name="apptype" class="form-control" readonly>
+                                        {{range $AppTypeList}}
+                                        <option value="{{.}}" {{if eq $AppType .}}selected{{end}}>{{.}}</option>
+                                        {{end}}
+                                    </select>
+                                </div>
+                            </div>     
+                            <div class="form-group">
+                                <label for="appname" class="col-sm-2 control-label">应用名称</label>
+                                <div class="col-sm-8">
+                                    <select name="appname" class="form-control" readonly>
+                                        {{range $AppNameList}}
+                                        <option value="{{.}}" {{if eq $AppName .}}selected{{end}}>{{.}}</option>
+                                        {{end}}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="upgradetype" class="col-sm-2 control-label">升级类型</label>
+                                <div class="col-sm-8">
+                                    <select name="upgradetype" class="form-control" readonly>
+                                        <option value="修复bug" {{if eq .Upgradetype "修复bug"}}selected{{end}}>修复bug</option>
+                                        <option value="产品发布" {{if eq .Upgradetype "产品发布"}}selected{{end}}>产品发布</option>
+                                        <option value="系统运维" {{if eq .Upgradetype "系统运维"}}selected{{end}}>系统运维</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="version" class="col-sm-2 control-label">迭代版本</label>
+                                <div class="col-sm-8">
+                                    <input id="version" name="version" placeholder="" type="text" class="form-control" value="{{.Version}}" readonly>
+                                </div>
+                            </div>                            
+                            <div class="form-group">
+                                <label for="jenkinsname" class="col-sm-2 control-label">Jenkins项目名称</label>
+                                <div class="col-sm-8">
+                                    <input id="jenkinsname" name="jenkinsname" placeholder="" type="text" class="form-control" value="{{.JenkinsName}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="buildnum" class="col-sm-2 control-label">Build Num</label>
+                                <div class="col-sm-8">
+                                    <input id="buildnum" name="buildnum" placeholder="" type="text" class="form-control" value="{{.BuildNum}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="featurelist" class="col-sm-2 control-label">升级功能列表</label>
+                                <div class="col-sm-8">
+                                    <textarea name="featurelist" class="form-control" rows="4" placeholder="" readonly>{{.FeatureList}}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="modifycfg" class="col-sm-2 control-label">配置文件修改</label>
+                                <div class="col-sm-8">
+                                    <textarea name="modifycfg" placeholder="" class="form-control" rows="4" readonly>{{.ModifyCfg}}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="relayapp" class="col-sm-2 control-label">升级依赖描述</label>
+                                <div class="col-sm-8">
+                                    <textarea name="relayapp" class="form-control" placeholder="" rows="4" readonly>{{.RelayApp}}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="attachment" class="col-sm-2 control-label">程序附件</label>
+                                <div class="col-sm-8">
+                                    （<a target="_blank" href="/attachment/{{.Attachment}}">{{.Attachment}}</a>）
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="sqlfile" class="col-sm-2 control-label">sql附件</label>
+                                <div class="col-sm-8">
+                                    （<a target="_blank" href="/attachment/{{.Sqlfile}}">{{.Sqlfile}}</a>）
+                                </div>
+                            </div>
+                            {{if ne .Upgradetype "系统运维"}}
+                            <div class="form-group">
+                                <label for="testoutcome" class="col-sm-2 control-label">测试意见</label>
+                                <div class="col-sm-8">
+                                    <textarea name="testoutcome" class="form-control" placeholder="" rows="2" readonly>{{.TestOutcome}}</textarea>
+                                </div>
+                            </div>
+                            {{end}}
+                            {{if eq .Upgradetype "产品发布"}}
+                            <div class="form-group">
+                                <label for="prdtoutcome" class="col-sm-2 control-label">产品意见</label>
+                                <div class="col-sm-8">
+                                    <textarea name="prdtoutcome" class="form-control" placeholder="" rows="2" readonly>{{.PrdtOutcome}}</textarea>
+                                </div>
+                            </div>
+                            {{end}}
+                            <div class="form-group">
+                                <label for="opoutcome" class="col-sm-2 control-label">运维意见</label>
+                                <div class="col-sm-8">
+                                    <textarea name="opoutcome" class="form-control" placeholder="" rows="2" readonly>{{.OpOutcome}}</textarea>
+                                </div>
+                            </div>
+                            {{if ne .Upgradetype "系统运维"}}
+                            <div class="form-group">
+                                <label for="finaloutcome" class="col-sm-2 control-label">最终意见</label>
+                                <div class="col-sm-8">
+                                    <textarea name="finaloutcome" class="form-control" placeholder="" rows="2" readonly>{{.FinalOutcome}}</textarea>
+                                </div>
+                            </div>
+                            {{end}}
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button id="submit_button" class="btn btn-primary"><a href="/workorder/my">返回列表</a></button>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{template "page_buttom" .}}
