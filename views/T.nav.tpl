@@ -36,10 +36,10 @@
             <li id="record">
                 <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">系统发布</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li class="myorder"><a href="/workorder/my/list">应用工单</a></li>
-                    <li class="myorder"><a href="/workorder/mydb/list">数据库工单</a></li>
-                    <li class="apporder"><a href="/workorder/app">提交应用工单</a></li>
-                    <li class="dborder"><a href="/workorder/db">提交数据库工单</a></li>
+                    <li class="download"><a href="/workorder/my/list">应用工单</a></li>
+                    <li class="download"><a href="/workorder/mydb/list">数据库工单</a></li>
+                    <li class="download"><a href="/workorder/app">提交应用工单</a></li>
+                    <li class="download"><a href="/workorder/db">提交数据库工单</a></li>
                     <li class="download"><a href="/record/fault/list">故障记录</a></li>
                     <li class="download"><a href="/record/quest/list">问题记录</a></li>
                 </ul>

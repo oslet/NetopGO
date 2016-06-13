@@ -67,7 +67,7 @@ func GetDBRecordMonth() (float64, error) {
 	var num float64
 	firstDay := time.Now().String()[:8] + "01 00:00:00"
 	o := orm.NewOrm()
-	err := o.Raw("select count(*) from dbrecord where created>=?", firstDay).QueryRow(&num)
+	err := o.Raw("select count(*) from dbworkorder where created>=?", firstDay).QueryRow(&num)
 	return num, err
 }
 
@@ -75,22 +75,42 @@ func GetAppRecordMonth() (float64, error) {
 	var num float64
 	firstDay := time.Now().String()[:8] + "01 00:00:00"
 	o := orm.NewOrm()
-	err := o.Raw("select count(*) from apprecord where created>=?", firstDay).QueryRow(&num)
+	err := o.Raw("select count(*) from appworkorder where created>=?", firstDay).QueryRow(&num)
 	return num, err
 }
 
-func GetAppFaultRecordMonth() (float64, error) {
+func GetQuestionRecordMonth() (float64, error) {
 	var num float64
 	firstDay := time.Now().String()[:8] + "01 00:00:00"
 	o := orm.NewOrm()
-	err := o.Raw("select count(*) from faultrecord where starttime>=? and category<>?", firstDay, "数据库").QueryRow(&num)
+	err := o.Raw("select count(*) from question where created>=? and status=?", firstDay, "挂起").QueryRow(&num)
 	return num, err
 }
 
-func GetDBFaultRecordMonth() (float64, error) {
+func FaultRecordMonth() (float64, error) {
 	var num float64
 	firstDay := time.Now().String()[:8] + "01 00:00:00"
 	o := orm.NewOrm()
-	err := o.Raw("select count(*) from faultrecord where starttime>=? and category=?", firstDay, "数据库").QueryRow(&num)
+	err := o.Raw("select count(*) from faultrecord where starttime>=?", firstDay).QueryRow(&num)
+	return num, err
+}
+
+func GetUnoverOrderNums(auth int64, dept, uname string) (float64, error) {
+	o := orm.NewOrm()
+	var num float64
+	var err error
+	if auth == 2 {
+		err = o.Raw("select count(*) from  dbworkorder where status=?", "正在实施").QueryRow(&num)
+	} else if auth == 1 {
+		err = o.Raw("select count(*) from  appworkorder where status=?", "实施流程中").QueryRow(&num)
+	} else if dept == "测试" {
+		err = o.Raw("select count(*) from  appworkorder where status=?", "测试流程中").QueryRow(&num)
+	} else if dept == "研发" {
+		err = o.Raw("select count(*) from  appworkorder where status<>?", "工单已关闭").QueryRow(&num)
+	} else if dept == "产品" {
+		err = o.Raw("select count(*) from  appworkorder where status=?", "审批流程中").QueryRow(&num)
+	} else {
+		err = o.Raw("select count(*) from  dbworkorder where sponsor=? and status<>?", uname, "实施完毕").QueryRow(&num)
+	}
 	return num, err
 }

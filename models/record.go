@@ -1,8 +1,11 @@
 package models
 
 import (
+	"database/sql"
 	"fmt"
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	_ "github.com/go-sql-driver/mysql"
 	"strconv"
 	"time"
 )
@@ -296,14 +299,65 @@ func FaultRecordDetail(id string) (*Faultrecord, error) {
 
 func SearchFaultRecCount(cate, quest string) (int64, error) {
 	o := orm.NewOrm()
-	faultRecs := make([]*Faultrecord, 0)
-	total, err := o.QueryTable("faultrecord").Filter("category__icontains", cate).All(&faultRecs)
+	var faultRecs []*Faultrecord
+	var total int64
+	var err error
+	faultRecs = make([]*Faultrecord, 0)
+	if len(quest) > 0 {
+		total, err = o.QueryTable("faultrecord").Filter("question", quest).Filter("category__icontains", cate).All(&faultRecs)
+	} else {
+		total, err = o.QueryTable("faultrecord").Filter("category__icontains", cate).All(&faultRecs)
+	}
 	return total, err
 }
 
 func SearchFaultRecByName(currPage, pageSize int, cate, quest string) ([]*Faultrecord, error) {
 	o := orm.NewOrm()
-	faultRecs := make([]*Faultrecord, 0)
-	_, err := o.QueryTable("faultrecord").Filter("category__icontains", cate).OrderBy("-starttime").Limit(pageSize, (currPage-1)*pageSize).All(&faultRecs)
+	var faultRecs []*Faultrecord
+	var err error
+	faultRecs = make([]*Faultrecord, 0)
+	if len(quest) > 0 {
+		_, err = o.QueryTable("faultrecord").Filter("question", quest).Filter("category__icontains", cate).OrderBy("-starttime").Limit(pageSize, (currPage-1)*pageSize).All(&faultRecs)
+	} else {
+		_, err = o.QueryTable("faultrecord").Filter("category__icontains", cate).OrderBy("-starttime").Limit(pageSize, (currPage-1)*pageSize).All(&faultRecs)
+	}
 	return faultRecs, err
+}
+
+func QueryFaultExport() (*map[int64][]string, []string, int64) {
+	result := make(map[int64][]string)
+	var columns []string
+	var total int64
+	schemaUrl := beego.AppConfig.String("db_user") + ":" + beego.AppConfig.String("db_passwd") + "@tcp(" + beego.AppConfig.String("db_host") + ":" + beego.AppConfig.String("db_port") + ")/" + beego.AppConfig.String("db_schema") + "?charset=utf8"
+
+	conn, err := sql.Open("mysql", schemaUrl)
+	if err != nil {
+		return &result, columns, total
+	}
+	defer conn.Close()
+
+	rows, err := conn.Query("select inter_num,starttime,endtime,level,system,appname,category,issolute,operater,solution,effection,analysis,nextstep from faultrecord")
+	if err != nil {
+		return &result, columns, total
+	}
+	defer rows.Close()
+	columns, err = rows.Columns()
+	values := make([]sql.RawBytes, len(columns))
+	scans := make([]interface{}, len(columns))
+
+	for i := range values {
+		scans[i] = &values[i]
+	}
+
+	for rows.Next() {
+		var row []string
+		_ = rows.Scan(scans...)
+		for _, col := range values {
+			row = append(row, string(col))
+		}
+		total = total + 1
+		result[total] = row
+	}
+
+	return &result, columns, total
 }

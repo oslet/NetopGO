@@ -19,7 +19,7 @@
     	{{template "nav" .}}
         <div id="page-wrapper" class="gray-bg">
             <div class="row border-bottom">
-            	{{template "nav_bar_header"}}
+            	{{template "nav_bar_header" .}}
             </div>
 
 {{end}}
