@@ -41,8 +41,10 @@
                     <li class="apporder"><a href="/workorder/app">提交应用工单</a></li>
                     <li class="dborder"><a href="/workorder/db">提交数据库工单</a></li>
                     <li class="download"><a href="/record/fault/list">故障记录</a></li>
+                    <li class="download"><a href="/record/quest/list">问题记录</a></li>
                 </ul>
-            </li>            
+            </li>      
+            <!--      
             <li id="record">
                 <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">记录管理</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
@@ -51,6 +53,7 @@
                     <li class="download"><a href="#">知识库</a></li>
                 </ul>
             </li>
+            -->
             <li id="log">
                <a href="/audit/list"><i class="fa fa-files-o"></i> <span class="nav-label">日志审计</span><span class="label label-info pull-right"></span></a>
             </li>

@@ -1,0 +1,119 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+{{if eq .Auth 3}}
+<div><span style="font-size:18px;color:red;">没有相关权限！</span></div>
+{{else}}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="">
+                        <a href="/record/quest/add" class="btn btn-sm btn-primary "> 添加记录 </a>
+                        <a id="del_btn" class="btn btn-sm btn-danger "> 删除所选 </a>
+                        <a href="/workorder/quest/export" class="btn btn-sm btn-success "> 导出列表 </a>
+                        {{if .IsSearch}}
+                        <a href="/record/quest/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        {{else}}
+                        <form id="search_form" method="get" action="/record/quest/search" class="form-inline pull-right">
+                            <div class="input-group">
+                                <div class="col-sm-8">
+                                    <select name="keyword" class="form-control">
+                                        <option value="1">--请选择业务类型--</option>
+                                        {{range .AppTypeList}}
+                                        <option value="{{.}}">{{.}}</option>
+                                        {{end}}
+                                    </select>
+                                </div>
+                                <div class="input-group-btn">
+                                    <button id='search_btn' type="submit" class="btn btn-primary">
+                                        -搜索-
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+                    <table class="table table-striped table-bordered table-hover " id="editable" >
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    <input type="checkbox" id="check_all" onclick="checkAll('check_all', 'checked')">
+                                </th>
+                                <th class="text-center">时间</th>
+                                <th class="text-center">内部编号</th>
+                                <th class="text-center">问题名称</th>
+                                <th class="text-center">影响业务</th>
+                                <th class="text-center">责任人</th>                         
+                                <th class="text-center">问题描述</th>
+                                <th class="text-center">导致故障数</th>
+                                <th class="text-center">状态</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{range .QuestRecords}}
+                            <tr class="gradeX">
+                                <td class="text-center">
+                                    <input type="checkbox" name="checked" value="{{.Id}}">
+                                </td>
+                                <td class="text-center">{{.Created}}</td>
+                                <td class="text-center">{{.InterNum}}</td>
+                                <td class="text-center">{{.Name}}</td>
+                                <td class="text-center">{{.InfluceBusine}}</td>
+                                <td class="text-center">{{.Owner}}</td>
+                                <td class="text-center">{{.Comment}}</td>
+                                <td class="text-center"><a href="/record/fault/list?quest={{.Name}}"><span style="font-size:14px;color:red;">{{.FaultCount}}</span></a></td>
+                                <td class="text-center">
+                                    <a href="#" {{if eq .Status "已解决"}} class="btn btn-xs btn-success"{{else if eq .Status "挂起"}} class="btn btn-xs btn-warning"{{end}}>{{.Status}}</a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/record/quest/add?id={{.Id}}" class="btn btn-xs btn-info">编辑</a>
+                                    <a href="/record/quest/del?id={{.Id}}" class="btn btn-xs btn-danger" onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                </td>
+                            </tr>
+                            {{end}}
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                                Total {{.totals}} entries
+                            </div>
+                        </div>
+                        {{template "paginator" .}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
+<script src="/static/js/jquery.shiftcheckbox.js"></script>
+<script>
+    $(document).ready(function(){
+
+        $('#del_btn').click(function(){
+            var check_array = [];
+            if (confirm("确定删除")) {
+                $(".gradeX input:checked").each(function() {
+                    check_array.push($(this).attr("value"))
+                });
+                console.log(check_array.join(","));
+                $.post("/record/quest/bitchDel",
+                        {ids: check_array.join(",")},
+                        function(data){
+                            //console.log(data);
+                            //$(".gradeX input:checked").closest("tr").remove();                            
+                            window.location.href="/record/quest/list"                            
+                            //alert(data);
+                        }
+                )
+            }
+
+        });
+
+    });
+
+</script>
+{{template "page_buttom"}}

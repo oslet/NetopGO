@@ -16,6 +16,7 @@
                         {{else}}
                         <form id="search_form" method="get" action="/record/fault/search" class="form-inline pull-right">
                             <div class="input-group">
+                                <input name="quest" type="hidden" value="{{.Question}}">
                                 <div class="col-sm-8">
                                     <select name="keyword" class="form-control">
                                         <option value="1">--请选择故障归类--</option>
@@ -57,7 +58,7 @@
                                 <td class="text-center">
                                     <input type="checkbox" name="checked" value="{{.Id}}">
                                 </td>
-                                <td class="text-center">{{.Name}}</td>
+                                <td class="text-center">{{.InterNum}}</td>
                                 <td class="text-center">{{.Starttime}}</td>
                                 <td class="text-center">{{.Endtime}}</td>
                                 <td class="text-center">{{.Level}}</td>

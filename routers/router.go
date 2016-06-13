@@ -87,6 +87,15 @@ func init() {
 	beego.Router("/record/fault/detail", &controllers.FaultRecordController{}, "get:Post")
 	beego.Router("/record/fault/search", &controllers.FaultRecordController{}, "get:Search")
 
+	beego.Router("/record/quest/list", &controllers.QuestController{})
+	beego.Router("/record/quest/add", &controllers.QuestController{}, "get:Add")
+	beego.Router("/record/quest/add", &controllers.QuestController{}, "post:Post")
+	beego.Router("/record/quest/modify", &controllers.QuestController{}, "post:Post")
+	beego.Router("/record/quest/del", &controllers.QuestController{}, "get:Delete")
+	beego.Router("/record/quest/bitchDel", &controllers.QuestController{}, "post:BitchDelete")
+	beego.Router("/record/quest/search", &controllers.QuestController{}, "get:Search")
+	beego.Router("/workorder/quest/export", &controllers.QuestController{}, "get:Export")
+
 	beego.Router("/audit/list", &controllers.AuditController{})
 	beego.Router("/audit/del", &controllers.AuditController{}, "get:Delete")
 	beego.Router("/audit/bitchDel", &controllers.AuditController{}, "post:BitchDelete")

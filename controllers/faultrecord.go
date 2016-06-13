@@ -19,7 +19,7 @@ func (this *FaultRecordController) Get() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
-
+	quest := this.Input().Get("quest")
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
 	} else {
@@ -30,8 +30,8 @@ func (this *FaultRecordController) Get() {
 
 	currPage, _ := strconv.ParseInt(page, 10, 64)
 	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
-	total, err := models.GetFaultRecordCount()
-	faultRecs, _, err := models.GetFaultRecords(int(currPage), int(pageSize))
+	total, err := models.GetFaultRecordCount(quest)
+	faultRecs, _, err := models.GetFaultRecords(int(currPage), int(pageSize), quest)
 	if err != nil {
 		beego.Error(err)
 	}
@@ -39,6 +39,7 @@ func (this *FaultRecordController) Get() {
 
 	auth := role.(int64)
 	this.Data["Auth"] = auth
+	this.Data["Question"] = quest
 	this.Data["List"] = arrList
 	this.Data["paginator"] = res
 	this.Data["FaultRecords"] = faultRecs
@@ -60,7 +61,8 @@ func (this *FaultRecordController) Add() {
 	this.Data["Category"] = "record/fault"
 	appTypeList := strings.Split(beego.AppConfig.String("AppType"), ",")
 	appNameList := strings.Split(beego.AppConfig.String("AppName"), ",")
-
+	questNames := models.GetQuestionNames()
+	this.Data["QuestNames"] = questNames
 	this.Data["AppTypeList"] = appTypeList
 	this.Data["AppNameList"] = appNameList
 	this.Data["Path1"] = "故障记录"
@@ -79,8 +81,8 @@ func (this *FaultRecordController) Post() {
 	this.Data["Category"] = "record/fault"
 
 	id := this.Input().Get("id")
-	name := this.Input().Get("name")
 	level := this.Input().Get("level")
+	question := this.Input().Get("question")
 	system := this.Input().Get("system")
 	appname := this.Input().Get("appname")
 	category := this.Input().Get("category")
@@ -105,7 +107,7 @@ func (this *FaultRecordController) Post() {
 		this.TplName = "fault_record_detail.html"
 		return
 	} else {
-		err := models.AddFaultRecord(name, level, system, appname, category, issolu, operater, starttime, endtime, solution, effection, analysis, nextstep)
+		err := models.AddFaultRecord(question, level, system, appname, category, issolu, operater, starttime, endtime, solution, effection, analysis, nextstep)
 		if err != nil {
 			beego.Error(err)
 		}
@@ -165,6 +167,7 @@ func (this *FaultRecordController) Search() {
 	this.Data["Category"] = "record/fault"
 
 	cate := this.Input().Get("keyword")
+	quest := this.Input().Get("quest")
 	if "1" == cate {
 		this.Data["Path1"] = "故障记录"
 		this.Data["Path2"] = ""
@@ -180,8 +183,8 @@ func (this *FaultRecordController) Search() {
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
 	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
-	total, err := models.SearchFaultRecCount(cate)
-	faultRecs, err := models.SearchFaultRecByName(int(currPage), int(pageSize), cate)
+	total, err := models.SearchFaultRecCount(cate, quest)
+	faultRecs, err := models.SearchFaultRecByName(int(currPage), int(pageSize), cate, quest)
 	if err != nil {
 		beego.Error(err)
 	}
@@ -190,6 +193,7 @@ func (this *FaultRecordController) Search() {
 	auth := role.(int64)
 	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
+	this.Data["Question"] = quest
 	this.Data["FaultRecords"] = faultRecs
 	this.Data["totals"] = total
 	this.Data["IsSearch"] = true

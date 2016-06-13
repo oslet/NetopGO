@@ -70,7 +70,6 @@ func AddUser(name, passwd, email, tel, auth, dept string) error {
 	//fmt.Printf("+++++++is exists+++++++: %v\n", err)
 	if err == nil {
 		return nil
-
 	}
 	_, err = o.Insert(user)
 	return err

@@ -1,0 +1,124 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<br>    
+                    <div class="ibox-content">
+                        {{$AppTypeList := .AppTypeList}}
+                        {{with .QuestRecord}}
+                        {{$InfluceBusine := .InfluceBusine}}
+                        <form method="post" id="userForm" class="form-horizontal" action="/record/quest/modify">
+                            <input name="id" type="hidden" value="{{.Id}}">
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">问题名称<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input name="name" placeholder="" type="text" class="form-control" value="{{.Name}}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="influce" class="col-sm-2 control-label">影响业务<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <select name="influce" class="form-control">
+                                        {{range $AppTypeList}}
+                                        <option value="{{.}}" {{if eq $InfluceBusine .}}selected{{end}}>{{.}}</option>
+                                        {{end}}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="owner" class="col-sm-2 control-label">责任人<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="owner" name="owner" placeholder="" type="text" class="form-control" value="{{.Owner}}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="status" class="col-sm-2 control-label">状态<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <select name="status" class="form-control">
+                                        <option value="挂起" {{if eq .Status "挂起"}}selected{{end}}>挂起</option>
+                                        <option value="已解决" {{if eq .Status "已解决"}}selected{{end}}>已解决</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="comment" class="col-sm-2 control-label">问题描述<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input name="comment" class="form-control" value="{{.Comment}}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white" type="reset">重置</button>
+                                    <button id="submit_button" class="btn btn-primary" type="submit">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+$('#userForm').validator({
+    timely: 2,
+    theme: "yellow_right_effect",
+    fields: {
+        "name": {
+            rule: "required;length[1~10]",
+            tip: "输入问题名称",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "influce": {
+            rule: "required;",
+            tip: "请选择影响业务",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },    
+        "owner": {
+            rule: "required;",
+            tip: "输入责任人",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },            
+        "disthost": {
+            rule: "required;",
+            tip: "输入目标服务器",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },                       
+        "status": {
+            rule: "required;",
+            tip: "请选择状态",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },                       
+        "comment": {
+            rule: "required;",
+            tip: "输入问题描述",
+            ok: "",
+            msg: {required: "必须填写!"}
+        }
+    },
+    valid: function(form) {
+        form.submit();
+    }
+});
+$('.form_datetime').datetimepicker({
+    //language:  'fr',
+    weekStart: 1,
+    todayBtn:  1,
+    autoclose: 1,
+    todayHighlight: 1,
+    startView: 2,
+    forceParse: 0,
+    showMeridian: 1
+});
+</script>
+{{template "page_buttom" .}}

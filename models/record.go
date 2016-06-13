@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/astaxie/beego/orm"
 	"strconv"
 	"time"
@@ -34,7 +35,8 @@ type Apprecord struct {
 
 type Faultrecord struct {
 	Id        int64
-	Name      string `orm:size(20)`
+	Question  string `orm:size(50)`
+	InterNum  string `orm:size(30)`
 	Starttime string `orm:size(19)`
 	Endtime   string `orm:size(19)`
 	Level     string `orm:size(20)`
@@ -198,30 +200,54 @@ func SearchAppRecByName(currPage, pageSize int, appname string) ([]*Apprecord, e
 	return appRecs, err
 }
 
-func GetFaultRecordCount() (int64, error) {
+func GetFaultRecordCount(quest string) (int64, error) {
 	o := orm.NewOrm()
-	faultRecs := make([]*Faultrecord, 0)
-	total, err := o.QueryTable("faultrecord").All(&faultRecs)
-	if err != nil {
-		return 0, err
+	var faultRecs []*Faultrecord
+	var total int64
+	var err error
+	faultRecs = make([]*Faultrecord, 0)
+	if len(quest) > 0 {
+		total, err = o.QueryTable("faultrecord").Filter("question", quest).All(&faultRecs)
+		if err != nil {
+			return 0, err
+		}
+	} else {
+		total, err = o.QueryTable("faultrecord").All(&faultRecs)
+		if err != nil {
+			return 0, err
+		}
 	}
 	return total, err
 }
 
-func GetFaultRecords(currPage, pageSize int) ([]*Faultrecord, int64, error) {
+func GetFaultRecords(currPage, pageSize int, quest string) ([]*Faultrecord, int64, error) {
 	o := orm.NewOrm()
-	faultRecs := make([]*Faultrecord, 0)
-	total, err := o.QueryTable("faultrecord").OrderBy("-starttime").Limit(pageSize, (currPage-1)*pageSize).All(&faultRecs)
-	if err != nil {
-		return nil, 0, err
+	var faultRecs []*Faultrecord
+	var total int64
+	var err error
+	faultRecs = make([]*Faultrecord, 0)
+	if len(quest) > 0 {
+		total, err = o.QueryTable("faultrecord").Filter("question", quest).OrderBy("-starttime").Limit(pageSize, (currPage-1)*pageSize).All(&faultRecs)
+		if err != nil {
+			return nil, 0, err
+		}
+	} else {
+		total, err = o.QueryTable("faultrecord").OrderBy("-starttime").Limit(pageSize, (currPage-1)*pageSize).All(&faultRecs)
+		if err != nil {
+			return nil, 0, err
+		}
 	}
+
 	return faultRecs, total, err
 }
 
-func AddFaultRecord(name, level, system, appname, category, issolu, operater, starttime, endtime, solution, effection, analysis, nextstep string) error {
+func AddFaultRecord(question, level, system, appname, category, issolu, operater, starttime, endtime, solution, effection, analysis, nextstep string) error {
 	o := orm.NewOrm()
+	now := time.Now().String()
+	interNum := "IE" + now[:4] + now[5:7] + now[8:10] + now[11:13] + now[14:16] + now[17:19]
 	record := &Faultrecord{
-		Name:      name,
+		InterNum:  interNum,
+		Question:  question,
 		Level:     level,
 		System:    system,
 		Appname:   appname,
@@ -236,6 +262,14 @@ func AddFaultRecord(name, level, system, appname, category, issolu, operater, st
 		Nextstep:  nextstep,
 	}
 	_, err := o.Insert(record)
+	if err == nil {
+		res, err := o.Raw("update question set fault_count=fault_count+1 where name= ?", question).Exec()
+		if err == nil {
+			num, _ := res.RowsAffected()
+			fmt.Println("update question row affected nums: ", num)
+		}
+	}
+
 	return err
 }
 
@@ -260,14 +294,14 @@ func FaultRecordDetail(id string) (*Faultrecord, error) {
 	return faultRec, err
 }
 
-func SearchFaultRecCount(cate string) (int64, error) {
+func SearchFaultRecCount(cate, quest string) (int64, error) {
 	o := orm.NewOrm()
 	faultRecs := make([]*Faultrecord, 0)
 	total, err := o.QueryTable("faultrecord").Filter("category__icontains", cate).All(&faultRecs)
 	return total, err
 }
 
-func SearchFaultRecByName(currPage, pageSize int, cate string) ([]*Faultrecord, error) {
+func SearchFaultRecByName(currPage, pageSize int, cate, quest string) ([]*Faultrecord, error) {
 	o := orm.NewOrm()
 	faultRecs := make([]*Faultrecord, 0)
 	_, err := o.QueryTable("faultrecord").Filter("category__icontains", cate).OrderBy("-starttime").Limit(pageSize, (currPage-1)*pageSize).All(&faultRecs)
