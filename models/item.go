@@ -104,7 +104,7 @@ func GetUnoverOrderNums(auth int64, dept, uname string) (float64, error) {
 	} else if auth == 1 {
 		err = o.Raw("select count(*) from  appworkorder where status=?", "实施流程中").QueryRow(&num)
 	} else if dept == "测试" {
-		err = o.Raw("select count(*) from  appworkorder where status=?", "测试流程中").QueryRow(&num)
+		err = o.Raw("select count(*) from  appworkorder where status in (?,?)", "测试流程中", "验证流程中").QueryRow(&num)
 	} else if dept == "研发" {
 		err = o.Raw("select count(*) from  appworkorder where status<>?", "工单已关闭").QueryRow(&num)
 	} else if dept == "产品" {
