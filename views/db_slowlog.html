@@ -21,6 +21,7 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {{$Auth := .Auth}}
                             {{range .Logs}}
                             <tr class="gradeX">
                                 <td class="text-center"><a href="#">{{.Uuid}}</a></td>
@@ -30,7 +31,7 @@
                                 <td class="text-center">{{.Count}}</td>
                                 <td class="text-center">
                                     <a href="/db/sqltext?sql={{.SqlText}}" class="btn btn-xs btn-primary">sqltext</a>
-                                    <a href="/db/explain?name={{.Name}}&sql={{.SqlText}}" class="btn btn-xs btn-warning">explain sql</a>
+                                    <a href="/db/explain?name={{.Name}}&sql={{.SqlText}}" class="btn btn-xs btn-warning" {{if eq $Auth 3}}disabled="disabled"{{end}}>explain sql</a>
                                     <!--
                                     <a href="/db/explain?name={{.Name}}&sql={{.SqlText}}" class="btn btn-xs btn-warning" {{if eq $RoleType "主"}}disabled="disabled"{{end}}>explain sql</a>
                                     -->

@@ -191,3 +191,38 @@ func GetSizeBySchema(schema string) (float64, error) {
 	err := o.Raw("select sum(size) from inst_info where schemaname=? and timestamp=? and name like '%master%'", schema, today).QueryRow(&size)
 	return size, err
 }
+
+func GetTotalSizeView(schema string) ([]string, []float64, []int64, error) {
+	o := orm.NewOrm()
+	var time []string
+	var currSize []float64
+	var totalSizes []int64
+	var totalSize int64
+	o.Raw("select sum(size)/2 from db where schemaname=?", schema).QueryRow(&totalSize)
+	nums, err := o.Raw("select date_format(timestamp,'%Y-%m-%d') from inst_info where schemaname=? group by timestamp", schema).QueryRows(&time)
+	o.Raw("select sum(size)/2 from inst_info where schemaname=? group by timestamp", schema).QueryRows(&currSize)
+	for i := 0; i < int(nums); i++ {
+		totalSizes = append(totalSizes, totalSize)
+	}
+	return time, currSize, totalSizes, err
+}
+
+func GetTotalSlowView(schema string) ([]string, []int64, error) {
+	o := orm.NewOrm()
+	var time []string
+	var count []int64
+	_, err := o.Raw("select distinct date_format(timestamp,'%Y-%m-%d') from slow_overview").QueryRows(&time)
+	o.Raw("select sum(b.count) as count from db a join slow_overview b on a.name=b.name where a.schemaname=? group by b.timestamp,a.schemaname", schema).QueryRows(&count)
+	return time, count, err
+}
+
+func GetTotalQpsView(schema string) ([]string, []float64, []float64, error) {
+	o := orm.NewOrm()
+	var time []string
+	var qps []float64
+	var tps []float64
+	_, err := o.Raw("select distinct timestamp from qps_tps_overview").QueryRows(&time)
+	o.Raw("select sum(b.qps) as qps from db a join qps_tps_overview b on a.name=b.name where a.schemaname=? group by b.timestamp,a.schemaname", schema).QueryRows(&qps)
+	o.Raw("select sum(b.tps) as tps from db a join qps_tps_overview b on a.name=b.name where a.schemaname=? group by b.timestamp,a.schemaname", schema).QueryRows(&tps)
+	return time, qps, tps, err
+}

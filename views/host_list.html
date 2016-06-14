@@ -78,7 +78,7 @@
                                 <th class="text-center">{{.Group}}</th>
                                 <td class="text-center">
                                     <a href="/host/webconsole?ip={{.Ip}}&id={{.Id}}&user={{.Root}}&role=1" target="_black" class="btn btn-xs btn-warning" {{if eq $Auth 3}}disabled="disabled"{{end}}>ROOT用户</a>
-                                    <a href="/host/webconsole?ip={{.Ip}}&id={{.Id}}&user={{.Read}}&role=2" target="_black" class="btn btn-xs btn btn-success">只读用户</a>
+                                    <a href="/host/webconsole?ip={{.Ip}}&id={{.Id}}&user={{.Read}}&role=2" target="_black" class="btn btn-xs btn btn-success" {{if eq $Auth 3}}disabled="disabled"{{end}}>只读用户</a>
                                 </td>
                                 <td class="text-center">
                                     <a href="/host/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Auth 1}}disabled="disabled"{{end}}>编辑</a>

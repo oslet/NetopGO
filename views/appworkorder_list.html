@@ -98,7 +98,7 @@
         </div>
     </div>
 </div>
-{{else}}
+{{else if .IsViewItem}}
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-12">
@@ -214,6 +214,8 @@
         </div>
     </div>
 </div>
+{{else}}
+<div><span style="font-size:18px;color:red;">没有相关权限！</span></div>
 {{end}}
 <script src="/static/js/jquery.shiftcheckbox.js"></script>
 

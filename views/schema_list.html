@@ -56,6 +56,7 @@
                                     <a href="/schema/partition?schema={{.Name}}&flag=min&num={{.Partition}}" class="btn btn-xs btn-primary"{{if eq .Partition 0}}disabled="disabled"{{end}} target="_blank">分钟</a>
                                     <a href="/schema/partition?schema={{.Name}}&flag=hour&num={{.Partition}}" class="btn btn-xs btn-success"{{if eq .Partition 0}}disabled="disabled"{{end}} target="_blank">小时</a>
                                     <a href="/schema/partition?schema={{.Name}}&flag=day&num={{.Partition}}" class="btn btn-xs btn-warning"{{if eq .Partition 0}}disabled="disabled"{{end}} target="_blank">天</a>
+                                    <a href="/schema/view?schema={{.Name}}" class="btn btn-xs btn-info" target="_blank">view</a>
                                 </td>
                                 <td class="text-center">
                                     <a href="/schema/add?id={{.Id}}" class="btn btn-xs btn-info">编辑</a>

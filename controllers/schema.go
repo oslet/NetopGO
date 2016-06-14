@@ -210,3 +210,30 @@ func (this *SchemaController) Partition() {
 	this.TplName = "part_detail.html"
 	return
 }
+
+func (this *SchemaController) View() {
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "db"
+	schema := this.Input().Get("schema")
+	time, size, total, err := models.GetTotalSizeView(schema)
+	slowTime, count, err := models.GetTotalSlowView(schema)
+	qpsTiem, qps, tps, err := models.GetTotalQpsView(schema)
+	if err != nil {
+		beego.Error(err)
+	}
+	this.Data["SizeTimes"] = time
+	this.Data["CurrSizes"] = size
+	this.Data["TotalSizes"] = total
+	this.Data["SlowTimes"] = slowTime
+	this.Data["SlowCounts"] = count
+	this.Data["QpsTimes"] = qpsTiem
+	this.Data["Qps"] = qps
+	this.Data["Tps"] = tps
+	this.Data["Path1"] = "Schema列表"
+	this.Data["Path2"] = "图表展示"
+	this.Data["Href"] = "/schema/list"
+	this.TplName = "schema_view.html"
+}

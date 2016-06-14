@@ -7,7 +7,7 @@
                <a href="/"><i class="fa fa-dashboard"></i> <span class="nav-label">仪表盘</span><span class="label label-info pull-right"></span></a>
             </li>
             <li id="user">
-                <a href="#"><i class="fa fa-group"></i> <span class="nav-label">用户管理</span><span class="fa arrow"></span></a>
+                <a href="javascript:void(0)"><i class="fa fa-group"></i> <span class="nav-label">用户管理</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li class="group"><a href="/user/list">用户列表</a></li>
                 </ul>
@@ -34,7 +34,7 @@
                 </ul>
             </li>
             <li id="record">
-                <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">系统发布</span><span class="fa arrow"></span></a>
+                <a href="javascript:void(0)"><i class="fa fa-edit"></i> <span class="nav-label">系统发布</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li class="download"><a href="/workorder/my/list">应用工单</a></li>
                     <li class="download"><a href="/workorder/mydb/list">数据库工单</a></li>

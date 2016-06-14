@@ -397,6 +397,7 @@ func (this *DBController) SlowLog() {
 		beego.Error(err)
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
+	this.Data["Auth"] = role.(int64)
 	this.Data["IsSlowLog"] = true
 	this.Data["Schema"] = name
 	this.Data["RoleType"] = roleType

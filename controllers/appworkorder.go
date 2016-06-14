@@ -64,7 +64,13 @@ func (this *AppWOController) Get() {
 	this.Data["paginator"] = res
 	this.Data["AppWorkOrders"] = appwos
 	this.Data["totals"] = total
-
+	var isViewItem bool
+	if dept.(string) == "研发" || dept.(string) == "运维" || dept.(string) == "测试" || dept.(string) == "产品" {
+		isViewItem = true
+	} else {
+		isViewItem = false
+	}
+	this.Data["IsViewItem"] = isViewItem
 	this.Data["Path1"] = "系统发布"
 	this.Data["Path2"] = "我的工单"
 	this.Data["Href"] = ""
@@ -74,7 +80,7 @@ func (this *AppWOController) Get() {
 }
 
 func (this *AppWOController) AppOrder() {
-	uid, uname, role, _ := this.IsLogined()
+	uid, uname, role, dept := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
@@ -84,6 +90,13 @@ func (this *AppWOController) AppOrder() {
 
 	this.Data["AppTypeList"] = appTypeList
 	this.Data["AppNameList"] = appNameList
+	var isViewItem bool
+	if dept.(string) == "研发" || dept.(string) == "运维" {
+		isViewItem = true
+	} else {
+		isViewItem = false
+	}
+	this.Data["IsViewItem"] = isViewItem
 	this.Data["Path1"] = "系统发布"
 	this.Data["Path2"] = "提交应用工单"
 	this.Data["Href"] = "/workorder/my/list"
