@@ -12,11 +12,11 @@ import (
 
 func init() {
 	models.RegisterDB()
-	orm.RunSyncdb("default", false, true)
+	orm.RunSyncdb("default", false, false)
 }
 
 func main() {
-	orm.Debug = true
-	models.IsViewDBApprove("产品", "研发审批")
+	//orm.Debug = true
+	//models.IsViewDBApprove("产品", "研发审批")
 	beego.Run()
 }
