@@ -15,7 +15,7 @@ func (this *UserController) Get() {
 	var page string
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	this.Data["Uname"] = uname.(string)
 	this.Data["Role"] = role
 	this.Data["Category"] = "user"
 
@@ -77,7 +77,7 @@ func (this *UserController) Add() {
 func (this *UserController) Delete() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	this.Data["Uname"] = uname.(string)
 	this.Data["Role"] = role
 	this.Data["Category"] = "user"
 
@@ -96,7 +96,7 @@ func (this *UserController) Delete() {
 func (this *UserController) BitchDelete() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	this.Data["Uname"] = uname.(string)
 	this.Data["Role"] = role
 	this.Data["Category"] = "user"
 
@@ -115,7 +115,7 @@ func (this *UserController) BitchDelete() {
 func (this *UserController) Post() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	this.Data["Uname"] = uname.(string)
 	this.Data["Role"] = role
 	this.Data["Category"] = "user"
 
@@ -149,7 +149,7 @@ func (this *UserController) Search() {
 	var page string
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	this.Data["Uname"] = uname.(string)
 	this.Data["Role"] = role
 	this.Data["Category"] = "user"
 
@@ -186,7 +186,7 @@ func (this *UserController) Search() {
 func (this *UserController) Detail() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	this.Data["Uname"] = uname.(string)
 	this.Data["Role"] = role
 	this.Data["Category"] = "user"
 
@@ -207,7 +207,7 @@ func (this *UserController) Detail() {
 func (this *UserController) ResetPasswd() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	this.Data["Uname"] = uname.(string)
 	this.Data["Role"] = role
 	this.Data["Category"] = "user"
 

@@ -30,11 +30,17 @@ func (this *AppWOController) Get() {
 	} else {
 		page = this.Input().Get("page")
 	}
+	pageAuth, _ := strconv.ParseInt(this.Input().Get("pageAuth"), 10, 64)
+	pageDept := this.Input().Get("pageDept")
+	this.Data["PageAuth"] = pageAuth
+	this.Data["PageDept"] = pageDept
+	// beego.Info(pageAuth)
+	// beego.Info(pageDept)
 
 	currPage, _ := strconv.ParseInt(page, 10, 64)
 	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
-	total, err := models.GetAppOrderCount(auth)
-	appwos, _, err := models.GetAppOrders(int(currPage), int(pageSize), auth)
+	total, err := models.GetAppOrderCount(pageAuth, pageDept, uname.(string))
+	appwos, _, err := models.GetAppOrders(int(currPage), int(pageSize), pageAuth, pageDept, uname.(string))
 	if err != nil {
 		beego.Error(err)
 	}
@@ -70,6 +76,7 @@ func (this *AppWOController) Get() {
 	} else {
 		isViewItem = false
 	}
+
 	this.Data["IsViewItem"] = isViewItem
 	this.Data["Path1"] = "系统发布"
 	this.Data["Path2"] = "我的工单"
@@ -96,6 +103,8 @@ func (this *AppWOController) AppOrder() {
 	} else {
 		isViewItem = false
 	}
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["IsViewItem"] = isViewItem
 	this.Data["Path1"] = "系统发布"
 	this.Data["Path2"] = "提交应用工单"
@@ -154,6 +163,8 @@ func (this *AppWOController) AppOrderPost() {
 	if err != nil {
 		beego.Error(err)
 	}
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Redirect("/workorder/my/list", 302)
 	return
 }
@@ -165,6 +176,8 @@ func (this *AppWOController) Approve() {
 	this.Data["Role"] = role
 	this.Data["Dept"] = dept
 	this.Data["IsSearch"] = false
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 
 	appTypeList := strings.Split(beego.AppConfig.String("AppType"), ",")
 	appNameList := strings.Split(beego.AppConfig.String("AppName"), ",")
@@ -212,6 +225,8 @@ func (this *AppWOController) Rollback() {
 		beego.Error(err)
 	}
 	test, product, op, final, testReadonly, productReadonly, opReadonly, finalReadonly := models.IsViewDiv(dept.(string), appwo.Status, appwo.Upgradetype)
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["Test"] = test
 	this.Data["Product"] = product
 	this.Data["Op"] = op
@@ -240,6 +255,8 @@ func (this *AppWOController) ApproveCommit() {
 	this.Data["Dept"] = dept
 	this.Data["Auth"] = role.(int64)
 	id := this.Input().Get("id")
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 
 	beego.Info(id)
 	appwo, err := models.GetAppwoById(id)
@@ -264,21 +281,40 @@ func (this *AppWOController) ApproveRollback() {
 	this.Data["Dept"] = dept
 	this.Data["Auth"] = role.(int64)
 	id := this.Input().Get("id")
-
-	beego.Info(id)
-	appwo, err := models.GetAppwoById(id)
-	if err != nil {
-		beego.Error(err)
-	}
-	lastStatus, who, outcome := models.LastStatus("app", dept.(string), appwo.Status, appwo.Upgradetype)
-	outcomevalue := this.Input().Get(outcome)
-	err = models.ApproveRollback(id, lastStatus, outcome, outcomevalue, who, uname.(string), appwo.Status, appwo.Upgradetype, dept.(string))
+	auth := role.(int64)
+	this.Data["Auth"] = auth
+	opoutcome := this.Input().Get("opoutcome")
+	err := models.ApproveRollback(id, "异常已回滚", opoutcome, uname.(string))
 	if err != nil {
 		beego.Error(err)
 	}
 	this.Redirect("/workorder/my/list", 302)
 	return
 }
+
+// func (this *AppWOController) ApproveRollback() {
+// 	uid, uname, role, dept := this.IsLogined()
+// 	this.Data["Id"] = uid
+// 	this.Data["Uname"] = uname
+// 	this.Data["Role"] = role
+// 	this.Data["Dept"] = dept
+// 	this.Data["Auth"] = role.(int64)
+// 	id := this.Input().Get("id")
+
+// 	beego.Info(id)
+// 	appwo, err := models.GetAppwoById(id)
+// 	if err != nil {
+// 		beego.Error(err)
+// 	}
+// 	lastStatus, who, outcome := models.LastStatus("app", dept.(string), appwo.Status, appwo.Upgradetype)
+// 	outcomevalue := this.Input().Get(outcome)
+// 	err = models.ApproveRollback(id, lastStatus, outcome, outcomevalue, who, uname.(string), appwo.Status, appwo.Upgradetype, dept.(string))
+// 	if err != nil {
+// 		beego.Error(err)
+// 	}
+// 	this.Redirect("/workorder/my/list", 302)
+// 	return
+// }
 
 func (this *AppWOController) Detail() {
 	uid, uname, role, dept := this.IsLogined()
@@ -296,6 +332,8 @@ func (this *AppWOController) Detail() {
 	if err != nil {
 		beego.Error(err)
 	}
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 
 	this.Data["AppTypeList"] = appTypeList
 	this.Data["AppNameList"] = appNameList
@@ -326,7 +364,8 @@ func (this *AppWOController) ApproveModify() {
 	// }
 	appTypeList := strings.Split(beego.AppConfig.String("AppType"), ",")
 	appNameList := strings.Split(beego.AppConfig.String("AppName"), ",")
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["AppTypeList"] = appTypeList
 	this.Data["AppNameList"] = appNameList
 	this.Data["Appwo"] = appwo
@@ -345,6 +384,9 @@ func (this *AppWOController) ApproveModifyPost() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Dept"] = dept
+	auth := role.(int64)
+	this.Data["Auth"] = auth
+
 	id := this.Input().Get("id")
 	apptype := this.Input().Get("apptype")
 	appname := this.Input().Get("appname")
@@ -399,16 +441,24 @@ func (this *AppWOController) ApproveModifyPost() {
 
 func (this *AppWOController) Search() {
 	var page string
-	uid, uname, role, detp := this.IsLogined()
+	uid, uname, role, dept := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Auth"] = role.(int64)
 	this.Data["Category"] = "workorder/my"
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 
+	pageAuth, _ := strconv.ParseInt(this.Input().Get("pageAuth"), 10, 64)
+	pageDept := this.Input().Get("pageDept")
+	this.Data["PageAuth"] = pageAuth
+	this.Data["PageDept"] = pageDept
+	// beego.Info(pageAuth)
+	// beego.Info(pageDept)
 	apptype := this.Input().Get("apptype")
 	appname := this.Input().Get("appname")
-	auth := this.Input().Get("auth")
+	//auth := this.Input().Get("auth")
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
 	} else {
@@ -416,8 +466,8 @@ func (this *AppWOController) Search() {
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
 	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
-	total, err := models.SearchAppwoCount(apptype, appname, auth)
-	appwos, err := models.SearchAppwo(int(currPage), int(pageSize), apptype, appname, auth)
+	total, err := models.SearchAppwoCount(apptype, appname, pageDept, uname.(string), pageAuth)
+	appwos, err := models.SearchAppwo(int(currPage), int(pageSize), apptype, appname, pageDept, uname.(string), pageAuth)
 	if err != nil {
 		beego.Error(err)
 	}
@@ -430,10 +480,17 @@ func (this *AppWOController) Search() {
 	if err != nil {
 		beego.Error(err)
 	}
+	var isViewItem bool
+	if dept.(string) == "研发" || dept.(string) == "运维" || dept.(string) == "测试" || dept.(string) == "产品" {
+		isViewItem = true
+	} else {
+		isViewItem = false
+	}
+	this.Data["IsViewItem"] = isViewItem
 	this.Data["Schemas"] = schemas
 	this.Data["AppTypeList"] = appTypeList
 	this.Data["AppNameList"] = appNameList
-	this.Data["Dept"] = detp.(string)
+	this.Data["Dept"] = dept.(string)
 	this.Data["paginator"] = res
 	this.Data["AppWorkOrders"] = appwos
 	this.Data["totals"] = total
@@ -456,6 +513,8 @@ func (this *AppWOController) Export() {
 	this.Data["Category"] = "workorder/my"
 	method := this.Input().Get("method")
 	values, columns, _ := models.QueryAppwosExport(method)
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 
 	file := xlsx.NewFile()
 	sheet, _ := file.AddSheet("Sheet1")
@@ -489,5 +548,26 @@ func (this *AppWOController) Export() {
 		os.Remove(filepath)
 	}()
 	this.Ctx.Output.Download(filepath, filename)
+	return
+}
+
+func (this *AppWOController) CloseOrder() {
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "workorder/my"
+	auth := role.(int64)
+	this.Data["Auth"] = auth
+
+	id := this.Input().Get("id")
+	err := models.CloseOrder(id)
+	if err != nil {
+		beego.Error(err)
+	}
+	this.Data["Path1"] = "系统发布"
+	this.Data["Path2"] = "我的工单"
+	this.Data["Href"] = ""
+	this.Redirect("/workorder/my/list", 302)
 	return
 }

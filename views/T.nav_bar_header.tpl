@@ -20,7 +20,7 @@
         </li>
         -->
         {{if .IsViewOrder}}
-        <li role="presentation"><a href="{{if .OrderFlag}}/workorder/my/list{{else}}/workorder/mydb/list{{end}}"><span style="color:blue;">流程工单 </span><span class="badge" style="color:red;">{{.UnoverOrderNums}}</span></a></li>
+        <li role="presentation"><a href="{{if .OrderFlag}}/workorder/my/list?pageAuth={{.PageAuth}}&pageDept={{.PageDept}}{{else}}/workorder/mydb/list?pageAuth={{.PageAuth}}&pageDept={{.PageDept}}{{end}}"><span style="color:blue;">流程工单 </span><span class="badge" style="color:red;">{{.UnoverOrderNums}}</span></a></li>
         {{end}}
         <!--
         <button class="btn btn-primary" type="button">

@@ -28,7 +28,8 @@ func (this *DBController) Get() {
 	this.Data["Path1"] = "DB列表"
 	this.Data["Path2"] = ""
 	this.Data["Href"] = "/db/list"
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
 	} else {
@@ -43,7 +44,6 @@ func (this *DBController) Get() {
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
-	auth := role.(int64)
 	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["DBs"] = dbs
@@ -58,7 +58,8 @@ func (this *DBController) Add() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "db"
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	id := this.Input().Get("id")
 	if len(id) > 0 {
 		db, err := models.GetDBById(id)
@@ -99,7 +100,8 @@ func (this *DBController) Post() {
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
 	this.Data["Category"] = "db"
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	id := this.Input().Get("id")
 	name := this.Input().Get("name")
 	uuid := this.Input().Get("uuid")
@@ -134,7 +136,8 @@ func (this *DBController) Delete() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "db"
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	id := this.Input().Get("id")
 	err := models.DeleteDB(id)
 	if err != nil {
@@ -153,7 +156,8 @@ func (this *DBController) BitchDelete() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "db"
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	ids := strings.Split(this.Input().Get("ids"), ",")
 	for _, id := range ids {
 		err := models.DeleteDB(id)
@@ -173,7 +177,8 @@ func (this *DBController) Search() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "db"
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	name := this.Input().Get("keyword")
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
@@ -189,7 +194,6 @@ func (this *DBController) Search() {
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
-	auth := role.(int64)
 	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["DBs"] = dbs
@@ -209,6 +213,7 @@ func (this *DBController) Query() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "db"
+	this.Data["Auth"] = role.(int64)
 	schemas, err := models.GetSchemaNames()
 	if err != nil {
 		beego.Error(err)
@@ -346,6 +351,8 @@ func (this *DBController) Detail() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "db"
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	name := this.Input().Get("name")
 	time, size, total, err := models.GetSizeView(name)
 	slowTime, count, err := models.GetSlowView(name)
@@ -374,6 +381,7 @@ func (this *DBController) SlowLog() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "db"
+
 	name := this.Input().Get("name")
 	roleType := this.Input().Get("role")
 	if len(roleType) == 0 {
@@ -418,7 +426,8 @@ func (this *DBController) Explain() {
 	this.Data["Category"] = "db"
 	name := this.Input().Get("name")
 	sqltext := this.Input().Get("sql")
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	plain, total, err := models.SqlExplain(name, sqltext)
 	if err != nil {
 		beego.Error(err)
@@ -437,7 +446,8 @@ func (this *DBController) Sqltext() {
 	this.Data["Role"] = role
 	this.Data["Category"] = "db"
 	sqltext := this.Input().Get("sql")
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["Sql"] = sqltext
 	this.Data["Path1"] = "DB列表"
 	this.Data["Path2"] = "Sqltext"
@@ -452,7 +462,8 @@ func (this *DBController) Export() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "db"
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	schema := this.Input().Get("schema")
 	sqltext := this.Input().Get("sql")
 	values, columns, _ := models.Query2Export(schema, sqltext)

@@ -48,6 +48,13 @@ func (this *DBWOController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
+	var isViewItem bool
+	if dept.(string) == "研发" || dept.(string) == "运维" || dept.(string) == "测试" {
+		isViewItem = true
+	} else {
+		isViewItem = false
+	}
+	this.Data["IsViewItem"] = isViewItem
 	this.Data["Schemas"] = schemas
 	auth := role.(int64)
 	this.Data["Auth"] = auth
@@ -69,6 +76,8 @@ func (this *DBWOController) DBOrder() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	schemas, err := models.GetSchemaNames()
 	if err != nil {
 		beego.Error(err)
@@ -79,6 +88,13 @@ func (this *DBWOController) DBOrder() {
 	} else {
 		flag = false
 	}
+	var isViewItem bool
+	if dept.(string) == "研发" || dept.(string) == "运维" || dept.(string) == "测试" {
+		isViewItem = true
+	} else {
+		isViewItem = false
+	}
+	this.Data["IsViewItem"] = isViewItem
 	this.Data["Flag"] = flag
 	this.Data["Schemas"] = schemas
 	this.Data["Path1"] = "系统发布"
@@ -96,6 +112,8 @@ func (this *DBWOController) DBOrderPost() {
 	this.Data["Role"] = role
 	this.Data["Dept"] = dept
 	this.Data["IsSearch"] = false
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	schema := this.Input().Get("schema")
 	upgradeobj := this.Input().Get("upgradeobj")
 	upgradetype := this.Input().Get("upgradetype")
@@ -130,6 +148,8 @@ func (this *DBWOController) DBInApp() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	schemas, err := models.GetSchemaNames()
 	if err != nil {
 		beego.Error(err)
@@ -153,6 +173,8 @@ func (this *DBWOController) DBInAppPost() {
 	this.Data["Role"] = role
 	this.Data["Dept"] = dept
 	this.Data["IsSearch"] = false
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	id := this.Input().Get("id")
 	sqlfile := this.Input().Get("sql")
 	schema := this.Input().Get("schema")
@@ -177,7 +199,8 @@ func (this *DBWOController) Detail() {
 	this.Data["Role"] = role
 	this.Data["Dept"] = dept
 	this.Data["IsSearch"] = false
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	schemas, err := models.GetSchemaNamesArray()
 	if err != nil {
 		beego.Error(err)

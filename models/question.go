@@ -80,6 +80,7 @@ func ModifyQuestion(id, name, influce, owner, status, comment string) error {
 		quest.InfluceBusine = influce
 		quest.Owner = owner
 		quest.Comment = comment
+		quest.Status = status
 	}
 	o.Update(quest)
 	return err

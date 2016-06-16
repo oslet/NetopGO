@@ -95,22 +95,37 @@ func FaultRecordMonth() (float64, error) {
 	return num, err
 }
 
-func GetUnoverOrderNums(auth int64, dept, uname string) (float64, error) {
+func GetUnoverOrderNums(auth int64, dept, uname string) (float64, int64, string, error) {
 	o := orm.NewOrm()
 	var num float64
 	var err error
+	var pageAuth int64
+	var pageDept string
 	if auth == 2 {
 		err = o.Raw("select count(*) from  dbworkorder where status=?", "正在实施").QueryRow(&num)
+		pageAuth = 2
+		pageDept = "运维"
 	} else if auth == 1 {
 		err = o.Raw("select count(*) from  appworkorder where status=?", "实施流程中").QueryRow(&num)
+		pageAuth = 1
+		pageDept = "运维"
 	} else if dept == "测试" {
 		err = o.Raw("select count(*) from  appworkorder where status in (?,?)", "测试流程中", "验证流程中").QueryRow(&num)
+		pageAuth = 3
+		pageDept = "测试"
 	} else if dept == "研发" {
 		err = o.Raw("select count(*) from  appworkorder where status<>?", "工单已关闭").QueryRow(&num)
+		pageAuth = 3
+		pageDept = "研发"
 	} else if dept == "产品" {
 		err = o.Raw("select count(*) from  appworkorder where status=?", "审批流程中").QueryRow(&num)
+		pageAuth = 3
+		pageDept = "产品"
 	} else {
-		err = o.Raw("select count(*) from  dbworkorder where sponsor=? and status<>?", uname, "实施完毕").QueryRow(&num)
+		err = nil
+		num = 0
+		pageAuth = 3
+		pageDept = ""
 	}
-	return num, err
+	return num, pageAuth, pageDept, err
 }

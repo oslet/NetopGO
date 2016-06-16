@@ -79,7 +79,7 @@
                                 </td>
                                 <td class="text-center">
                                     <a href="/workorder/approveDetail?id={{.Id}}" class="btn btn-xs btn-primary" >详情</a>
-                                    <a href="/workorder/dbInApp?id={{.Id}}&sqlfile={{.Sqlfile}}" class="btn btn-xs btn-info" >审批</a>
+                                    <a href="/workorder/dbInApp?id={{.Id}}&sqlfile={{.Sqlfile}}" class="btn btn-xs btn-info" {{if ne .DbStatus "正在实施"}}disabled="disabled"{{end}}>审批</a>
                                 </td>
                             </tr>
                             {{end}}
@@ -108,9 +108,11 @@
                       <a href="/workorder/my/export?method=month" class="btn btn-sm btn-primary "> 本月导出 </a>
                       <a href="/workorder/my/export?method=all" class="btn btn-sm btn-info "> 全量导出 </a>
                       {{if .IsSearch}}
-                      <a href="/workorder/my/list" class="btn btn-white pull-right"> 返回列表 </a>
+                      <a href="/workorder/my/list?pageAuth={{.PageAuth}}&pageDept={{.PageDept}}" class="btn btn-white pull-right"> 返回列表 </a>
                       {{else}}
                       <form id="search_form" method="get" action="/workorder/my/search" class="form-inline pull-right">
+                          <input name="pageAuth" type="hidden" value="{{.PageAuth}}"></input>
+                          <input name="pageDept" type="hidden" value="{{.PageDept}}"></input>
                           <div class="input-group">
                               <select name="apptype" class="form-control">
                                   {{range .AppTypeList}}
@@ -124,7 +126,7 @@
                                 <option value="{{.}}">{{.}}</option>
                                 {{end}}
                             </select>
-                          </div>                             
+                          </div>                      
                           <div class="input-group">
                               <div class="input-group-btn">
                                   <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
@@ -179,18 +181,21 @@
                                 <td class="text-center">
                                     <a href="/workorder/approveDetail?id={{.Id}}" class="btn btn-xs btn-primary" >详情</a>
                                     {{if eq $Dept "研发"}} 
+                                    <a href="/workorder/approve/close?id={{.Id}}" class="btn btn-xs btn-danger" {{if eq .Isedit "false"}}disabled="disabled"{{end}} onclick="if(confirm('确定要关闭工单吗?')==false)return false;">关闭</a>
+                                    {{end}}
+                                    <!--
+                                    {{if eq $Dept "研发"}} 
                                     <a href="/workorder/approve/modify?id={{.Id}}" class="btn btn-xs btn-warning" {{if eq .Isedit "false"}}disabled="disabled"{{end}}>编辑</a>
                                     {{end}}
                                     {{if eq $Dept "运维"}} 
                                     <a href="/workorder/approve/modify?id={{.Id}}" class="btn btn-xs btn-danger" {{if eq .Isedit "false"}}disabled="disabled"{{end}}>编辑</a>
                                     {{end}}
+                                    -->
                                     {{if eq $Dept "测试"}}
                                     <a href="/workorder/approve?id={{.Id}}" class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>审批</a>
-                                    <a href="/workorder/rollback?id={{.Id}}" class="btn btn-xs btn-danger" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>回滚</a>
                                     {{end}}
                                     {{if eq $Dept "产品"}}
                                     <a href="/workorder/approve?id={{.Id}}" class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>审批</a>
-                                    <a href="/workorder/rollback?id={{.Id}}" class="btn btn-xs btn-danger" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>回滚</a>
                                     {{end}}
                                     {{if eq $Dept "运维"}}
                                     <a href="/workorder/approve?id={{.Id}}" class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>实施</a>

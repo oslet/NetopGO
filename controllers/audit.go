@@ -18,6 +18,8 @@ func (this *AuditController) Get() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
@@ -34,7 +36,6 @@ func (this *AuditController) Get() {
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
-	auth := role.(int64)
 	this.Data["Auth"] = auth
 	this.Data["Schemas"] = schemas
 	this.Data["paginator"] = res
@@ -55,7 +56,8 @@ func (this *AuditController) Detail() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "audit"
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	id := this.Input().Get("id")
 	audit, err := models.AuditDetail(id)
 	if err != nil {
@@ -76,7 +78,8 @@ func (this *AuditController) Delete() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "audit"
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	id := this.Input().Get("id")
 	err := models.DeleteAudit(id)
 	if err != nil {
@@ -95,7 +98,8 @@ func (this *AuditController) BitchDelete() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "audit"
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	ids := strings.Split(this.Input().Get("ids"), ",")
 	for _, id := range ids {
 		err := models.DeleteAudit(id)
@@ -115,7 +119,8 @@ func (this *AuditController) Search() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "audit"
-
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	schema := this.Input().Get("keyword")
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
@@ -131,7 +136,6 @@ func (this *AuditController) Search() {
 	}
 	res := models.Paginator(int(currPage), int(pageSize), total)
 
-	auth := role.(int64)
 	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
 	this.Data["Audits"] = audits

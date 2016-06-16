@@ -60,7 +60,7 @@ func (this *MainController) Get() {
 	if err != nil {
 		beego.Error(err)
 	}
-	unoverOrderNums, err := models.GetUnoverOrderNums(role.(int64), dept.(string), uname.(string))
+	unoverOrderNums, pageAuth, pageDept, err := models.GetUnoverOrderNums(role.(int64), dept.(string), uname.(string))
 	if err != nil {
 		beego.Error(err)
 	}
@@ -78,6 +78,8 @@ func (this *MainController) Get() {
 	} else {
 		orderFlag = false
 	}
+	this.Data["PageAuth"] = pageAuth
+	this.Data["PageDept"] = pageDept
 	this.Data["IsViewOrder"] = true
 	this.Data["OrderFlag"] = orderFlag
 	this.Data["UnoverOrderNums"] = unoverOrderNums

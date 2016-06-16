@@ -2,7 +2,7 @@ package models
 
 import (
 	"database/sql"
-	"fmt"
+	//"fmt"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
@@ -97,13 +97,33 @@ func AddAppOrder(apptype, appname, version, jenkinsname, buildnum, featurelist, 
 	return err
 }
 
-func GetAppOrderCount(auth int64) (int64, error) {
+func GetAppOrderCount(auth int64, dept, uname string) (int64, error) {
 	var total int64
 	var err error
 	o := orm.NewOrm()
 	appwo := make([]*Appworkorder, 0)
 	if auth == 2 {
 		total, err = o.QueryTable("appworkorder").Filter("status", "实施流程中").Filter("db_status", "正在实施").All(&appwo)
+		if err != nil {
+			return 0, err
+		}
+	} else if auth == 1 {
+		total, err = o.QueryTable("appworkorder").Filter("status", "实施流程中").All(&appwo)
+		if err != nil {
+			return 0, err
+		}
+	} else if dept == "研发" {
+		total, err = o.Raw("select * from  appworkorder where sponsor=? and status<>?", uname, "工单已关闭").QueryRows(&appwo)
+		if err != nil {
+			return 0, err
+		}
+	} else if dept == "测试" {
+		total, err = o.Raw("select * from  appworkorder where status in (?,?)", "测试流程中", "验证流程中").QueryRows(&appwo)
+		if err != nil {
+			return 0, err
+		}
+	} else if dept == "产品" {
+		total, err = o.Raw("select * from  appworkorder where status=?", "审批流程中").QueryRows(&appwo)
 		if err != nil {
 			return 0, err
 		}
@@ -117,13 +137,33 @@ func GetAppOrderCount(auth int64) (int64, error) {
 	return total, err
 }
 
-func GetAppOrders(currPage, pageSize int, auth int64) ([]*Appworkorder, int64, error) {
+func GetAppOrders(currPage, pageSize int, auth int64, dept, uname string) ([]*Appworkorder, int64, error) {
 	var total int64
 	var err error
 	o := orm.NewOrm()
 	appwo := make([]*Appworkorder, 0)
 	if auth == 2 {
 		total, err = o.QueryTable("appworkorder").Filter("status", "实施流程中").Filter("db_status", "正在实施").OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&appwo)
+		if err != nil {
+			return nil, 0, err
+		}
+	} else if auth == 1 {
+		total, err = o.QueryTable("appworkorder").Filter("status", "实施流程中").OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&appwo)
+		if err != nil {
+			return nil, 0, err
+		}
+	} else if dept == "研发" {
+		total, err = o.Raw("select * from  appworkorder where sponsor=? and status<>? order by created desc limit ?,?", uname, "工单已关闭", (currPage-1)*pageSize, pageSize).QueryRows(&appwo)
+		if err != nil {
+			return nil, 0, err
+		}
+	} else if dept == "测试" {
+		total, err = o.Raw("select * from  appworkorder where status in (?,?) order by created desc limit ?,?", "测试流程中", "验证流程中", (currPage-1)*pageSize, pageSize).QueryRows(&appwo)
+		if err != nil {
+			return nil, 0, err
+		}
+	} else if dept == "产品" {
+		total, err = o.Raw("select * from  appworkorder where status=? order by created desc limit ?,?", "审批流程中", (currPage-1)*pageSize, pageSize).QueryRows(&appwo)
 		if err != nil {
 			return nil, 0, err
 		}
@@ -178,46 +218,78 @@ func ApproveCommit(id, nextStatus, outcome, outcomevalue, who, uname string) err
 	return err
 }
 
-func ApproveRollback(id, nextStatus, outcome, outcomevalue, who, uname, status, upgradeType, dept string) error {
+func ApproveRollback(id, status, opoutcome, operater string) error {
 	o := orm.NewOrm()
-	var isEdit string
 	aid, err := strconv.ParseInt(id, 10, 64)
 	appwo := &Appworkorder{
 		Id: aid,
 	}
-
-	if dept == "测试" && upgradeType == "修复bug" && status == "测试流程中" {
-		isEdit = "true"
-	} else if dept == "测试" && upgradeType == "产品发布" && status == "测试流程中" {
-		isEdit = "true"
-	} else if dept == "运维" && upgradeType == "系统运维" && status == "实施流程中" {
-		isEdit = "true"
-	} else {
-		isEdit = "false"
-	}
-
 	err = o.Read(appwo)
 	if err == nil {
-		appwo.Status = nextStatus
-		if who == "tester" {
-			appwo.Tester = uname
-		} else if who == "approver" {
-			appwo.Approver = uname
-		} else if who == "finalchker" {
-			appwo.Finalchker = uname
-		} else if who == "operater" {
-			appwo.Operater = uname
-		}
-		if outcome == "testoutcome" {
-			appwo.TestOutcome = outcomevalue
-		} else if outcome == "prdtoutcome" {
-			appwo.PrdtOutcome = outcomevalue
-		} else if outcome == "opoutcome" {
-			appwo.OpOutcome = outcomevalue
-		} else if outcome == "finaloutcome" {
-			appwo.FinalOutcome = outcomevalue
-		}
-		appwo.Isedit = isEdit
+		appwo.Status = status
+		appwo.Operater = operater
+		appwo.OpOutcome = opoutcome
+		appwo.Isedit = "true"
+	}
+	o.Update(appwo)
+	return err
+}
+
+// func ApproveRollback(id, nextStatus, outcome, outcomevalue, who, uname, status, upgradeType, dept string) error {
+// 	o := orm.NewOrm()
+// 	var isEdit string
+// 	aid, err := strconv.ParseInt(id, 10, 64)
+// 	appwo := &Appworkorder{
+// 		Id: aid,
+// 	}
+
+// 	if dept == "测试" && upgradeType == "修复bug" && status == "测试流程中" {
+// 		isEdit = "true"
+// 	} else if dept == "测试" && upgradeType == "产品发布" && status == "测试流程中" {
+// 		isEdit = "true"
+// 	} else if dept == "运维" && upgradeType == "系统运维" && status == "实施流程中" {
+// 		isEdit = "true"
+// 	} else {
+// 		isEdit = "false"
+// 	}
+
+// 	err = o.Read(appwo)
+// 	if err == nil {
+// 		appwo.Status = nextStatus
+// 		if who == "tester" {
+// 			appwo.Tester = uname
+// 		} else if who == "approver" {
+// 			appwo.Approver = uname
+// 		} else if who == "finalchker" {
+// 			appwo.Finalchker = uname
+// 		} else if who == "operater" {
+// 			appwo.Operater = uname
+// 		}
+// 		if outcome == "testoutcome" {
+// 			appwo.TestOutcome = outcomevalue
+// 		} else if outcome == "prdtoutcome" {
+// 			appwo.PrdtOutcome = outcomevalue
+// 		} else if outcome == "opoutcome" {
+// 			appwo.OpOutcome = outcomevalue
+// 		} else if outcome == "finaloutcome" {
+// 			appwo.FinalOutcome = outcomevalue
+// 		}
+// 		appwo.Isedit = isEdit
+// 	}
+// 	o.Update(appwo)
+// 	return err
+// }
+
+func CloseOrder(id string) error {
+	o := orm.NewOrm()
+	aid, err := strconv.ParseInt(id, 10, 64)
+	appwo := &Appworkorder{
+		Id: aid,
+	}
+	err = o.Read(appwo)
+	if err == nil {
+		appwo.Status = "工单已关闭"
+		appwo.Isedit = "false"
 	}
 	o.Update(appwo)
 	return err
@@ -264,13 +336,33 @@ func ApproveModify(id, apptype, appname, upgradetype, version, jenkinsname, buil
 	return err
 }
 
-func SearchAppwoCount(apptype, appname, auth string) (int64, error) {
+func SearchAppwoCount(apptype, appname, dept, uname string, auth int64) (int64, error) {
 	o := orm.NewOrm()
 	var err error
 	var total int64
 	appwos := make([]*Appworkorder, 0)
-	if auth == "2" {
+	if auth == 2 {
 		total, err = o.QueryTable("appworkorder").Filter("status", "实施流程中").Filter("db_status", "正在实施").Filter("apptype__icontains", apptype).Filter("appname__icontains", appname).All(&appwos)
+	} else if auth == 1 {
+		total, err = o.QueryTable("appworkorder").Filter("status", "实施流程中").Filter("apptype__icontains", apptype).Filter("appname__icontains", appname).All(&appwos)
+		if err != nil {
+			return 0, err
+		}
+	} else if dept == "研发" {
+		total, err = o.Raw("select * from  appworkorder where sponsor=? and apptype like ? and appname like ? and status<>?", uname, apptype, appname, "工单已关闭").QueryRows(&appwos)
+		if err != nil {
+			return 0, err
+		}
+	} else if dept == "测试" {
+		total, err = o.Raw("select * from  appworkorder where status in (?,?) and apptype like ? and appname like ?", "测试流程中", "验证流程中", apptype, appname).QueryRows(&appwos)
+		if err != nil {
+			return 0, err
+		}
+	} else if dept == "产品" {
+		total, err = o.Raw("select * from  appworkorder where status=? and apptype like ? and appname like ?", "审批流程中", apptype, appname).QueryRows(&appwos)
+		if err != nil {
+			return 0, err
+		}
 	} else {
 		total, err = o.QueryTable("appworkorder").Filter("apptype__icontains", apptype).Filter("appname__icontains", appname).All(&appwos)
 	}
@@ -278,12 +370,32 @@ func SearchAppwoCount(apptype, appname, auth string) (int64, error) {
 	return total, err
 }
 
-func SearchAppwo(currPage, pageSize int, apptype, appname, auth string) ([]*Appworkorder, error) {
+func SearchAppwo(currPage, pageSize int, apptype, appname, dept, uname string, auth int64) ([]*Appworkorder, error) {
 	o := orm.NewOrm()
 	var err error
 	appwos := make([]*Appworkorder, 0)
-	if auth == "2" {
+	if auth == 2 {
 		_, err = o.QueryTable("appworkorder").Filter("status", "实施流程中").Filter("db_status", "正在实施").Filter("apptype__icontains", apptype).Filter("appname__icontains", appname).OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&appwos)
+	} else if auth == 1 {
+		_, err = o.QueryTable("appworkorder").Filter("status", "实施流程中").Filter("apptype__icontains", apptype).Filter("appname__icontains", appname).OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&appwos)
+		if err != nil {
+			return nil, err
+		}
+	} else if dept == "研发" {
+		_, err = o.Raw("select * from  appworkorder where sponsor=? and apptype like ? and appname like ? and status<>? order by created limit ?,?", uname, apptype, appname, "工单已关闭", (currPage-1)*pageSize, pageSize).QueryRows(&appwos)
+		if err != nil {
+			return nil, err
+		}
+	} else if dept == "测试" {
+		_, err = o.Raw("select * from  appworkorder where status in (?,?) and apptype like ? and appname like ? order by created limit ?,?", "测试流程中", "验证流程中", apptype, appname, (currPage-1)*pageSize, pageSize).QueryRows(&appwos)
+		if err != nil {
+			return nil, err
+		}
+	} else if dept == "产品" {
+		_, err = o.Raw("select * from  appworkorder where status=? and apptype like ? and appname like ? order by created limit ?,?", "审批流程中", apptype, appname, (currPage-1)*pageSize, pageSize).QueryRows(&appwos)
+		if err != nil {
+			return nil, err
+		}
 	} else {
 		_, err = o.QueryTable("appworkorder").Filter("apptype__icontains", apptype).Filter("appname__icontains", appname).OrderBy("-created").Limit(pageSize, (currPage-1)*pageSize).All(&appwos)
 	}
@@ -438,7 +550,7 @@ func LastStatus(cate, dept, status, upgradeType string) (string, string, string)
 }
 
 func IsApproved(cate, dept, status, upgradeType, dbStatus string) string {
-	fmt.Printf("*****this :%v", dbStatus)
+	//fmt.Printf("*****this :%v", dbStatus)
 	var flag string
 	if cate == "app" && dept == "测试" && upgradeType == "修复bug" && status == "测试流程中" {
 		flag = "true"

@@ -13,6 +13,7 @@ import (
 func init() {
 	models.RegisterDB()
 	orm.RunSyncdb("default", false, false)
+	//orm.RunSyncdb("default", false, true)
 }
 
 func main() {
