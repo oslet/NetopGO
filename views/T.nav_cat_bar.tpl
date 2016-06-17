@@ -4,7 +4,7 @@
         <h2></h2>
         <ol class="breadcrumb">
             <li>
-                <a href="/">仪表盘</a>
+                <a href="/netopgo">仪表盘</a>
             </li>
             <li>
                 <a href="{{.Href}}">{{.Path1}}</a>

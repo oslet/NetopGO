@@ -33,7 +33,7 @@ func (this *LoginController) Post() {
 	this.SetSession("auth", user.Auth)
 	this.SetSession("dept", user.Dept)
 
-	this.Redirect("/", 302)
+	this.Redirect("/netopgo", 302)
 }
 
 func (this *LoginController) Logout() {
