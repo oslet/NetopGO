@@ -254,6 +254,6 @@ func (this *UserController) ResetPasswd() {
 			beego.Error(err)
 		}
 
-		this.Redirect("/", 302)
+		this.Redirect("/netopgo", 302)
 	}
 }

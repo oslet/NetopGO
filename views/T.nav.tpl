@@ -4,7 +4,7 @@
         <ul class="nav" id="side-menu">
             {{template "nav_li_profile" .}}
             <li id="index">
-               <a href="/"><i class="fa fa-dashboard"></i> <span class="nav-label">仪表盘</span><span class="label label-info pull-right"></span></a>
+               <a href="/netopgo"><i class="fa fa-dashboard"></i> <span class="nav-label">仪表盘</span><span class="label label-info pull-right"></span></a>
             </li>
             <li id="user">
                 <a href="javascript:void(0)"><i class="fa fa-group"></i> <span class="nav-label">用户管理</span><span class="fa arrow"></span></a>
