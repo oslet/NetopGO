@@ -1,7 +1,7 @@
 package models
 
 import (
-	//	"fmt"
+	//"fmt"
 	"github.com/astaxie/beego/orm"
 	"math"
 	"strconv"
@@ -56,7 +56,7 @@ func AddUser(name, passwd, email, tel, auth, dept string) error {
 	if err != nil {
 		return err
 	}
-	passwd = string(Base64Encode([]byte(passwd)))
+	passwd, _ = AESEncode(passwd, AesKey)
 	user := &User{
 		Name:    name,
 		Passwd:  passwd,
@@ -79,7 +79,8 @@ func ModifyUser(id, name, passwd, email, tel, auth, dept string) error {
 	o := orm.NewOrm()
 	uid, err := strconv.ParseInt(id, 10, 64)
 	authInt, err := strconv.ParseInt(auth, 10, 64)
-	passwd = string(Base64Encode([]byte(passwd)))
+	passwd, _ = AESEncode(passwd, AesKey)
+	//fmt.Printf("models passwd -----:%v", passwd)
 	user := &User{
 		Id: uid,
 	}
@@ -141,7 +142,7 @@ func SearchUserByName(currPage, pageSize int, name string) ([]*User, error) {
 func ResetPasswd(id, passwd string) error {
 	o := orm.NewOrm()
 	uid, err := strconv.ParseInt(id, 10, 64)
-	passwd = string(Base64Encode([]byte(passwd)))
+	passwd, _ = AESEncode(passwd, AesKey)
 	user := &User{
 		Id: uid,
 	}

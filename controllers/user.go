@@ -60,6 +60,7 @@ func (this *UserController) Add() {
 			beego.Error(err)
 		}
 		user.Passwd, _ = models.AESDecode(user.Passwd, models.AesKey)
+		//beego.Info(user.Passwd)
 		this.Data["User"] = user
 		this.Data["Path1"] = "用户列表"
 		this.Data["Path2"] = "修改用户"
@@ -127,9 +128,11 @@ func (this *UserController) Post() {
 	auth := this.Input().Get("auth")
 	dept := this.Input().Get("dept")
 	//beego.Info(id)
+	//beego.Info(passwd)
 	if len(id) > 0 {
 		err := models.ModifyUser(id, name, passwd, email, tel, auth, dept)
 		if err != nil {
+			//		beego.Info("call")
 			beego.Error(err)
 		}
 	} else {
@@ -231,7 +234,8 @@ func (this *UserController) ResetPasswd() {
 		if err != nil {
 			beego.Error(err)
 		}
-		if string(models.Base64Encode([]byte(passwd0))) != user.Passwd {
+		enpasswd, _ := models.AESEncode(passwd0, models.AesKey)
+		if enpasswd != user.Passwd {
 			flag = 1
 			this.Data["Flag"] = flag
 			this.Data["Path1"] = "用户列表"
