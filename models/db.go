@@ -223,6 +223,7 @@ func SqlExplain(name, sqltext string) ([]*Explain, int64, error) {
 	schemaUrl := db.User + ":" + passwd + "@tcp(" + db.Name + ":" + db.Port + ")/" + db.Schemaname + "?charset=utf8"
 	orm.RegisterDriver(_DB_Driver, orm.DRMySQL)
 	sql_db, err := orm.GetDB(db.Name)
+	beego.Info(schemaUrl)
 	if sql_db == nil {
 		orm.RegisterDataBase(db.Name, _DB_Driver, schemaUrl, 30)
 		fmt.Println("=====> register database of slow explain")
