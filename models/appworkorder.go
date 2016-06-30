@@ -218,7 +218,7 @@ func ApproveCommit(id, nextStatus, outcome, outcomevalue, who, uname string) err
 	return err
 }
 
-func ApproveRollback(id, status, opoutcome, operater string) error {
+func ApproveRollback(id, status, opoutcome, finaloutcome, operater string) error {
 	o := orm.NewOrm()
 	aid, err := strconv.ParseInt(id, 10, 64)
 	appwo := &Appworkorder{
@@ -229,6 +229,7 @@ func ApproveRollback(id, status, opoutcome, operater string) error {
 		appwo.Status = status
 		appwo.Operater = operater
 		appwo.OpOutcome = opoutcome
+		appwo.FinalOutcome = finaloutcome
 		appwo.Isedit = "true"
 	}
 	o.Update(appwo)
@@ -591,15 +592,15 @@ func IsApproved(cate, dept, status, upgradeType, dbStatus string) string {
 	}
 
 	if cate == "app" && dept == "研发" && upgradeType == "修复bug" && status == "测试流程中" {
-		flag = "false"
+		flag = "true"
 	} else if cate == "app" && dept == "研发" && upgradeType == "产品发布" && status == "测试流程中" {
-		flag = "false"
+		flag = "true"
 	} else if cate == "app" && dept == "研发" && upgradeType == "系统运维" && status == "测试流程中" {
 		flag = "false"
 	} else if cate == "app" && dept == "研发" && upgradeType == "修复bug" && status == "审批流程中" {
-		flag = "false"
+		flag = "true"
 	} else if cate == "app" && dept == "研发" && upgradeType == "产品发布" && status == "审批流程中" {
-		flag = "false"
+		flag = "true"
 	} else if cate == "app" && dept == "研发" && upgradeType == "系统运维" && status == "审批流程中" {
 		flag = "false"
 	} else if cate == "app" && dept == "研发" && upgradeType == "修复bug" && status == "实施流程中" {
@@ -621,9 +622,9 @@ func IsApproved(cate, dept, status, upgradeType, dbStatus string) string {
 	} else if cate == "app" && dept == "研发" && upgradeType == "系统运维" && status == "工单已关闭" {
 		flag = "false"
 	} else if cate == "app" && dept == "研发" && upgradeType == "修复bug" && status == "异常已回滚" {
-		flag = "true"
+		flag = "false"
 	} else if cate == "app" && dept == "研发" && upgradeType == "产品发布" && status == "异常已回滚" {
-		flag = "true"
+		flag = "false"
 	} else if cate == "app" && dept == "研发" && upgradeType == "系统运维" && status == "异常已回滚" {
 		flag = "false"
 	}

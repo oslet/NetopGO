@@ -12,10 +12,13 @@ import (
 
 func init() {
 	models.RegisterDB()
-	orm.RunSyncdb("default", false, true)
+	orm.RunSyncdb("default", false, false)
+	//orm.RunSyncdb("default", false, true)
 }
 
 func main() {
-	orm.Debug = true
+	//orm.Debug = true
 	beego.Run()
 }
+
+//test

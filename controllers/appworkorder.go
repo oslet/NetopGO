@@ -284,7 +284,8 @@ func (this *AppWOController) ApproveRollback() {
 	auth := role.(int64)
 	this.Data["Auth"] = auth
 	opoutcome := this.Input().Get("opoutcome")
-	err := models.ApproveRollback(id, "异常已回滚", opoutcome, uname.(string))
+	finaloutcome := this.Input().Get("finaloutcome")
+	err := models.ApproveRollback(id, "异常已回滚", opoutcome, finaloutcome, uname.(string))
 	if err != nil {
 		beego.Error(err)
 	}
