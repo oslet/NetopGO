@@ -10,7 +10,7 @@
     </div>
     <ul class="nav navbar-top-links navbar-right">
         <li>
-            <span class="m-r-sm text-muted welcome-message">欢迎使用听云NetopGO系统</span>
+            <span class="m-r-sm text-muted welcome-message">欢迎使用Plateno ops manager</span>
         </li>
         <!--
         <li class="dropdown">

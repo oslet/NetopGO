@@ -3,9 +3,10 @@ package controllers
 import (
 	"NetopGO/models"
 	//"fmt"
-	"github.com/astaxie/beego"
 	"strconv"
 	"strings"
+
+	"github.com/astaxie/beego"
 )
 
 type HostController struct {
@@ -100,8 +101,13 @@ func (this *HostController) Post() {
 	this.Data["Category"] = "host"
 
 	id := this.Input().Get("id")
+	class := this.Input().Get("class")
+	service_name := this.Input().Get("service_name")
 	name := this.Input().Get("name")
 	ip := this.Input().Get("ip")
+	port := this.Input().Get("port")
+	os_type := this.Input().Get("os_type")
+	owner := this.Input().Get("owner")
 	root := this.Input().Get("root")
 	read := this.Input().Get("read")
 	rootpwd := this.Input().Get("rootpwd")
@@ -114,12 +120,12 @@ func (this *HostController) Post() {
 	comment := this.Input().Get("comment")
 	//beego.Info(idc)
 	if len(id) > 0 {
-		err := models.ModifyHost(id, name, ip, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
+		err := models.ModifyHost(id, class, service_name, name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
 		if err != nil {
 			beego.Error(err)
 		}
 	} else {
-		err := models.AddHost(name, ip, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
+		err := models.AddHost(name, class, service_name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
 		if err != nil {
 			beego.Error(err)
 		}

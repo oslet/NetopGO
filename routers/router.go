@@ -3,11 +3,13 @@ package routers
 import (
 	"NetopGO/controllers"
 	"NetopGO/models"
+
 	"github.com/astaxie/beego"
 	"golang.org/x/net/websocket"
 )
 
 func init() {
+	beego.Router("/", &controllers.MainController{})
 	beego.Router("/netopgo", &controllers.MainController{})
 	beego.Router("/login", &controllers.LoginController{})
 	beego.Router("/logout", &controllers.LoginController{}, "get:Logout")
@@ -30,6 +32,14 @@ func init() {
 	beego.Router("/group/del", &controllers.GroupController{}, "get:Delete")
 	beego.Router("/group/bitchDel", &controllers.GroupController{}, "post:BitchDelete")
 	beego.Router("/group/search", &controllers.GroupController{}, "get:Search")
+
+	beego.Router("/line/list", &controllers.LineController{})
+	beego.Router("/line/add", &controllers.LineController{}, "get:Add")
+	beego.Router("/line/add", &controllers.LineController{}, "post:Post")
+	beego.Router("/line/modify", &controllers.LineController{}, "post:Post")
+	beego.Router("/line/del", &controllers.LineController{}, "get:Delete")
+	beego.Router("/line/bitchDel", &controllers.LineController{}, "post:BitchDelete")
+	beego.Router("/line/search", &controllers.LineController{}, "get:Search")
 
 	beego.Router("/host/list", &controllers.HostController{})
 	beego.Router("/host/add", &controllers.HostController{}, "get:Add")

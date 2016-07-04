@@ -5,6 +5,20 @@
                         {{with .Host}}
                         <form method="post" id="userForm" class="form-horizontal" action="/host/modify?id={{.Id}}">
                             <div class="form-group">
+                                <label for="class" class="col-sm-2 control-label">类型<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="class" name="class" placeholder="" type="text" class="form-control" value="{{.Class}}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="service_name" class="col-sm-2 control-label">系统服务名<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="service_name" name="service_name" placeholder="" type="text" class="form-control" value="{{.Service_name}}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
                                 <label for="name" class="col-sm-2 control-label">主机名<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
                                     <input id="name" name="name" placeholder="" type="text" class="form-control" value="{{.Name}}">
@@ -15,6 +29,27 @@
                                 <label for="ip" class="col-sm-2 control-label">IP<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
                                     <input id="ip" name="ip" placeholder="" type="text" class="form-control" value="{{.Ip}}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="port" class="col-sm-2 control-label">Port<span class="black-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="port" name="port" placeholder="" type="text" class="form-control" value="{{.Port}}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="os_type" class="col-sm-2 control-label">OS<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="os_type" name="os_type" placeholder="" type="text" class="form-control" value="{{.Os_type}}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="owner" class="col-sm-2 control-label">Owner<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="owner" name="owner" placeholder="" type="text" class="form-control" value="{{.Owner}}">
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
@@ -133,6 +168,9 @@
                                         <option value="微软云" {{if eq .Idc "微软云"}}selected{{end}}>微软云</option>
                                         <option value="百度云" {{if eq .Idc "百度云"}}selected{{end}}>百度云</option>
                                         <option value="金山云" {{if eq .Idc "金山云"}}selected{{end}}>金山云</option>
+                                        <option value="金山云" {{if eq .Idc "亚太"}}selected{{end}}>亚太</option>
+                                        <option value="金山云" {{if eq .Idc "人民中"}}selected{{end}}>人民中</option>
+                                        <option value="金山云" {{if eq .Idc "新滘西"}}selected{{end}}>新滘西</option>
                                     </select>
                                 </div>
                             </div>                                                     
@@ -156,6 +194,18 @@ $('#userForm').validator({
     timely: 2,
     theme: "yellow_right_effect",
     fields: {
+       "class": {
+            rule: "required;length[1~100]",
+            tip: "输入类型名",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+       "service_name": {
+            rule: "required;length[1~100]",
+            tip: "输入系统服务名",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
         "name": {
             rule: "required;length[1~100]",
             tip: "输入主机名",
@@ -168,9 +218,21 @@ $('#userForm').validator({
             ok: "",
             msg: {required: "必须填写!"}
         },
-        "rootpwd": {
-            rule: "required;length[6~50]",
-            tip: "输入root用户密码",
+        "os_type": {
+            rule: "required;length[6~30]",
+            tip: "输入系统类型",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "owner": {
+            rule: "required;length[3~20]",
+            tip: "输入负责人",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "root": {
+            rule: "required;length[1~20]",
+            tip: "输入root用户名称",
             ok: "",
             msg: {required: "必须填写!"}
         },        

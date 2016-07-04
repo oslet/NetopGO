@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>NetopGO | 听云NetopGO系统</title>
+    <title>Plateno | Plateno ops manager</title>
 
     <link rel="shortcut icon" href="/static/img/facio.ico" type="image/x-icon">
     {{template "link_css"}}

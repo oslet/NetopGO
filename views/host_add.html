@@ -3,6 +3,20 @@
 <br>
                     <div class="ibox-content">
                         <form method="post" id="userForm" class="form-horizontal" action="/host/add">
+                                <div class="form-group">
+                                <label for="class" class="col-sm-2 control-label">类型<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="class" name="class" placeholder="" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                <label for="service_name" class="col-sm-2 control-label">系统服务名<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="service_name" name="service_name" placeholder="" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
                             <div class="form-group">
                                 <label for="name" class="col-sm-2 control-label">主机名<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
@@ -14,6 +28,27 @@
                                 <label for="ip" class="col-sm-2 control-label">IP<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
                                     <input id="ip" name="ip" placeholder="" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="port" class="col-sm-2 control-label">Port<span class="black-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="port" name="port" placeholder="" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="os_type" class="col-sm-2 control-label">OS<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="" name="os_type" placeholder="" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="owner" class="col-sm-2 control-label">Owner<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="owner" name="owner" placeholder="" type="text" class="form-control" >
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
@@ -153,6 +188,18 @@ $('#userForm').validator({
     timely: 2,
     theme: "yellow_right_effect",
     fields: {
+        "class": {
+            rule: "required;length[1~100]",
+            tip: "输入类型名",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "service_name": {
+            rule: "required;length[1~100]",
+            tip: "输入系统服务名",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
         "name": {
             rule: "required;length[1~100]",
             tip: "输入主机名",
@@ -165,8 +212,20 @@ $('#userForm').validator({
             ok: "",
             msg: {required: "必须填写!"}
         },
+        "os_type": {
+            rule: "required;length[7~50]",
+            tip: "输入OS",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "owner": {
+            rule: "required;length[7~15]",
+            tip: "输入Owner",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
         "root": {
-            rule: "required;length[1~10]",
+            rule: "required;length[1~20]",
             tip: "输入root用户名称",
             ok: "",
             msg: {required: "必须填写!"}

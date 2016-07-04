@@ -1,26 +1,32 @@
 package models
 
 import (
-	"github.com/astaxie/beego/orm"
 	"strconv"
 	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 type Host struct {
-	Id      int64
-	Name    string `orm:size(50)`
-	Ip      string `orm:size(15)`
-	Cpu     string `orm:size(50)`
-	Mem     string `orm:size(50)`
-	Disk    string `orm:size(50)`
-	Idc     string `orm:size(50)`
-	Root    string `orm:size(10)`
-	Rootpwd string `orm:size(50)`
-	Read    string `orm:size(10)`
-	Readpwd string `orm:size(50)`
-	Group   string `orm:size(50)`
-	Comment string `orm:size(100)`
-	Created time.Time
+	Id           int64
+	Class        string `orm:size(50)`
+	Service_name string `orm:size(50)`
+	Name         string `orm:size(50)`
+	Ip           string `orm:size(15)`
+	Port         string `orm:size(15)`
+	Os_type      string `orm:size(50)`
+	Owner        string `orm:size(50)`
+	Cpu          string `orm:size(50)`
+	Mem          string `orm:size(50)`
+	Disk         string `orm:size(50)`
+	Idc          string `orm:size(50)`
+	Root         string `orm:size(10)`
+	Rootpwd      string `orm:size(50)`
+	Read         string `orm:size(10)`
+	Readpwd      string `orm:size(50)`
+	Group        string `orm:size(50)`
+	Comment      string `orm:size(100)`
+	Created      time.Time
 }
 
 // register host model
@@ -56,24 +62,29 @@ func GetHostById(id string) (*Host, error) {
 	return host, err
 }
 
-func AddHost(name, ip, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment string) error {
+func AddHost(class, service_name, name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment string) error {
 	o := orm.NewOrm()
 	rootpwd, _ = AESEncode(rootpwd, AesKey)
 	readpwd, _ = AESEncode(readpwd, AesKey)
 	host := &Host{
-		Name:    name,
-		Ip:      ip,
-		Root:    root,
-		Read:    read,
-		Rootpwd: rootpwd,
-		Readpwd: readpwd,
-		Cpu:     cpu,
-		Mem:     mem,
-		Disk:    disk,
-		Group:   group,
-		Idc:     idc,
-		Comment: comment,
-		Created: time.Now(),
+		Class:        class,
+		Service_name: service_name,
+		Name:         name,
+		Ip:           ip,
+		Port:         port,
+		Os_type:      os_type,
+		Owner:        owner,
+		Root:         root,
+		Read:         read,
+		Rootpwd:      rootpwd,
+		Readpwd:      readpwd,
+		Cpu:          cpu,
+		Mem:          mem,
+		Disk:         disk,
+		Group:        group,
+		Idc:          idc,
+		Comment:      comment,
+		Created:      time.Now(),
 	}
 	err := o.QueryTable("host").Filter("name", name).One(host)
 	if err == nil {
@@ -83,7 +94,7 @@ func AddHost(name, ip, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc,
 	return err
 }
 
-func ModifyHost(id, name, ip, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment string) error {
+func ModifyHost(id, class, service_name, name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment string) error {
 	o := orm.NewOrm()
 	rootpwd, _ = AESEncode(rootpwd, AesKey)
 	readpwd, _ = AESEncode(readpwd, AesKey)
@@ -93,8 +104,13 @@ func ModifyHost(id, name, ip, root, read, rootpwd, readpwd, cpu, mem, disk, grou
 	}
 	err = o.Read(host)
 	if err == nil {
+		host.Class = class
+		host.Service_name = service_name
 		host.Name = name
 		host.Ip = ip
+		host.Port = port
+		host.Os_type = os_type
+		host.Owner = owner
 		host.Root = root
 		host.Read = read
 		host.Rootpwd = rootpwd

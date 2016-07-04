@@ -19,6 +19,9 @@
                 </ul>
                 <ul class="nav nav-second-level">
                     <li class="idc"> <a href="/group/list">业务组列表</a></li>
+                </ul>
+                <ul class="nav nav-second-level">
+                    <li class="idc"> <a href="/line/list">线路列表</a></li>
                 </ul>                                
             </li>
             <li id="db">
@@ -58,7 +61,7 @@
                <a href="/audit/list"><i class="fa fa-files-o"></i> <span class="nav-label">日志审计</span><span class="label label-info pull-right"></span></a>
             </li>
             <li class="special_link">
-                <a href="http://www.tingyun.com" target="_blank"><i class="fa fa-database"></i> <span class="nav-label">访问官网</span></a>
+                <a href="http://www.platenogroup.com" target="_blank"><i class="fa fa-database"></i> <span class="nav-label">访问官网</span></a>
             </li>
         </ul>
 
