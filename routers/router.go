@@ -41,6 +41,14 @@ func init() {
 	beego.Router("/line/bitchDel", &controllers.LineController{}, "post:BitchDelete")
 	beego.Router("/line/search", &controllers.LineController{}, "get:Search")
 
+	beego.Router("/syslist/list", &controllers.SyslistController{})
+	beego.Router("/syslist/add", &controllers.SyslistController{}, "get:Add")
+	beego.Router("/syslist/add", &controllers.SyslistController{}, "post:Post")
+	beego.Router("/syslist/modify", &controllers.SyslistController{}, "post:Post")
+	beego.Router("/syslist/del", &controllers.SyslistController{}, "get:Delete")
+	beego.Router("/syslist/bitchDel", &controllers.SyslistController{}, "post:BitchDelete")
+	beego.Router("/syslist/search", &controllers.SyslistController{}, "get:Search")
+
 	beego.Router("/host/list", &controllers.HostController{})
 	beego.Router("/host/add", &controllers.HostController{}, "get:Add")
 	beego.Router("/host/add", &controllers.HostController{}, "post:Post")

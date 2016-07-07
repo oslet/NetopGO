@@ -1,0 +1,95 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<br>
+                    <div class="ibox-content">
+                        <form method="post" id="userForm" class="form-horizontal" action="/syslist/add">
+                            <div class="form-group">
+                                <label for="class" class="col-sm-2 control-label">系统分类</label>
+                                <div class="col-sm-8">
+                                    <select name="class" class="form-control">
+                                        <option value="内部系统">内部系统</option>
+                                        <option value="分店运营相关" >分店运营相关</option>
+                                        <option value="网站预定">网站预定</option>
+                                        <option value="销售相关">销售相关</option>
+                                        <option value="数据相关">数据相关</option>
+                                        <option value="财务相关">财务相关</option>
+                                        <option value="互联网公司">互联网公司</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">系统名称<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="name" name="name" placeholder="" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                <label for="owner1" class="col-sm-2 control-label">owner1<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="owner1" name="owner1" placeholder="" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="owner2" class="col-sm-2 control-label">owner2<span class="black-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="owner2" name="owner2" placeholder="" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="domain_name" class="col-sm-2 control-label">域名<span class="black-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="domain_name" name="domain_name" placeholder="" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="comment" class="col-sm-2 control-label">用途/备注<span class="black-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="comment" name="comment" placeholder="" type="text" class="form-control" >
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div> 
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white" type="reset">重置</button>
+                                    <button id="submit_button" class="btn btn-primary" type="submit">保存</button>
+                                </div>
+                            </div>
+                        </form>
+    </div>
+
+<script>
+$('#userForm').validator({
+    timely: 2,
+    theme: "yellow_right_effect",
+    rules: {
+        check_username: [/^[\w.]{1,20}$/, '至少1位大小写字母数字和下划线小数点'],
+        type_m: function(element){
+                    return  $("#M").is(":checked");
+            }
+    },
+    fields: {
+        "name": {
+            rule: "required;check_username",
+            tip: "输入系统名",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "owner1": {
+            rule: "required;length[2~10]",
+            tip: "输入系统负责人",
+            ok: "",
+            msg: {required: "必须填写!"}
+        }
+    },
+    valid: function(form) {
+        form.submit();
+    }
+});
+</script>
+{{template "page_buttom" .}}
+

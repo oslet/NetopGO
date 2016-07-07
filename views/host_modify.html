@@ -129,7 +129,8 @@
                                 <label for="disk" class="col-sm-2 control-label">Disk</label>
                                 <div class="col-sm-8">
                                     <select name="disk" class="form-control">
-                                        <option value="50GB" {{if eq .Disk "50GB"}}selected{{end}}>50GB</option>
+                                        <option value="40GB" {{if eq .Disk "40GB"}}selected{{end}}>40GB</option>
+                                        <option value="30GB" {{if eq .Disk "30GB"}}selected{{end}}>30GB</option>
                                         <option value="100GB" {{if eq .Disk "100GB"}}selected{{end}}>100GB</option>
                                         <option value="200GB" {{if eq .Disk "200GB"}}selected{{end}}>200GB</option>
                                         <option value="500GB" {{if eq .Disk "500GB"}}selected{{end}}>500GB</option>
@@ -168,9 +169,9 @@
                                         <option value="微软云" {{if eq .Idc "微软云"}}selected{{end}}>微软云</option>
                                         <option value="百度云" {{if eq .Idc "百度云"}}selected{{end}}>百度云</option>
                                         <option value="金山云" {{if eq .Idc "金山云"}}selected{{end}}>金山云</option>
-                                        <option value="金山云" {{if eq .Idc "亚太"}}selected{{end}}>亚太</option>
-                                        <option value="金山云" {{if eq .Idc "人民中"}}selected{{end}}>人民中</option>
-                                        <option value="金山云" {{if eq .Idc "新滘西"}}selected{{end}}>新滘西</option>
+                                        <option value="亚太" {{if eq .Idc "亚太"}}selected{{end}}>亚太</option>
+                                        <option value="人民中" {{if eq .Idc "人民中"}}selected{{end}}>人民中</option>
+                                        <option value="新滘西" {{if eq .Idc "新滘西"}}selected{{end}}>新滘西</option>
                                     </select>
                                 </div>
                             </div>                                                     
@@ -213,7 +214,7 @@ $('#userForm').validator({
             msg: {required: "必须填写!"}
         },
         "ip": {
-            rule: "required;length[7~15]",
+            rule: "required;length[3~20]",
             tip: "输入IP",
             ok: "",
             msg: {required: "必须填写!"}
@@ -225,7 +226,7 @@ $('#userForm').validator({
             msg: {required: "必须填写!"}
         },
         "owner": {
-            rule: "required;length[3~20]",
+            rule: "required;length[2~20]",
             tip: "输入负责人",
             ok: "",
             msg: {required: "必须填写!"}
@@ -255,7 +256,7 @@ $('#userForm').validator({
             msg: {required: "必须填写!"}
         },
         "comment": {
-            rule: "required;length[6~50]",
+            rule: "required;length[1~50]",
             tip: "输入备注",
             ok: "",
             msg: {required: "必须填写!"}

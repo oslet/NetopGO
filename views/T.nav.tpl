@@ -23,6 +23,9 @@
                 <ul class="nav nav-second-level">
                     <li class="idc"> <a href="/line/list">线路列表</a></li>
                 </ul>                                
+                <ul class="nav nav-second-level">
+                    <li class="idc"> <a href="/syslist/list">系统列表</a></li>
+                </ul>
             </li>
             <li id="db">
                 <a><i class="fa fa-gears"></i> <span class="nav-label">DB管理</span><span class="fa arrow"></span></a>

@@ -2,14 +2,29 @@
 {{template "nav_cat_bar" .}}
 <br>
                     <div class="ibox-content">
-                        {{with .Group}}
+                        {{with .Line}}
                         <form method="post" id="userForm" class="form-horizontal" action="/line/modify?id={{.Id}}">
                             <div class="form-group">
                                 <label for="name" class="col-sm-2 control-label">线路名称<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
-                                    <input id="name" name="name" placeholder="name" type="text" class="form-control" value="{{.Name}}">
+                                    <input id="name" name="name" placeholder="线路名称" type="text" class="form-control" value="{{.Name}}">
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label for="use" class="col-sm-2 control-label">目的用途<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="use" name="use" placeholder="use" type="text" class="form-control" value="{{.Use}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="enable" class="col-sm-2 control-label">是否启用</label>
+                                <div class="col-sm-8">
+                                    <select name="enable" class="form-control">
+                                        <option value="禁用">禁用</option>
+                                        <option value="启用" selected>启用</option>
+                                    </select>
+                                </div>
+                            </div>    
                             <div class="form-group">
                                 <label for="conment" class="col-sm-2 control-label">线路备注<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
@@ -43,7 +58,19 @@ $('#userForm').validator({
     fields: {
         "name": {
             rule: "required;check_username",
-            tip: "输入主机名",
+            tip: "输入线路名称",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "use": {
+            rule: "required;length[3~200]",
+            tip: "输入目的用途",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "enable": {
+            rule: "required",
+            tip: "选择是否启用",
             ok: "",
             msg: {required: "必须填写!"}
         },

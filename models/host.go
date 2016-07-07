@@ -7,6 +7,7 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
+
 type Host struct {
 	Id           int64
 	Class        string `orm:size(50)`
@@ -139,16 +140,29 @@ func DeleteHost(id string) error {
 	return nil
 }
 
-func SearchHostCount(idc, group, name string) (int64, error) {
+func SearchHostCount(idc, name string) (int64, error) {
 	o := orm.NewOrm()
 	hosts := make([]*Host, 0)
-	total, err := o.QueryTable("host").Filter("idc", idc).Filter("group", group).Filter("name__icontains", name).All(&hosts)
+	total, err := o.QueryTable("host").Filter("idc", idc).Filter("name__icontains", name).All(&hosts)
 	return total, err
 }
 
-func SearchHostByName(currPage, pageSize int, idc, group, name string) ([]*Host, error) {
+type Name struct {
+	name string
+	ip   string
+}
+
+
+func SearchHostByName(currPage, pageSize int, idc, name string) ([]*Host, error) {
 	o := orm.NewOrm()
 	hosts := make([]*Host, 0)
-	_, err := o.QueryTable("host").Filter("idc", idc).Filter("group", group).Filter("name__icontains", name).Limit(pageSize, (currPage-1)*pageSize).All(&hosts)
+	var cond *orm.Condition
+	cond = orm.NewCondition()
+	cond = cond.Or("name__icontains", name)
+	cond = cond.Or("ip__icontains", "ip")
+	var qs orm.QuerySeter
+	qs = o.QueryTable("host").Filter("idc", idc).Limit(pageSize, (currPage-1)*pageSize).SetCond(cond)
+	_, err := qs.All(&hosts)
+	//_, err := o.QueryTable("host").Filter("idc", idc).Filter("name__icontains", name).Limit(pageSize, (currPage-1)*pageSize).All(&hosts)
 	return hosts, err
 }

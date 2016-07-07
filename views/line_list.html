@@ -31,6 +31,8 @@
                                     <input type="checkbox" id="check_all" onclick="checkAll('check_all', 'checked')">
                                 </th>
                                 <th class="text-center">线路名</th>
+                                <th class="text-center">用途名</th>
+                                <th class="text-center">是否启用</th>
                                 <th class="text-center">备注</th>
                                 <th class="text-center">创建时间</th>                         
                                 <th class="text-center">操作</th>
@@ -43,6 +45,8 @@
                                     <input type="checkbox" name="checked" value="{{.Id}}">
                                 </td>
                                 <td class="text-center"><a href="#">{{.Name}}</a></td>
+                                <td class="text-center">{{.Use}}</td>
+                                <td class="text-center">{{.Enable}}</td>
                                 <td class="text-center">{{.Conment}}</td>
                                 <td class="text-center">{{.Created}}</td>
                                 <td class="text-center">

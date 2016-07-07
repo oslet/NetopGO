@@ -1,0 +1,119 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+{{$Auth := .Auth}}
+{{if eq .Auth 3}}
+<div><span style="font-size:18px;color:red;">没有相关权限！</span></div>
+{{else}}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="">
+                        <a href="/syslist/add" class="btn btn-sm btn-primary " {{if ne $Auth 1}}disabled="disabled"{{end}}> 添加系统 </a>
+                        <a id="del_btn" class="btn btn-sm btn-danger" {{if ne $Auth 1}}disabled="disabled"{{end}}> 删除所选 </a>
+                        {{if .IsSearch}}
+                        <a href="/syslist/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        {{else}}
+                        <form id="search_form" method="get" action="/syslist/search" class="form-inline pull-right">
+                            <div class="input-group">
+                                <select name="syslist" class="form-control">
+                                    <option value="1" selected>---请选择分类---</option>
+                                    <option value="内部系统">内部系统</option>
+                                    <option value="分店运营相关">分店运营相关</option>
+                                    <option value="网站预定">网站预定</option>
+                                    <option value="销售相关">销售相关</option>
+                                    <option value="数据相关">数据相关</option>
+                                    <option value="财务相关">财务相关</option>
+                                    <option value="互联网公司">互联网公司</option>
+                                </select> 
+                            </div>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="search_input" name="keyword" placeholder="按主机名称搜索...">
+                                <div class="input-group-btn">
+                                    <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
+                                        -搜索-
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+                    <table class="table table-striped table-bordered table-hover " id="editable" >
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    <input type="checkbox" id="check_all" onclick="checkAll('check_all', 'checked')">
+                                </th>
+                                <th class="text-center">系统分类</th>
+                                <th class="text-center">系统名称</th>
+                                <th class="text-center">owner1</th>
+                                <th class="text-center">owner2</th>
+                                <th class="text-center">域名</th>
+                                <th class="text-center">用途/备注</th>
+                                <th class="text-center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{range .Syslists}}
+                            <tr class="gradeX">
+                                <td class="text-center">
+                                    <input type="checkbox" name="checked" value="{{.Id}}">
+                                </td>
+                                <td class="text-center">{{.Class}}</td>
+                                <td class="text-center"><a href="#">{{.Name}}</a></td>
+                                <td class="text-center">{{.Owner1}}</td>
+                                <td class="text-center">{{.Owner2}}</td>
+                                <td class="text-center">{{.Domain_name}}</td>
+                                <td class="text-center">{{.Comment}}</td>
+                                <td class="text-center">
+                                    <a href="/syslist/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Auth 1}}disabled="disabled"{{end}}>编辑</a>
+                                    <a href="/syslist/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Auth 1}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                </td>
+
+                            </tr>
+                            {{end}}
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                                Total {{.totals}} entries
+                            </div>
+                        </div>
+                        {{template "paginator" .}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
+<script src="/static/js/jquery.shiftcheckbox.js"></script>
+<script>
+    $(document).ready(function(){
+
+        $('#del_btn').click(function(){
+            var check_array = [];
+            if (confirm("确定删除")) {
+                $(".gradeX input:checked").each(function() {
+                    check_array.push($(this).attr("value"))
+                });
+                console.log(check_array.join(","));
+                $.post("/syslist/bitchDel",
+                        {ids: check_array.join(",")},
+                        function(data){
+                            //console.log(data);
+                            //$(".gradeX input:checked").closest("tr").remove();                            
+                            window.location.href="/syslist/list"                            
+                            //alert(data);
+                        }
+                )
+            }
+
+        });
+
+    });
+
+</script>
+{{template "page_buttom"}}

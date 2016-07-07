@@ -91,8 +91,8 @@
                                 <label for="cpu" class="col-sm-2 control-label">Cpu</label>
                                 <div class="col-sm-8">
                                     <select name="cpu" class="form-control">
-                                        <option value="1核" selected>1核</option>
-                                        <option value="2核">2核</option>
+                                        <option value="1核">1核</option>
+                                        <option value="2核" selected>2核</option>
                                         <option value="4核">4核</option>
                                         <option value="8核">8核</option>
                                         <option value="12核">12核</option>
@@ -108,8 +108,8 @@
                                 <label for="mem" class="col-sm-2 control-label">Mem</label>
                                 <div class="col-sm-8">
                                     <select name="mem" class="form-control">
-                                        <option value="2GB" selected>2GB</option>
-                                        <option value="4GB">4GB</option>
+                                        <option value="2GB" >2GB</option>
+                                        <option value="4GB" selected>4GB</option>
                                         <option value="6GB">6GB</option>
                                         <option value="8GB">8GB</option>
                                         <option value="12GB">12GB</option>
@@ -128,7 +128,8 @@
                                 <label for="disk" class="col-sm-2 control-label">Disk</label>
                                 <div class="col-sm-8">
                                     <select name="disk" class="form-control">
-                                        <option value="50GB" selected>50GB</option>
+                                        <option value="40GB" selected>40GB</option>
+                                        <option value="30GB" >30GB</option>
                                         <option value="100GB">100GB</option>
                                         <option value="200GB">200GB</option>
                                         <option value="500GB">500GB</option>
@@ -166,6 +167,9 @@
                                         <option value="微软云">微软云</option>
                                         <option value="百度云">百度云</option>
                                         <option value="金山云">金山云</option>
+                                        <option value="亚太">亚太</option>
+                                        <option value="人民中">人民中</option>
+                                        <option value="新滘西">新滘西</option>
                                     </select>
                                 </div>
                             </div>                                                     
@@ -207,7 +211,7 @@ $('#userForm').validator({
             msg: {required: "必须填写!"}
         },
         "ip": {
-            rule: "required;length[7~15]",
+            rule: "required;length[8~30]",
             tip: "输入IP",
             ok: "",
             msg: {required: "必须填写!"}
@@ -219,7 +223,7 @@ $('#userForm').validator({
             msg: {required: "必须填写!"}
         },
         "owner": {
-            rule: "required;length[7~15]",
+            rule: "required;length[2~15]",
             tip: "输入Owner",
             ok: "",
             msg: {required: "必须填写!"}

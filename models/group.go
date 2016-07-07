@@ -1,16 +1,17 @@
 package models
 
 import (
-	"github.com/astaxie/beego/orm"
 	"strconv"
 	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 type Group struct {
 	Id      int64
 	Name    string `orm:size(50)`
 	Conment string `orm:size(50)`
-	Created time.Time
+	Created string
 }
 
 func init() {
@@ -50,7 +51,7 @@ func AddGroup(name, conment string) error {
 	group := &Group{
 		Name:    name,
 		Conment: conment,
-		Created: time.Now(),
+		Created: time.Now().Format("2006-01-02 15:04:05"),
 	}
 	err := o.QueryTable("group").Filter("name", name).One(group)
 	if err == nil {

@@ -10,8 +10,10 @@ import (
 type Line struct {
 	Id      int64
 	Name    string `orm:size(50)`
+	Use     string `orm:size(50)`
+	Enable  string `orm:size(8)`
 	Conment string `orm:size(50)`
-	Created time.Time
+	Created string
 }
 
 func init() {
@@ -46,12 +48,14 @@ func GetLineById(id string) (*Line, error) {
 	return line, err
 }
 
-func AddLine(name, conment string) error {
+func AddLine(name, use, enable, conment string) error {
 	o := orm.NewOrm()
 	line := &Line{
 		Name:    name,
+		Use:     use,
+		Enable:  enable,
 		Conment: conment,
-		Created: time.Now(),
+		Created: time.Now().Format("2006-01-02 15:04:05"),
 	}
 	err := o.QueryTable("line").Filter("name", name).One(line)
 	if err == nil {
@@ -61,7 +65,7 @@ func AddLine(name, conment string) error {
 	return err
 }
 
-func ModifyLine(id, name, conment string) error {
+func ModifyLine(id, name, use, enable, conment string) error {
 	o := orm.NewOrm()
 	gid, err := strconv.ParseInt(id, 10, 64)
 	line := &Line{
@@ -70,6 +74,8 @@ func ModifyLine(id, name, conment string) error {
 	err = o.Read(line)
 	if err == nil {
 		line.Name = name
+		line.Use = use
+		line.Enable = enable
 		line.Conment = conment
 	}
 	o.Update(line)

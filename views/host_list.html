@@ -33,14 +33,6 @@
                                     <option value="新滘西">新滘西</option>
                                 </select> 
                             </div>
-                            <div class="form-group">                            
-                                <select name="group" class="form-control">
-                                    <option value="1" selected>---请选择业务组---</option>
-                                    {{range .Groups}}
-                                    <option value="{{.Name}}">{{.Name}}</option>
-                                    {{end}}
-                                </select>
-                            </div>                             
                             <div class="input-group">
                                 <input type="text" class="form-control" id="search_input" name="keyword" placeholder="按主机名称搜索...">
                                 <div class="input-group-btn">

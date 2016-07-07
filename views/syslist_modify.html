@@ -1,0 +1,97 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+<br>
+                    <div class="ibox-content">
+                        {{with .Syslist}}
+                        <form method="post" id="userForm" class="form-horizontal" action="/syslist/modify?id={{.Id}}">
+                           <div class="form-group">
+                                <label for="class" class="col-sm-2 control-label">系统分类</label>
+                                <div class="col-sm-8">
+                                    <select name="class" class="form-control">
+                                        <option value="内部系统" {{if eq .Class "内部系统"}}selected{{end}}>内部系统</option>
+                                        <option value="分店运营相关" {{if eq .Class "分店运营相关"}}selected{{end}}>分店运营相关</option>
+                                        <option value="网站预定" {{if eq .Class "网站预定"}}selected{{end}}>网站预定</option>
+                                        <option value="销售相关" {{if eq .Class "销售相关"}}selected{{end}}>销售相关</option>
+                                        <option value="数据相关" {{if eq .Class "数据相关"}}selected{{end}}>数据相关</option>
+                                        <option value="财务相关" {{if eq .Class "财务相关"}}selected{{end}}>财务相关</option>
+                                        <option value="互联网公司" {{if eq .Class "互联网公司"}}selected{{end}}>互联网公司</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">系统名称<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="name" name="name" placeholder="name" type="text" class="form-control" value="{{.Name}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="owner1" class="col-sm-2 control-label">owner1<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="owner1" name="owner1" placeholder="owner1" type="text" class="form-control" value="{{.Owner1}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="owner2" class="col-sm-2 control-label">owner2<span class="black-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="owner2" name="owner2" placeholder="owner2" type="text" class="form-control" value="{{.Owner2}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="domain_name" class="col-sm-2 control-label">域名<span class="black-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="domain_name" name="domain_name" placeholder="domain_name" type="text" class="form-control" value="{{.Domain_name}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment" class="col-sm-2 control-label">用途/备注<span class="black-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="comment" name="comment" placeholder="comment" type="text" class="form-control" value="{{.Comment}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white" type="reset">重置</button>
+                                    <button id="submit_button" class="btn btn-primary" type="submit">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+$('#userForm').validator({
+    timely: 2,
+    theme: "yellow_right_effect",
+    rules: {
+        check_username: [/^[\w.]{1,20}$/, '至少1位大小写字母数字和下划线小数点'],
+        type_m: function(element){
+                    return  $("#M").is(":checked");
+            }
+    },
+    fields: {
+        "name": {
+            rule: "required;check_username",
+            tip: "输入主机名",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "owner1": {
+            rule: "required;length[2~10]",
+            tip: "输入备注",
+            ok: "",
+            msg: {required: "必须填写!"}
+        }
+    },
+    valid: function(form) {
+        form.submit();
+    }
+});
+</script>
+{{template "page_buttom" .}}
+
+

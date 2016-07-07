@@ -3,12 +3,13 @@ package models
 import (
 	"database/sql"
 	//"fmt"
-	"github.com/astaxie/beego"
-	"github.com/astaxie/beego/orm"
-	_ "github.com/go-sql-driver/mysql"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 /*
@@ -218,7 +219,7 @@ func ApproveCommit(id, nextStatus, outcome, outcomevalue, who, uname string) err
 	return err
 }
 
-func ApproveRollback(id, status, opoutcome, operater string) error {
+func ApproveRollback(id, status, opoutcome, finaloutcome, operater string) error {
 	o := orm.NewOrm()
 	aid, err := strconv.ParseInt(id, 10, 64)
 	appwo := &Appworkorder{
@@ -228,6 +229,7 @@ func ApproveRollback(id, status, opoutcome, operater string) error {
 	if err == nil {
 		appwo.Status = status
 		appwo.Operater = operater
+		appwo.FinalOutcome = finaloutcome
 		appwo.OpOutcome = opoutcome
 		appwo.Isedit = "true"
 	}

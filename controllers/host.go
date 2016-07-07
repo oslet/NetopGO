@@ -125,7 +125,7 @@ func (this *HostController) Post() {
 			beego.Error(err)
 		}
 	} else {
-		err := models.AddHost(name, class, service_name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
+		err := models.AddHost(class, service_name, name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
 		if err != nil {
 			beego.Error(err)
 		}
@@ -183,9 +183,8 @@ func (this *HostController) Search() {
 	this.Data["Category"] = "host"
 
 	name := this.Input().Get("keyword")
-	group := this.Input().Get("group")
 	idc := this.Input().Get("idc")
-	if group == "1" || idc == "1" {
+	if idc == "1" {
 		this.Data["Path1"] = "主机列表"
 		this.Data["Path2"] = ""
 		this.Data["Href"] = "/host/list"
@@ -200,8 +199,8 @@ func (this *HostController) Search() {
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
 	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
-	total, err := models.SearchHostCount(idc, group, name)
-	hosts, err := models.SearchHostByName(int(currPage), int(pageSize), idc, group, name)
+	total, err := models.SearchHostCount(idc, name)
+	hosts, err := models.SearchHostByName(int(currPage), int(pageSize), idc, name)
 	if err != nil {
 		beego.Error(err)
 	}
@@ -215,7 +214,6 @@ func (this *HostController) Search() {
 	this.Data["IsSearch"] = true
 	this.Data["Keyword"] = name
 	this.Data["Idc"] = idc
-	this.Data["Group"] = group
 	this.Data["Path1"] = "主机列表"
 	this.Data["Path2"] = "搜索结果"
 	this.Data["Href"] = "/host/list"

@@ -84,14 +84,16 @@ func (this *LineController) Post() {
 
 	id := this.Input().Get("id")
 	name := this.Input().Get("name")
+	use := this.Input().Get("use")
+	enable := this.Input().Get("enable")
 	conment := this.Input().Get("conment")
 	if len(id) > 0 {
-		err := models.ModifyLine(id, name, conment)
+		err := models.ModifyLine(id, name, use, enable, conment)
 		if err != nil {
 			beego.Error(err)
 		}
 	} else {
-		err := models.AddLine(name, conment)
+		err := models.AddLine(name, use, enable, conment)
 		if err != nil {
 			beego.Error(err)
 		}

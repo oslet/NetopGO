@@ -7,10 +7,11 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
+	"strings"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
-	"strings"
 )
 
 var (
@@ -28,7 +29,7 @@ func RegisterDB() {
 	db_user := beego.AppConfig.String("db_user")
 	db_passwd := beego.AppConfig.String("db_passwd")
 
-	jdbcUrl := db_user + ":" + db_passwd + "@tcp(" + db_host + ":" + db_port + ")/" + db_schema + "?charset=utf8"
+	jdbcUrl := db_user + ":" + db_passwd + "@tcp(" + db_host + ":" + db_port + ")/" + db_schema + "?charset=utf8" + "&loc=Local"
 	beego.Info(fmt.Sprintf("connect to mysql server %v successfully !", db_host))
 	orm.RegisterDriver(_DB_Driver, orm.DRMySQL)
 	orm.RegisterDataBase("default", _DB_Driver, jdbcUrl, 30)
