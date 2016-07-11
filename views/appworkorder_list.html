@@ -146,7 +146,6 @@
                                 <th class="text-center">业务类型</th>                         
                                 <th class="text-center">发布类型</th>
                                 <th class="text-center">发起人</th>
-                                <th class="text-center">请求次数</th>
                                 <th class="text-center">测试</th>
                                 <th class="text-center">产品</th>
                                 <th class="text-center">运维</th>
@@ -167,7 +166,6 @@
                                 <td class="text-center">{{.Apptype}}</td>
                                 <td class="text-center">{{.Upgradetype}}</td>
                                 <td class="text-center">{{.Sponsor}}</td>
-                                <td class="text-center">{{.RequestCount}}</td>
                                 <td class="text-center">{{if eq (.Tester|len) 0}}无{{else}}{{.Tester}}{{end}}</td>
                                 <td class="text-center">{{if eq (.Approver|len) 0}}无{{else}}{{.Approver}}{{end}}</td>
                                 <td class="text-center">{{if eq (.Operater|len) 0}}无{{else}}{{.Operater}}{{end}}</td>
@@ -176,12 +174,17 @@
                                     <a href="#" {{if eq .Status "测试流程中"}} class="btn btn-xs btn-success"{{else if eq .Status "审批流程中"}} class="btn btn-xs btn-warning"{{else if eq .Status "实施流程中"}} class="btn btn-xs btn-primary"{{else if eq .Status "验证流程中"}} class="btn btn-xs btn-info"{{else if eq .Status "工单已关闭"}} class="btn btn-xs btn-default"{{else if eq .Status "异常已回滚"}} class="btn btn-xs btn-danger"{{end}}>{{.Status}}</a>
                                 </td>
                                 <td class="text-center">
-                                <a href="#" {{if eq .DbStatus "实施完毕"}} class="btn btn-xs btn-success"{{else if eq .DbStatus "正在实施"}}class="btn btn-xs btn-info"{{else if eq .DbStatus "无DB变更"}}class="btn btn-xs btn-primary"{{else if eq .DbStatus "异常回滚"}}class="btn btn-xs btn-danger"{{end}}>{{.DbStatus}}</a>
+                                <a href="#" {{if eq .DbStatus "实施完毕"}} class="btn btn-xs btn-default"{{else if eq .DbStatus "正在实施"}}class="btn btn-xs btn-info"{{else if eq .DbStatus "无DB变更"}}class="btn btn-xs btn-warning"{{else if eq .DbStatus "异常回滚"}}class="btn btn-xs btn-danger"{{end}}>{{.DbStatus}}</a>
                                 </td>
                                 <td class="text-center">
-                                    <a href="/workorder/approveDetail?id={{.Id}}" class="btn btn-xs btn-primary" >详情</a>
+                                    <a href="/workorder/approveDetail?id={{.Id}}" class="btn btn-xs btn-success" >详情</a>
                                     {{if eq $Dept "研发"}} 
-                                    <a href="/workorder/approve/close?id={{.Id}}" class="btn btn-xs btn-danger" {{if eq .Isedit "false"}}disabled="disabled"{{end}} onclick="if(confirm('确定要关闭工单吗?')==false)return false;">关闭</a>
+                                    {{if eq .Isapproved "true"}}
+                                    <a href="/workorder/approve/modify?id={{.Id}}" class="btn btn-xs btn-info">编辑</a>
+                                    {{end}}
+                                    {{if eq .Isedit "true"}}
+                                    <a href="/workorder/approve/close?id={{.Id}}" class="btn btn-xs btn-danger" onclick="if(confirm('确定要关闭工单吗?')==false)return false;">关闭</a>
+                                    {{end}}
                                     {{end}}
                                     <!--
                                     {{if eq $Dept "研发"}} 
@@ -192,7 +195,11 @@
                                     {{end}}
                                     -->
                                     {{if eq $Dept "测试"}}
-                                    <a href="/workorder/approve?id={{.Id}}" class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>审批</a>
+                                    <a href="/workorder/approve?id={{.Id}}" class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>
+                                    审批</a>
+                                    {{if eq .Status "验证流程中"}}
+                                    <a href="/workorder/rollback?id={{.Id}}" class="btn btn-xs btn-danger">回滚</a>
+                                    {{end}}
                                     {{end}}
                                     {{if eq $Dept "产品"}}
                                     <a href="/workorder/approve?id={{.Id}}" class="btn btn-xs btn-info" {{if eq .Isapproved "false"}}disabled="disabled"{{end}}>审批</a>

@@ -37,19 +37,22 @@
                             <div class="form-group">
                                 <label for="version" class="col-sm-2 control-label">迭代版本<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
-                                    <input id="version" name="version" placeholder="请准确填写迭代版本！如果升级类型是系统运维，则填写<无>！" type="text" class="form-control" >
+                                    <input id="version" name="version" type="text" class="form-control" value="无">
+                                    <div><span class="help-block"><font color="red">默认是<无>，如果涉及版本变更请填写！</font></span></div>
                                 </div>
                             </div>                            
                             <div class="form-group">
                                 <label for="jenkinsname" class="col-sm-2 control-label">Jenkins项目名称<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
-                                    <input id="jenkinsname" name="jenkinsname" placeholder="Docker环境请准确填写jenkins项目名称，其他环境请填写<无>！" type="text" class="form-control" >
+                                    <input id="jenkinsname" name="jenkinsname" type="text" class="form-control" value="无">
+                                    <div><span id="helpBlock" class="help-block"><font color="red">默认是<无>，Docker环境请准确填写jenkins项目名称！</font></span></div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="buildnum" class="col-sm-2 control-label">Build Num<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
-                                    <input id="buildnum" name="buildnum" placeholder="Docker环境请准确填写jenkins build num，其他环境请填写<无>！" type="text" class="form-control" >
+                                    <input id="buildnum" name="buildnum" type="text" class="form-control" value="无">
+                                    <div><span id="helpBlock" class="help-block"><font color="red">默认是<无>，Docker环境请准确填写jenkins build num！</font></span></div>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -61,13 +64,15 @@
                             <div class="form-group">
                                 <label for="modifycfg" class="col-sm-2 control-label">配置文件修改<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
-                                    <textarea name="modifycfg" placeholder="请准确填写配置文件修改项,如果没有，则填写<无>！" class="form-control" rows="4"></textarea>
+                                    <textarea name="modifycfg" class="form-control" rows="4">无</textarea>
+                                    <div><span id="helpBlock" class="help-block"><font color="red">默认是<无>，如果涉及配置变更请准确填写！</font></span></div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="relayapp" class="col-sm-2 control-label">升级依赖描述<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
-                                    <textarea name="relayapp" class="form-control" placeholder="请准确填写升级系统依赖关系,如果没有，则填写<无>！" rows="4"></textarea>
+                                    <textarea name="relayapp" class="form-control" rows="4">无</textarea>
+                                    <div><span id="helpBlock" class="help-block"><font color="red">默认是<无>，如果涉及多系统依赖变更请准确填写！</font></span></div>
                                 </div>
                             </div>
                             <div class="form-group">

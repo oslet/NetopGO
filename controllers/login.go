@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"NetopGO/models"
-	"fmt"
+	//"fmt"
 	"github.com/astaxie/beego"
 )
 
@@ -18,13 +18,9 @@ func (this *LoginController) Get() {
 func (this *LoginController) Post() {
 	uname := this.Input().Get("uname")
 	passwd := this.Input().Get("passwd")
-	fmt.Printf("input password: %v\n", passwd)
 	encodePasswd, _ := models.AESEncode(passwd, models.AesKey)
-	decodePasswd, _ := models.AESDecode(encodePasswd, models.AesKey)
-	fmt.Printf("encode password: %v\n", encodePasswd)
-	fmt.Printf("decode password: %v\n", decodePasswd)
 	user, err := models.Login(uname)
-	fmt.Printf("user password: %v\n", user.Passwd)
+
 	if err != nil || encodePasswd != user.Passwd {
 		beego.Error(err)
 		this.Data["Error"] = true
