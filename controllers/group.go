@@ -2,9 +2,10 @@ package controllers
 
 import (
 	"NetopGO/models"
-	"github.com/astaxie/beego"
 	"strconv"
 	"strings"
+
+	"github.com/astaxie/beego"
 )
 
 type GroupController struct {
@@ -80,25 +81,30 @@ func (this *GroupController) Post() {
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
 	this.Data["Category"] = "group"
+	Auth := role.(int64)
+	this.Data["Auth"] = Auth
 
 	id := this.Input().Get("id")
 	name := this.Input().Get("name")
 	conment := this.Input().Get("conment")
 	if len(id) > 0 {
-		err := models.ModifyGroup(id, name, conment)
+		err, msg := models.ModifyGroup(id, name, conment)
 		if err != nil {
 			beego.Error(err)
 		}
+		this.Data["Message"] = msg
 	} else {
-		err := models.AddGroup(name, conment)
+		err, msg := models.AddGroup(name, conment)
 		if err != nil {
 			beego.Error(err)
 		}
+		this.Data["Message"] = msg
 	}
 	this.Data["Path1"] = "业务组列表"
 	this.Data["Path2"] = ""
 	this.Data["Href"] = "/group/list"
-	this.Redirect("/group/list", 302)
+	//this.Redirect("/group/list", 302)
+	this.TplName = "group_add.html"
 }
 
 func (this *GroupController) Delete() {

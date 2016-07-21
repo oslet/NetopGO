@@ -60,6 +60,8 @@ func (this *HostController) Add() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "host"
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 
 	groups, err := models.GetNames()
 	if err != nil {
@@ -99,6 +101,8 @@ func (this *HostController) Post() {
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
 	this.Data["Category"] = "host"
+	Auth := role.(int64)
+	this.Data["Auth"] = Auth
 
 	id := this.Input().Get("id")
 	class := this.Input().Get("class")
@@ -120,20 +124,23 @@ func (this *HostController) Post() {
 	comment := this.Input().Get("comment")
 	//beego.Info(idc)
 	if len(id) > 0 {
-		err := models.ModifyHost(id, class, service_name, name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
+		err, msg := models.ModifyHost(id, class, service_name, name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
 		if err != nil {
 			beego.Error(err)
 		}
+		this.Data["Message"] = msg
 	} else {
-		err := models.AddHost(class, service_name, name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
+		err, msg := models.AddHost(class, service_name, name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
 		if err != nil {
 			beego.Error(err)
 		}
+		this.Data["Message"] = msg
 	}
 	this.Data["Path1"] = "主机列表"
 	this.Data["Path2"] = ""
 	this.Data["Href"] = "/host/list"
-	this.Redirect("/host/list", 302)
+	//this.Redirect("/host/list", 302)
+	this.TplName = "host_add.html"
 }
 
 func (this *HostController) Delete() {

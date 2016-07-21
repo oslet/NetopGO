@@ -2,10 +2,11 @@ package models
 
 import (
 	//"fmt"
-	"github.com/astaxie/beego/orm"
 	"math"
 	"strconv"
 	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 type User struct {
@@ -50,11 +51,13 @@ func GetUsers(currPage, pageSize int) ([]*User, int64, error) {
 	return users, total, err
 }
 
-func AddUser(name, passwd, email, tel, auth, dept string) error {
+func AddUser(name, passwd, email, tel, auth, dept string) (error, string) {
 	o := orm.NewOrm()
+	var msg string
 	authInt, err := strconv.ParseInt(auth, 10, 64)
 	if err != nil {
-		return err
+		msg = "添加发生异常 "
+		return err, msg
 	}
 	passwd, _ = AESEncode(passwd, AesKey)
 	user := &User{
@@ -69,14 +72,17 @@ func AddUser(name, passwd, email, tel, auth, dept string) error {
 	err = o.QueryTable("user").Filter("name", name).One(user)
 	//fmt.Printf("+++++++is exists+++++++: %v\n", err)
 	if err == nil {
-		return nil
+		msg = "已存在" + name + "用户"
+		return nil, msg
 	}
 	_, err = o.Insert(user)
-	return err
+	msg = "添加成功"
+	return err, msg
 }
 
-func ModifyUser(id, name, passwd, email, tel, auth, dept string) error {
+func ModifyUser(id, name, passwd, email, tel, auth, dept string) (error, string) {
 	o := orm.NewOrm()
+	var msg string
 	uid, err := strconv.ParseInt(id, 10, 64)
 	authInt, err := strconv.ParseInt(auth, 10, 64)
 	passwd, _ = AESEncode(passwd, AesKey)
@@ -93,8 +99,14 @@ func ModifyUser(id, name, passwd, email, tel, auth, dept string) error {
 		user.Auth = authInt
 		user.Dept = dept
 	}
-	o.Update(user)
-	return err
+	err = o.QueryTable("user").Filter("name", name).One(user)
+	if err == nil {
+		msg = "已存在" + name + "用户"
+		return nil, msg
+	}
+	_, err = o.Update(user)
+	msg = "修改成功"
+	return err, msg
 }
 
 func DeleteUser(id string) error {

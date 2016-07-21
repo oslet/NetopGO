@@ -46,8 +46,9 @@ func GetGroupById(id string) (*Group, error) {
 	return group, err
 }
 
-func AddGroup(name, conment string) error {
+func AddGroup(name, conment string) (error, string) {
 	o := orm.NewOrm()
+	var msg string
 	group := &Group{
 		Name:    name,
 		Conment: conment,
@@ -55,14 +56,17 @@ func AddGroup(name, conment string) error {
 	}
 	err := o.QueryTable("group").Filter("name", name).One(group)
 	if err == nil {
-		return nil
+		msg = "业务组" + name + " 已存在 "
+		return nil, msg
 	}
 	_, err = o.Insert(group)
-	return err
+	msg = "添加业务组成功"
+	return err, msg
 }
 
-func ModifyGroup(id, name, conment string) error {
+func ModifyGroup(id, name, conment string) (error, string) {
 	o := orm.NewOrm()
+	var msg string
 	gid, err := strconv.ParseInt(id, 10, 64)
 	group := &Group{
 		Id: gid,
@@ -73,7 +77,7 @@ func ModifyGroup(id, name, conment string) error {
 		group.Conment = conment
 	}
 	o.Update(group)
-	return err
+	return err, msg
 }
 
 func DeleteGroup(id string) error {

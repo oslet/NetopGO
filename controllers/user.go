@@ -2,9 +2,10 @@ package controllers
 
 import (
 	"NetopGO/models"
-	"github.com/astaxie/beego"
 	"strconv"
 	"strings"
+
+	"github.com/astaxie/beego"
 )
 
 type UserController struct {
@@ -54,6 +55,7 @@ func (this *UserController) Add() {
 	this.Data["Category"] = "user"
 
 	id := this.Input().Get("id")
+
 	if len(id) > 0 {
 		user, err := models.GetUserById(id)
 		if err != nil {
@@ -61,6 +63,8 @@ func (this *UserController) Add() {
 		}
 		user.Passwd, _ = models.AESDecode(user.Passwd, models.AesKey)
 		//beego.Info(user.Passwd)
+		auth := role.(int64)
+		this.Data["Auth"] = auth
 		this.Data["User"] = user
 		this.Data["Path1"] = "用户列表"
 		this.Data["Path2"] = "修改用户"
@@ -68,8 +72,10 @@ func (this *UserController) Add() {
 		this.TplName = "user_modify.html"
 		return
 	}
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["Path1"] = "用户列表"
-	this.Data["Path2"] = "添加用户"
+	this.Data["Path2"] = ""
 	this.Data["Href"] = "/user/list"
 	this.TplName = "user_add.html"
 
@@ -119,6 +125,8 @@ func (this *UserController) Post() {
 	this.Data["Uname"] = uname.(string)
 	this.Data["Role"] = role
 	this.Data["Category"] = "user"
+	Auth := role.(int64)
+	this.Data["Auth"] = Auth
 
 	id := this.Input().Get("id")
 	name := this.Input().Get("uname")
@@ -130,21 +138,24 @@ func (this *UserController) Post() {
 	//beego.Info(id)
 	//beego.Info(passwd)
 	if len(id) > 0 {
-		err := models.ModifyUser(id, name, passwd, email, tel, auth, dept)
+		err, msg := models.ModifyUser(id, name, passwd, email, tel, auth, dept)
 		if err != nil {
 			//		beego.Info("call")
 			beego.Error(err)
 		}
+		this.Data["Message"] = msg
 	} else {
-		err := models.AddUser(name, passwd, email, tel, auth, dept)
+		err, msg := models.AddUser(name, passwd, email, tel, auth, dept)
 		if err != nil {
 			beego.Error(err)
 		}
+		this.Data["Message"] = msg
 	}
 	this.Data["Path1"] = "用户列表"
-	this.Data["Path2"] = ""
+	this.Data["Path2"] = "添加用户"
 	this.Data["Href"] = "/user/list"
-	this.Redirect("/user/list", 302)
+	//this.Redirect("/user/list", 302)
+	this.TplName = "user_add.html"
 	return
 }
 

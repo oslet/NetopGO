@@ -51,8 +51,9 @@ func GetSyslistById(id string) (*SysList, error) {
 	return Syslist, err
 }
 
-func AddSyslist(class, name, owner1, owner2, domain_name, comment string) error {
+func AddSyslist(class, name, owner1, owner2, domain_name, comment string) (error, string) {
 	o := orm.NewOrm()
+	var msg string
 	//rootpwd, _ = AESEncode(rootpwd, AesKey)
 	//readpwd, _ = AESEncode(readpwd, AesKey)
 	Syslist := &SysList{
@@ -66,14 +67,17 @@ func AddSyslist(class, name, owner1, owner2, domain_name, comment string) error 
 	}
 	err := o.QueryTable("sys_list").Filter("name", name).One(Syslist)
 	if err == nil {
-		return nil
+		msg = "系统名已存在"
+		return nil, msg
 	}
 	_, err = o.Insert(Syslist)
-	return err
+	msg = "添加系统成功"
+	return err, msg
 }
 
-func ModifySyslist(id, class, name, owner1, owner2, domain_name, comment string) error {
+func ModifySyslist(id, class, name, owner1, owner2, domain_name, comment string) (error, string) {
 	o := orm.NewOrm()
+	var msg string
 	//rootpwd, _ = AESEncode(rootpwd, AesKey)
 	//readpwd, _ = AESEncode(readpwd, AesKey)
 	hid, err := strconv.ParseInt(id, 10, 64)
@@ -90,7 +94,8 @@ func ModifySyslist(id, class, name, owner1, owner2, domain_name, comment string)
 		Syslist.Comment = comment
 	}
 	o.Update(Syslist)
-	return err
+	msg = "修改成功"
+	return err, msg
 }
 
 func DeleteSyslist(id string) error {
@@ -106,23 +111,25 @@ func DeleteSyslist(id string) error {
 	return nil
 }
 
-func SearchSyslistCount(name string) (int64, error) {
+func SearchSyslistCount(class, name string) (int64, error) {
 	o := orm.NewOrm()
 	Syslists := make([]*SysList, 0)
-	total, err := o.QueryTable("sys_list").Filter("name__icontains", name).All(&Syslists)
+	total, err := o.QueryTable("sys_list").Filter("class", class).Filter("name__icontains", name).All(&Syslists)
 	return total, err
 }
 
-func SearchSyslistByName(currPage, pageSize int, name string) ([]*SysList, error) {
+func SearchSyslistByName(currPage, pageSize int, class, name string) ([]*SysList, error) {
 	o := orm.NewOrm()
 	Syslists := make([]*SysList, 0)
-	var cond *orm.Condition
-	cond = orm.NewCondition()
-	cond = cond.Or("name__icontains", name)
-	//cond = cond.Or("ip__icontains", "ip")
-	var qs orm.QuerySeter
-	qs = o.QueryTable("sys_list").Limit(pageSize, (currPage-1)*pageSize).SetCond(cond)
-	_, err := qs.All(&Syslists)
-	//_, err := o.QueryTable("sys_list").Filter("idc", idc).Filter("name__icontains", name).Limit(pageSize, (currPage-1)*pageSize).All(&hosts)
+	/*
+		var cond *orm.Condition
+		cond = orm.NewCondition()
+		cond = cond.Or("name__icontains", name)
+		//cond = cond.Or("ip__icontains", "ip")
+		var qs orm.QuerySeter
+		qs = o.QueryTable("sys_list").Limit(pageSize, (currPage-1)*pageSize).SetCond(cond)
+		_, err := qs.All(&Syslists)
+	*/
+	_, err := o.QueryTable("sys_list").Filter("class", class).Filter("name__icontains", name).Limit(pageSize, (currPage-1)*pageSize).All(&Syslists)
 	return Syslists, err
 }

@@ -7,7 +7,6 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-
 type Host struct {
 	Id           int64
 	Class        string `orm:size(50)`
@@ -63,8 +62,9 @@ func GetHostById(id string) (*Host, error) {
 	return host, err
 }
 
-func AddHost(class, service_name, name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment string) error {
+func AddHost(class, service_name, name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment string) (error, string) {
 	o := orm.NewOrm()
+	var msg string
 	rootpwd, _ = AESEncode(rootpwd, AesKey)
 	readpwd, _ = AESEncode(readpwd, AesKey)
 	host := &Host{
@@ -87,16 +87,19 @@ func AddHost(class, service_name, name, ip, port, os_type, owner, root, read, ro
 		Comment:      comment,
 		Created:      time.Now(),
 	}
-	err := o.QueryTable("host").Filter("name", name).One(host)
+	err := o.QueryTable("host").Filter("name", name).Filter("service_name", service_name).Filter("ip", ip).One(host)
 	if err == nil {
-		return nil
+		msg = "主机名或服务名已存在"
+		return nil, msg
 	}
 	_, err = o.Insert(host)
-	return err
+	msg = "添加主机成功"
+	return err, msg
 }
 
-func ModifyHost(id, class, service_name, name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment string) error {
+func ModifyHost(id, class, service_name, name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment string) (error, string) {
 	o := orm.NewOrm()
+	var msg string
 	rootpwd, _ = AESEncode(rootpwd, AesKey)
 	readpwd, _ = AESEncode(readpwd, AesKey)
 	hid, err := strconv.ParseInt(id, 10, 64)
@@ -124,7 +127,8 @@ func ModifyHost(id, class, service_name, name, ip, port, os_type, owner, root, r
 		host.Comment = comment
 	}
 	o.Update(host)
-	return err
+	msg = "修改成功"
+	return err, msg
 }
 
 func DeleteHost(id string) error {
@@ -152,17 +156,18 @@ type Name struct {
 	ip   string
 }
 
-
 func SearchHostByName(currPage, pageSize int, idc, name string) ([]*Host, error) {
 	o := orm.NewOrm()
 	hosts := make([]*Host, 0)
-	var cond *orm.Condition
-	cond = orm.NewCondition()
-	cond = cond.Or("name__icontains", name)
-	cond = cond.Or("ip__icontains", "ip")
-	var qs orm.QuerySeter
-	qs = o.QueryTable("host").Filter("idc", idc).Limit(pageSize, (currPage-1)*pageSize).SetCond(cond)
-	_, err := qs.All(&hosts)
-	//_, err := o.QueryTable("host").Filter("idc", idc).Filter("name__icontains", name).Limit(pageSize, (currPage-1)*pageSize).All(&hosts)
+	/*
+		var cond *orm.Condition
+		cond = orm.NewCondition()
+		cond = cond.Or("name__icontains", name)
+		cond = cond.Or("ip__icontains", "ip")
+		var qs orm.QuerySeter
+		qs = o.QueryTable("host").Filter("idc", idc).Limit(pageSize, (currPage-1)*pageSize).SetCond(cond)
+		_, err := qs.All(&hosts)
+	*/
+	_, err := o.QueryTable("host").Filter("idc", idc).Filter("name__icontains", name).Limit(pageSize, (currPage-1)*pageSize).All(&hosts)
 	return hosts, err
 }

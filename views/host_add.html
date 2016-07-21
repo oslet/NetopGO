@@ -1,7 +1,10 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
+{{$Auth := .Auth}}
+{{if eq .Auth 1}}
 <br>
                     <div class="ibox-content">
+	      <div class="alert alert-warning text-center" id="alert_msg" style="display:none;">{{.Message}}</div>
                         <form method="post" id="userForm" class="form-horizontal" action="/host/add">
                                 <div class="form-group">
                                 <label for="class" class="col-sm-2 control-label">类型<span class="red-fonts">*</span></label>
@@ -186,7 +189,9 @@
             </div>
         </div>
     </div>
-
+{{else}}
+<div><span style="font-size:18px;color:red;">没有相关权限！</span></div>
+{{end}}
 <script>
 $('#userForm').validator({
     timely: 2,

@@ -53,6 +53,8 @@ func (this *LineController) Add() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "Line"
+	Auth := role.(int64)
+	this.Data["Auth"] = Auth
 
 	id := this.Input().Get("id")
 	if len(id) > 0 {
@@ -82,26 +84,31 @@ func (this *LineController) Post() {
 	this.Data["IsSearch"] = false
 	this.Data["Category"] = "line"
 
+	Auth := role.(int64)
+	this.Data["Auth"] = Auth
 	id := this.Input().Get("id")
 	name := this.Input().Get("name")
 	use := this.Input().Get("use")
 	enable := this.Input().Get("enable")
 	conment := this.Input().Get("conment")
 	if len(id) > 0 {
-		err := models.ModifyLine(id, name, use, enable, conment)
+		err, msg := models.ModifyLine(id, name, use, enable, conment)
 		if err != nil {
 			beego.Error(err)
 		}
+		this.Data["Message"] = msg
 	} else {
-		err := models.AddLine(name, use, enable, conment)
+		err, msg := models.AddLine(name, use, enable, conment)
 		if err != nil {
 			beego.Error(err)
 		}
+		this.Data["Message"] = msg
 	}
 	this.Data["Path1"] = "线路列表"
 	this.Data["Path2"] = ""
 	this.Data["Href"] = "/line/list"
-	this.Redirect("/line/list", 302)
+	//this.Redirect("/line/list", 302)
+	this.TplName = "line_add.html"
 }
 
 func (this *LineController) Delete() {

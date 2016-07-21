@@ -48,8 +48,9 @@ func GetLineById(id string) (*Line, error) {
 	return line, err
 }
 
-func AddLine(name, use, enable, conment string) error {
+func AddLine(name, use, enable, conment string) (error, string) {
 	o := orm.NewOrm()
+	var msg string
 	line := &Line{
 		Name:    name,
 		Use:     use,
@@ -59,14 +60,17 @@ func AddLine(name, use, enable, conment string) error {
 	}
 	err := o.QueryTable("line").Filter("name", name).One(line)
 	if err == nil {
-		return nil
+		msg = "线路" + name + "已存在"
+		return nil, msg
 	}
 	_, err = o.Insert(line)
-	return err
+	msg = "添加线路成功"
+	return err, msg
 }
 
-func ModifyLine(id, name, use, enable, conment string) error {
+func ModifyLine(id, name, use, enable, conment string) (error, string) {
 	o := orm.NewOrm()
+	var msg string
 	gid, err := strconv.ParseInt(id, 10, 64)
 	line := &Line{
 		Id: gid,
@@ -79,7 +83,8 @@ func ModifyLine(id, name, use, enable, conment string) error {
 		line.Conment = conment
 	}
 	o.Update(line)
-	return err
+	msg = "修改成功"
+	return err, msg
 }
 
 func DeleteLine(id string) error {

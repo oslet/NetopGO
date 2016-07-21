@@ -61,6 +61,8 @@ func (this *SyslistController) Add() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "syslist"
+	Auth := role.(int64)
+	this.Data["Auth"] = Auth
 	/*
 		groups, err := models.GetNames()
 		if err != nil {
@@ -100,6 +102,8 @@ func (this *SyslistController) Post() {
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
 	this.Data["Category"] = "syslist"
+	Auth := role.(int64)
+	this.Data["Auth"] = Auth
 
 	id := this.Input().Get("id")
 	class := this.Input().Get("class")
@@ -110,20 +114,23 @@ func (this *SyslistController) Post() {
 	comment := this.Input().Get("comment")
 	//beego.Info(idc)
 	if len(id) > 0 {
-		err := models.ModifySyslist(id, class, name, owner1, owner2, domain_name, comment)
+		err, msg := models.ModifySyslist(id, class, name, owner1, owner2, domain_name, comment)
 		if err != nil {
 			beego.Error(err)
 		}
+		this.Data["Message"] = msg
 	} else {
-		err := models.AddSyslist(class, name, owner1, owner2, domain_name, comment)
+		err, msg := models.AddSyslist(class, name, owner1, owner2, domain_name, comment)
 		if err != nil {
 			beego.Error(err)
 		}
+		this.Data["Message"] = msg
 	}
 	this.Data["Path1"] = "系统列表"
 	this.Data["Path2"] = ""
 	this.Data["Href"] = "/syslist/list"
-	this.Redirect("/syslist/list", 302)
+	//this.Redirect("/syslist/list", 302)
+	this.TplName = "syslist_add.html"
 }
 
 func (this *SyslistController) Delete() {
@@ -173,16 +180,16 @@ func (this *SyslistController) Search() {
 	this.Data["Category"] = "syslist"
 
 	name := this.Input().Get("keyword")
-	/*
-		idc := this.Input().Get("idc")
-		if idc == "1" {
-			this.Data["Path1"] = "主机列表"
-			this.Data["Path2"] = ""
-			this.Data["Href"] = "/host/list"
-			this.TplName = "host_list.html"
-			return
-		}
-	*/
+
+	class := this.Input().Get("class")
+	if class == "1" {
+		this.Data["Path1"] = "系统列表"
+		this.Data["Path2"] = ""
+		this.Data["Href"] = "/syslist/list"
+		this.TplName = "syslist_list.html"
+		return
+	}
+
 	//beego.Info(name)
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
@@ -191,8 +198,8 @@ func (this *SyslistController) Search() {
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
 	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
-	total, err := models.SearchSyslistCount(name)
-	syslists, err := models.SearchSyslistByName(int(currPage), int(pageSize), name)
+	total, err := models.SearchSyslistCount(class, name)
+	syslists, err := models.SearchSyslistByName(int(currPage), int(pageSize), class, name)
 	if err != nil {
 		beego.Error(err)
 	}
