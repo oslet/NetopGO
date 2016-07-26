@@ -3,10 +3,14 @@ package controllers
 import (
 	"NetopGO/models"
 	//"fmt"
+	"os"
+	"path"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/astaxie/beego"
+	"github.com/tealeg/xlsx"
 )
 
 type HostController struct {
@@ -178,6 +182,127 @@ func (this *HostController) BitchDelete() {
 	}
 	//this.Redirect("/user/list", 302)
 	this.Ctx.WriteString("删除成功！")
+	return
+}
+
+func (this *HostController) ReportWeek() {
+	var page string
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "report/host"
+	this.Data["IsSearch"] = false
+	this.Data["Path1"] = "主机列表"
+	this.Data["Path2"] = ""
+	this.Data["Href"] = "/report/host/list"
+
+	if len(this.Input().Get("page")) == 0 {
+		page = "1"
+	} else {
+		page = this.Input().Get("page")
+	}
+	currPage, _ := strconv.ParseInt(page, 10, 64)
+	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
+	total, err := models.GetHostCount()
+	hosts, _, err := models.GetHosts(int(currPage), int(pageSize))
+	if err != nil {
+		beego.Error(err)
+	}
+	res := models.Paginator(int(currPage), int(pageSize), total)
+
+	auth := role.(int64)
+	this.Data["Auth"] = auth
+	this.Data["paginator"] = res
+	this.Data["Hosts"] = hosts
+	this.Data["totals"] = total
+
+	this.TplName = "report_host_list.html"
+	return
+}
+
+func (this *HostController) SearchWeek() {
+	var page string
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "report/host"
+
+	week := this.Input().Get("keyword")
+
+	if len(this.Input().Get("page")) == 0 {
+		page = "1"
+	} else {
+		page = this.Input().Get("page")
+	}
+	currPage, _ := strconv.ParseInt(page, 10, 64)
+	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
+	total, err := models.SearchHostWeekCount()
+	hosts, err := models.SearchHostByWeek(int(currPage), int(pageSize), week)
+	if err != nil {
+		beego.Error(err)
+	}
+	res := models.Paginator(int(currPage), int(pageSize), total)
+
+	auth := role.(int64)
+	this.Data["Auth"] = auth
+	this.Data["paginator"] = res
+	this.Data["Hosts"] = hosts
+	this.Data["totals"] = total
+	this.Data["IsSearch"] = true
+	//this.Data["Keyword"] = name
+	//this.Data["Idc"] = idc
+	this.Data["Path1"] = "主机列表"
+	this.Data["Path2"] = "搜索结果"
+	this.Data["Href"] = "/report/host/list"
+	this.TplName = "report_host_list.html"
+	return
+}
+
+func (this *HostController) Export() {
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "report/host"
+	method := this.Input().Get("method")
+	values, columns, _ := models.QueryHostWeekExport(method)
+	auth := role.(int64)
+	this.Data["Auth"] = auth
+
+	file := xlsx.NewFile()
+	sheet, _ := file.AddSheet("Sheet1")
+	row := sheet.AddRow()
+	for _, val := range columns {
+		cell := row.AddCell()
+		cell.Value = val
+	}
+	//sheet.SetColWidth(1, len(columns), 100)
+	for _, val := range *values {
+		row = sheet.AddRow()
+		for _, value := range val {
+			cell := row.AddCell()
+			cell.Value = value
+		}
+	}
+	now := time.Now().String()
+	var filename string
+	if method == "week" {
+		filename = "week_host" + now[:4] + now[5:7] + now[8:10] + now[11:13] + now[14:16] + now[17:19] + ".xlsx"
+	} else if method == "all" {
+		filename = "all_host" + now[:4] + now[5:7] + now[8:10] + now[11:13] + now[14:16] + now[17:19] + ".xlsx"
+	}
+
+	filepath := path.Join("export", filename)
+	err := file.Save(filepath)
+	if err != nil {
+		beego.Error(err)
+	}
+	defer func() {
+		os.Remove(filepath)
+	}()
+	this.Ctx.Output.Download(filepath, filename)
 	return
 }
 

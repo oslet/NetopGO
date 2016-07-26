@@ -153,5 +153,9 @@ func init() {
 	beego.Router("/workorder/mydb/search", &controllers.DBWOController{}, "get:Search")
 	beego.Router("/workorder/mydb/export", &controllers.DBWOController{}, "get:Export")
 
+	beego.Router("/report/host/list", &controllers.HostController{}, "get:ReportWeek")
+	beego.Router("/report/host/search", &controllers.HostController{}, "get:SearchWeek")
+	beego.Router("/report/host/export", &controllers.HostController{}, "get:Export")
+
 	beego.Router("/attachment/:all", &controllers.AttachController{})
 }

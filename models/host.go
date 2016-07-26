@@ -1,10 +1,13 @@
 package models
 
 import (
+	"database/sql"
 	"strconv"
 	"time"
 
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type Host struct {
@@ -151,11 +154,6 @@ func SearchHostCount(idc, name string) (int64, error) {
 	return total, err
 }
 
-type Name struct {
-	name string
-	ip   string
-}
-
 func SearchHostByName(currPage, pageSize int, idc, name string) ([]*Host, error) {
 	o := orm.NewOrm()
 	hosts := make([]*Host, 0)
@@ -170,4 +168,107 @@ func SearchHostByName(currPage, pageSize int, idc, name string) ([]*Host, error)
 	*/
 	_, err := o.QueryTable("host").Filter("idc", idc).Filter("name__icontains", name).Limit(pageSize, (currPage-1)*pageSize).All(&hosts)
 	return hosts, err
+}
+
+/*
+func SearchHostWeekCount() (int64, error) {
+	o := orm.NewOrm()
+	//hosts := make([]*Host, 0)
+	var hosts int
+	//total, err := o.QueryTable("host").Filter("name__icontains", name).All(&hosts)
+	total, err := o.Raw("select count(*) as Count from host where date_sub(curdate(), INTERVAL ? DAY) <= date(`created`)", 7).QueryRows(&hosts)
+	return total, err
+}
+*/
+
+func SearchHostWeekCount() (int64, error) {
+	o := orm.NewOrm()
+	//hosts := make([]*Host, 0)
+	var count int64
+	//total, err := o.QueryTable("host").Filter("name__icontains", name).All(&hosts)
+	err := o.Raw("select count(*) as Count from host where date_sub(curdate(), INTERVAL ? DAY) <= date(`created`)", 7).QueryRow(&count)
+	return count, err
+}
+
+func SearchHostByWeek(currPage, pageSize int, created string) ([]*Host, error) {
+	o := orm.NewOrm()
+	hosts := make([]*Host, 0)
+	/*
+			var cond *orm.Condition
+			cond = orm.NewCondition()
+			cond = cond.Or("name__icontains", name)
+			cond = cond.Or("ip__icontains", "ip")
+			var qs orm.QuerySeter
+			qs = o.QueryTable("host").Filter("idc", idc).Limit(pageSize, (currPage-1)*pageSize).SetCond(cond)
+			_, err := qs.All(&hosts)
+
+		//_, err := o.QueryTable("host").Filter("created", created).Limit(pageSize, (currPage-1)*pageSize).All(&hosts)
+		//_, err := o.Raw("select * from host where date_sub(curdate(), INTERVAL 7 DAY) <= date(?)", created).QueryRows(&hosts)
+		_, err := orm.NewOrm().QueryTable("host").Filter("created").
+	*/
+	_, err := o.Raw("select * from host where date_sub(curdate(), INTERVAL 7 DAY) <= date(`created`)").QueryRows(&hosts)
+	return hosts, err
+}
+
+func QueryHostWeekExport(method string) (*map[int64][]string, []string, int64) {
+	result := make(map[int64][]string)
+	var columns []string
+	var total int64
+	schemaUrl := beego.AppConfig.String("db_user") + ":" + beego.AppConfig.String("db_passwd") + "@tcp(" + beego.AppConfig.String("db_host") + ":" + beego.AppConfig.String("db_port") + ")/" + beego.AppConfig.String("db_schema") + "?charset=utf8"
+
+	conn, err := sql.Open("mysql", schemaUrl)
+	if err != nil {
+		return &result, columns, total
+	}
+
+	defer conn.Close()
+	if method == "week" {
+		rows, err := conn.Query("select name,ip,comment,cpu,mem,disk,idc,`group`,created from `host` where DATE_SUB(CURDATE(), INTERVAL 7 day) <= date(`created`)")
+		if err != nil {
+			return &result, columns, total
+		}
+		defer rows.Close()
+		columns, err = rows.Columns()
+		values := make([]sql.RawBytes, len(columns))
+		scans := make([]interface{}, len(columns))
+
+		for i := range values {
+			scans[i] = &values[i]
+		}
+
+		for rows.Next() {
+			var row []string
+			_ = rows.Scan(scans...)
+			for _, col := range values {
+				row = append(row, string(col))
+			}
+			total = total + 1
+			result[total] = row
+		}
+	} else if method == "all" {
+		rows, err := conn.Query("select name,ip,comment,cpu,mem,disk,idc,`group`,created from `host`")
+		if err != nil {
+			return &result, columns, total
+		}
+		defer rows.Close()
+		columns, err = rows.Columns()
+		values := make([]sql.RawBytes, len(columns))
+		scans := make([]interface{}, len(columns))
+
+		for i := range values {
+			scans[i] = &values[i]
+		}
+
+		for rows.Next() {
+			var row []string
+			_ = rows.Scan(scans...)
+			for _, col := range values {
+				row = append(row, string(col))
+			}
+			total = total + 1
+			result[total] = row
+		}
+	}
+
+	return &result, columns, total
 }

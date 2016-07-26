@@ -51,7 +51,7 @@
                                     <input type="checkbox" id="check_all" onclick="checkAll('check_all', 'checked')">
                                 </th>
                                 <th class="text-center">主机名</th>
-                                <th class="text-center">备注</th>
+                                <th class="text-center">系统服务名</th>
                                 <th class="text-center">Cpu</th>
                                 <th class="text-center">Mem</th>
                                 <th class="text-center">Disk</th>
@@ -68,7 +68,7 @@
                                     <input type="checkbox" name="checked" value="{{.Id}}">
                                 </td>
                                 <td class="text-center"><a href="#">{{.Name}}</a></td>
-                                <td class="text-center">{{.Comment}}</td>
+                                <td class="text-center">{{.Service_name}}</td>
                                 <td class="text-center">{{.Cpu}}</td>
                                 <td class="text-center">{{.Mem}}</td>
                                 <td class="text-center">{{.Disk}}</td>

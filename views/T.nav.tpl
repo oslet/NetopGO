@@ -53,11 +53,16 @@
             <li id="log">
                <a href="/audit/list"><i class="fa fa-files-o"></i> <span class="nav-label">日志审计</span><span class="label label-info pull-right"></span></a>
             </li>
+            <li id="report">
+                <a href="javascript:void(0)"><i class="fa fa-edit"></i> <span class="nav-label">报表管理</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li class="report_host"><a href="/report/host/list/">新增主机</a></li>
+                </ul>
+            </li>  
             <li class="special_link">
                 <a href="http://www.platenogroup.com" target="_blank"><i class="fa fa-database"></i> <span class="nav-label">访问官网</span></a>
             </li>
         </ul>
-
-    </div>
+        </div>
 </nav>
 {{end}}

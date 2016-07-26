@@ -196,6 +196,13 @@
 $('#userForm').validator({
     timely: 2,
     theme: "yellow_right_effect",
+        rules: {
+            check_ip: [/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}$/, 'ip地址不正确'],
+            check_port: [/^\d{1,5}$/, '端口号不正确'],
+         type_m: function(element){
+                     return  $("#M").is(":checked");
+             }
+        },
     fields: {
         "class": {
             rule: "required;length[1~100]",
@@ -216,7 +223,7 @@ $('#userForm').validator({
             msg: {required: "必须填写!"}
         },
         "ip": {
-            rule: "required;length[8~30]",
+            rule: "check_ip",
             tip: "输入IP",
             ok: "",
             msg: {required: "必须填写!"}
