@@ -1,0 +1,102 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+{{$Auth := .Auth}}
+{{if eq .Auth 3}}
+<div><span style="font-size:18px;color:red;">没有相关权限！</span></div>
+{{else}}
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <div class="">
+                      <a href="/report/host/export?method=week" class="btn btn-sm btn-primary "> 本周导出 </a>
+                      <a href="/report/host/export?method=all" class="btn btn-sm btn-info "> 全量导出 </a>
+                      <a href="/report/host/sendmail" class="btn btn-sm btn-info "> 邮件发送 </a>
+                         {{if .IsSearch}}
+                        <a href="/report/host/list"  class="btn btn-white pull-right"> 返回列表 </a>
+                        {{else}}
+                        <form id="search_form" method="get" action="/report/host/search" class="form-inline pull-right">
+                            <div class="input-group">
+                                <!--input type="text" class="form-control" id="search_input" name="keyword" placeholder="本周新增"-->
+                                <div class="input-group-btn">
+                                    <button id='search_btn' type="submit" class="btn btn-sm btn-primary">
+                                        本周新增
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+                    <table class="table table-striped table-bordered table-hover " id="editable" >
+                        <thead>
+                            <tr>
+                                <th class="text-center">主机名</th>
+		 <th class="text-center">IP地址</th>
+                                <th class="text-center">系统服务名</th>
+                                <th class="text-center">Cpu</th>
+                                <th class="text-center">Mem</th>
+                                <th class="text-center">Disk</th>
+                                <th class="text-center">所属机房</th>
+                                <th class="text-center">业务组</th>
+		 <th class= "text-center">创建时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{range .Hosts}}
+                            <tr class="gradeX">
+                                <td class="text-center"><a href="#">{{.Name}}</a></td>
+		 <td class="text-center">{{.Ip}}</td>
+                                <td class="text-center">{{.Service_name}}</td>
+                                <td class="text-center">{{.Cpu}}</td>
+                                <td class="text-center">{{.Mem}}</td>
+                                <td class="text-center">{{.Disk}}</td>
+                                <td class="text-center">{{.Idc}}</td>
+                                <th class="text-center">{{.Group}}</th>
+		 <th class="text-center">{{.Created}}</th>
+                            </tr>
+                            {{end}}
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="dataTables_info" id="editable_info" role="status" aria-live="polite">
+                                Total {{.totals}} entries
+                            </div>
+                        </div>
+                        {{template "paginator" .}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{end}}
+<script src="/static/js/jquery.shiftcheckbox.js"></script>
+<script>
+    $(document).ready(function(){
+
+        $('#del_btn').click(function(){
+            var check_array = [];
+            if (confirm("确定删除")) {
+                $(".gradeX input:checked").each(function() {
+                    check_array.push($(this).attr("value"))
+                });
+                console.log(check_array.join(","));
+                $.post("/host/bitchDel",
+                        {ids: check_array.join(",")},
+                        function(data){
+                            //console.log(data);
+                            //$(".gradeX input:checked").closest("tr").remove();                            
+                            window.location.href="/host/list"                            
+                            //alert(data);
+                        }
+                )
+            }
+
+        });
+
+    });
+
+</script>
+{{template "page_buttom"}}
