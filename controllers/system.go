@@ -9,21 +9,21 @@ import (
 	"github.com/astaxie/beego"
 )
 
-type SyslistController struct {
+type SystemController struct {
 	BaseController
 }
 
-func (this *SyslistController) Get() {
+func (this *SystemController) Get() {
 	var page string
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	this.Data["Category"] = "syslist"
+	this.Data["Category"] = "system"
 	this.Data["IsSearch"] = false
 	this.Data["Path1"] = "系统列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/syslist/list"
+	this.Data["Href"] = "/system/list"
 
 	/*
 		groups, err := models.GetNames()
@@ -39,8 +39,8 @@ func (this *SyslistController) Get() {
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
 	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
-	total, err := models.GetSysListCount()
-	syslists, _, err := models.GetSysLists(int(currPage), int(pageSize))
+	total, err := models.GetSystemCount()
+	Systemlists, _, err := models.GetSystems(int(currPage), int(pageSize))
 	if err != nil {
 		beego.Error(err)
 	}
@@ -49,18 +49,18 @@ func (this *SyslistController) Get() {
 	auth := role.(int64)
 	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
-	this.Data["Syslists"] = syslists
+	this.Data["Systemlists"] = Systemlists
 	this.Data["totals"] = total
 
-	this.TplName = "syslist_list.html"
+	this.TplName = "system_list.html"
 	return
 }
-func (this *SyslistController) Add() {
+func (this *SystemController) Add() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	this.Data["Category"] = "syslist"
+	this.Data["Category"] = "system"
 	Auth := role.(int64)
 	this.Data["Auth"] = Auth
 	/*
@@ -72,36 +72,36 @@ func (this *SyslistController) Add() {
 	*/
 	id := this.Input().Get("id")
 	if len(id) > 0 {
-		syslist, err := models.GetSyslistById(id)
+		systemlist, err := models.GetSystemlistById(id)
 		if err != nil {
 			beego.Error(err)
 		}
-		//syslist.Rootpwd, _ = models.AESDecode(syslist.Rootpwd, models.AesKey)
-		//syslist.Readpwd, _ = models.AESDecode(syslist.Readpwd, models.AesKey)
+		//systemlist.Rootpwd, _ = models.AESDecode(systemlist.Rootpwd, models.AesKey)
+		//systemlist.Readpwd, _ = models.AESDecode(systemlist.Readpwd, models.AesKey)
 		//fmt.Printf("***root :%v,read :%v\n", host.Rootpwd, host.Readpwd)
-		this.Data["Syslist"] = syslist
+		this.Data["Systemlist"] = systemlist
 		//	this.Data["HostGroupName"] = host.Group
 		this.Data["Path1"] = "系统列表"
 		this.Data["Path2"] = "修改系统应用"
-		this.Data["Href"] = "/syslist/list"
-		this.TplName = "syslist_modify.html"
+		this.Data["Href"] = "/system/list"
+		this.TplName = "system_modify.html"
 		//this.TplName = "test.html"
 		return
 	}
 	this.Data["Path1"] = "系统列表"
 	this.Data["Path2"] = "添加系统"
-	this.Data["Href"] = "/syslist/list"
-	this.TplName = "syslist_add.html"
+	this.Data["Href"] = "/system/list"
+	this.TplName = "system_add.html"
 
 }
 
-func (this *SyslistController) Post() {
+func (this *SystemController) Post() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
-	this.Data["Category"] = "syslist"
+	this.Data["Category"] = "system"
 	Auth := role.(int64)
 	this.Data["Auth"] = Auth
 
@@ -111,16 +111,20 @@ func (this *SyslistController) Post() {
 	owner1 := this.Input().Get("owner1")
 	owner2 := this.Input().Get("owner2")
 	domain_name := this.Input().Get("domain_name")
+	controller := this.Input().Get("controller")
+	responsible := this.Input().Get("responsible")
+	team := this.Input().Get("team")
+	company := this.Input().Get("company")
 	comment := this.Input().Get("comment")
 	//beego.Info(idc)
 	if len(id) > 0 {
-		err, msg := models.ModifySyslist(id, class, name, owner1, owner2, domain_name, comment)
+		err, msg := models.ModifySystemlist(id, class, name, owner1, owner2, domain_name, controller, responsible, team, company, comment)
 		if err != nil {
 			beego.Error(err)
 		}
 		this.Data["Message"] = msg
 	} else {
-		err, msg := models.AddSyslist(class, name, owner1, owner2, domain_name, comment)
+		err, msg := models.AddSystemlist(class, name, owner1, owner2, domain_name, controller, responsible, team, company, comment)
 		if err != nil {
 			beego.Error(err)
 		}
@@ -128,40 +132,40 @@ func (this *SyslistController) Post() {
 	}
 	this.Data["Path1"] = "系统列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/syslist/list"
-	//this.Redirect("/syslist/list", 302)
-	this.TplName = "syslist_add.html"
+	this.Data["Href"] = "/system/list"
+	//this.Redirect("/system/list", 302)
+	this.TplName = "system_add.html"
 }
 
-func (this *SyslistController) Delete() {
+func (this *SystemController) Delete() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	this.Data["Category"] = "syslist"
+	this.Data["Category"] = "system"
 
 	id := this.Input().Get("id")
-	err := models.DeleteSyslist(id)
+	err := models.DeleteSystemlist(id)
 	if err != nil {
 		beego.Error(err)
 	}
 	this.Data["Path1"] = "系统列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/syslist/list"
-	this.Redirect("/syslist/list", 302)
+	this.Data["Href"] = "/system/list"
+	this.Redirect("/system/list", 302)
 	return
 }
 
-func (this *SyslistController) BitchDelete() {
+func (this *SystemController) BitchDelete() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	this.Data["Category"] = "syslist"
+	this.Data["Category"] = "system"
 
 	ids := strings.Split(this.Input().Get("ids"), ",")
 	for _, id := range ids {
-		err := models.DeleteSyslist(id)
+		err := models.DeleteSystemlist(id)
 		if err != nil {
 			this.Ctx.WriteString("删除失败！")
 		}
@@ -171,13 +175,13 @@ func (this *SyslistController) BitchDelete() {
 	return
 }
 
-func (this *SyslistController) Search() {
+func (this *SystemController) Search() {
 	var page string
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	this.Data["Category"] = "syslist"
+	this.Data["Category"] = "system"
 
 	name := this.Input().Get("keyword")
 
@@ -185,8 +189,8 @@ func (this *SyslistController) Search() {
 	if class == "1" {
 		this.Data["Path1"] = "系统列表"
 		this.Data["Path2"] = ""
-		this.Data["Href"] = "/syslist/list"
-		this.TplName = "syslist_list.html"
+		this.Data["Href"] = "/system/list"
+		this.TplName = "system_list.html"
 		return
 	}
 
@@ -198,8 +202,8 @@ func (this *SyslistController) Search() {
 	}
 	currPage, _ := strconv.ParseInt(page, 10, 64)
 	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
-	total, err := models.SearchSyslistCount(class, name)
-	syslists, err := models.SearchSyslistByName(int(currPage), int(pageSize), class, name)
+	total, err := models.SearchSystemlistCount(class, name)
+	Systemlists, err := models.SearchSystemlistByName(int(currPage), int(pageSize), class, name)
 	if err != nil {
 		beego.Error(err)
 	}
@@ -208,14 +212,14 @@ func (this *SyslistController) Search() {
 	auth := role.(int64)
 	this.Data["Auth"] = auth
 	this.Data["paginator"] = res
-	this.Data["Syslists"] = syslists
+	this.Data["Systemlists"] = Systemlists
 	this.Data["totals"] = total
 	this.Data["IsSearch"] = true
 	this.Data["Keyword"] = name
 	//this.Data["Idc"] = idc
 	this.Data["Path1"] = "系统列表"
 	this.Data["Path2"] = "搜索结果"
-	this.Data["Href"] = "/syslist/list"
-	this.TplName = "syslist_list.html"
+	this.Data["Href"] = "/system/list"
+	this.TplName = "system_list.html"
 	return
 }

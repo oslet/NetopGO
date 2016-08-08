@@ -3,6 +3,10 @@ package controllers
 import (
 	"NetopGO/models"
 	//"fmt"
+	"encoding/base64"
+	"fmt"
+	"net/mail"
+	"net/smtp"
 	"os"
 	"path"
 	"strconv"
@@ -143,7 +147,7 @@ func (this *HostController) Post() {
 	this.Data["Path1"] = "主机列表"
 	this.Data["Path2"] = ""
 	this.Data["Href"] = "/host/list"
-	//this.Redirect("/host/list", 302)
+	//this.("/host/list", 302)
 	this.TplName = "host_add.html"
 }
 
@@ -350,6 +354,81 @@ func (this *HostController) Search() {
 	this.Data["Path2"] = "搜索结果"
 	this.Data["Href"] = "/host/list"
 	this.TplName = "host_list.html"
+	return
+}
+
+func (this *HostController) ReportSendMail() {
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "report/host"
+	Auth := role.(int64)
+	this.Data["Auth"] = Auth
+	//date := time.Now().Format("2006-01-02 15:04:05")
+
+	b64 := base64.NewEncoding("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/")
+
+	host := "mail.in.7daysinn.cn"
+	email := "falconalert@in.7daysinn.cn"
+	password := "RaAgpfAbcM8ubfNU5vnJr__rGMp5gOCP"
+	toEmail := "yun.li@platenogroup.com"
+
+	from := mail.Address{"主机报表", email}
+	to := mail.Address{"", toEmail}
+
+	header := make(map[string]string)
+	header["From"] = from.String()
+	header["To"] = to.String()
+	header["Subject"] = fmt.Sprintf("=?UTF-8?B?%s?=", b64.EncodeToString([]byte("主机列表")))
+	header["MIME-Version"] = "1.0"
+	header["Content-Type"] = "text/html; charset=UTF-8"
+	header["Content-Transfer-Encoding"] = "base64"
+
+	body := `
+	  <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <title>HOST Result</title>
+      </head>
+      <body>
+        <h2>HOST Result</h2>
+        <p>Your email has been sent to: </p>
+        <pre>{{html .}}</pre>
+        <p><a href="/">Start again!</a></p>
+        <div>
+          <p><b>© 2014 RubyLearning. All rights reserved.</b></p>
+        </div>
+      </body>
+    </html>
+`
+
+	//	var mailTemplate = template.Must(template.New("mail").Parse(mailTemplateHTML))
+	message := ""
+	for k, v := range header {
+		message += fmt.Sprintf("%s: %s\r\n", k, v)
+	}
+	message += "\r\n" + b64.EncodeToString([]byte(body))
+
+	auth := smtp.PlainAuth(
+		"",
+		email,
+		password,
+		host,
+	)
+
+	err := smtp.SendMail(
+		host+":25",
+		auth,
+		email,
+		[]string{to.Address},
+		[]byte(message),
+	)
+	if err != nil {
+		panic(err)
+	}
+	this.Redirect("/report/host/list", 302)
 	return
 }
 

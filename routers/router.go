@@ -41,13 +41,13 @@ func init() {
 	beego.Router("/line/bitchDel", &controllers.LineController{}, "post:BitchDelete")
 	beego.Router("/line/search", &controllers.LineController{}, "get:Search")
 
-	beego.Router("/syslist/list", &controllers.SyslistController{})
-	beego.Router("/syslist/add", &controllers.SyslistController{}, "get:Add")
-	beego.Router("/syslist/add", &controllers.SyslistController{}, "post:Post")
-	beego.Router("/syslist/modify", &controllers.SyslistController{}, "post:Post")
-	beego.Router("/syslist/del", &controllers.SyslistController{}, "get:Delete")
-	beego.Router("/syslist/bitchDel", &controllers.SyslistController{}, "post:BitchDelete")
-	beego.Router("/syslist/search", &controllers.SyslistController{}, "get:Search")
+	beego.Router("/system/list", &controllers.SystemController{})
+	beego.Router("/system/add", &controllers.SystemController{}, "get:Add")
+	beego.Router("/system/add", &controllers.SystemController{}, "post:Post")
+	beego.Router("/system/modify", &controllers.SystemController{}, "post:Post")
+	beego.Router("/system/del", &controllers.SystemController{}, "get:Delete")
+	beego.Router("/system/bitchDel", &controllers.SystemController{}, "post:BitchDelete")
+	beego.Router("/system/search", &controllers.SystemController{}, "get:Search")
 
 	beego.Router("/host/list", &controllers.HostController{})
 	beego.Router("/host/add", &controllers.HostController{}, "get:Add")
@@ -156,6 +156,10 @@ func init() {
 	beego.Router("/report/host/list", &controllers.HostController{}, "get:ReportWeek")
 	beego.Router("/report/host/search", &controllers.HostController{}, "get:SearchWeek")
 	beego.Router("/report/host/export", &controllers.HostController{}, "get:Export")
+	beego.Router("/report/host/sendmail", &controllers.HostController{}, "get:ReportSendMail")
+	beego.Router("/report/recycle/list", &controllers.RecycleHostController{}, "get:ReportWeek")
+	beego.Router("/report/recycle/search", &controllers.RecycleHostController{}, "get:SearchWeek")
+	beego.Router("/report/recycle/export", &controllers.RecycleHostController{}, "get:Export")
 
 	beego.Router("/attachment/:all", &controllers.AttachController{})
 }

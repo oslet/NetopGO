@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	AesKey string = "$hejGRT^$*#@#12o"
+	AesKey string = "rx,+&zNQZrCWxS#L"
 )
 
 const (

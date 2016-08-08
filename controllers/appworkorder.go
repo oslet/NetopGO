@@ -2,13 +2,14 @@ package controllers
 
 import (
 	"NetopGO/models"
-	"github.com/astaxie/beego"
-	"github.com/tealeg/xlsx"
 	"os"
 	"path"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/astaxie/beego"
+	"github.com/tealeg/xlsx"
 )
 
 type AppWOController struct {
@@ -124,7 +125,7 @@ func (this *AppWOController) AppOrderPost() {
 	apptype := this.Input().Get("apptype")
 	appname := this.Input().Get("appname")
 	version := this.Input().Get("version")
-	jenkinsname := this.Input().Get("jenkinsname")
+	sourcecodename := this.Input().Get("sourcecodename")
 	buildnum := this.Input().Get("buildnum")
 	featurelist := this.Input().Get("featurelist")
 	modifycfg := this.Input().Get("modifycfg")
@@ -159,7 +160,7 @@ func (this *AppWOController) AppOrderPost() {
 		}
 	}
 
-	err = models.AddAppOrder(apptype, appname, version, jenkinsname, buildnum, featurelist, modifycfg, relayapp, upgradetype, sponsor, attachment, sqlfile, currDept)
+	err = models.AddAppOrder(apptype, appname, version, sourcecodename, buildnum, featurelist, modifycfg, relayapp, upgradetype, sponsor, attachment, sqlfile, currDept)
 	if err != nil {
 		beego.Error(err)
 	}
@@ -393,7 +394,7 @@ func (this *AppWOController) ApproveModifyPost() {
 	appname := this.Input().Get("appname")
 	upgradetype := this.Input().Get("upgradetype")
 	version := this.Input().Get("version")
-	jenkinsname := this.Input().Get("jenkinsname")
+	sourcecodename := this.Input().Get("sourcecodename")
 	buildnum := this.Input().Get("buildnum")
 	featurelist := this.Input().Get("featurelist")
 	modifycfg := this.Input().Get("modifycfg")
@@ -432,7 +433,7 @@ func (this *AppWOController) ApproveModifyPost() {
 		final_sqlfile = old_sqlfile
 	}
 
-	err = models.ApproveModify(id, apptype, appname, upgradetype, version, jenkinsname, buildnum, featurelist, modifycfg, relayapp, final_attachment, final_sqlfile, dept.(string))
+	err = models.ApproveModify(id, apptype, appname, upgradetype, version, sourcecodename, buildnum, featurelist, modifycfg, relayapp, final_attachment, final_sqlfile, dept.(string))
 	if err == nil {
 		beego.Error(err)
 	}

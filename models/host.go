@@ -136,15 +136,19 @@ func ModifyHost(id, class, service_name, name, ip, port, os_type, owner, root, r
 
 func DeleteHost(id string) error {
 	o := orm.NewOrm()
+	var err1 error
 	hid, err := strconv.ParseInt(id, 10, 64)
 	host := &Host{
 		Id: hid,
 	}
-	_, err = o.Delete(host)
-	if err != nil {
-		return err
+	if _, err1 = o.Raw("insert into recycle_host(class,service_name,name,ip,port,os_type,owner,cpu,mem,disk,`group`,idc,COMMENT,created) select class,service_name,name,ip,port,os_type,owner,cpu,mem,disk,`group`,idc,COMMENT,CURRENT_TIMESTAMP() as created from `host` where id=?", hid).Exec(); err1 == nil {
+
+		if _, err = o.Delete(host); err == nil {
+			return nil
+		}
 	}
 	return nil
+
 }
 
 func SearchHostCount(idc, name string) (int64, error) {
@@ -223,7 +227,7 @@ func QueryHostWeekExport(method string) (*map[int64][]string, []string, int64) {
 
 	defer conn.Close()
 	if method == "week" {
-		rows, err := conn.Query("select name,ip,comment,cpu,mem,disk,idc,`group`,created from `host` where DATE_SUB(CURDATE(), INTERVAL 7 day) <= date(`created`)")
+		rows, err := conn.Query("select name,ip,service_name,cpu,mem,disk,idc,`group`,created from `host` where DATE_SUB(CURDATE(), INTERVAL 7 day) <= date(`created`)")
 		if err != nil {
 			return &result, columns, total
 		}
@@ -246,7 +250,7 @@ func QueryHostWeekExport(method string) (*map[int64][]string, []string, int64) {
 			result[total] = row
 		}
 	} else if method == "all" {
-		rows, err := conn.Query("select name,ip,comment,cpu,mem,disk,idc,`group`,created from `host`")
+		rows, err := conn.Query("select name,ip,service_name,cpu,mem,disk,idc,`group`,created from `host`")
 		if err != nil {
 			return &result, columns, total
 		}

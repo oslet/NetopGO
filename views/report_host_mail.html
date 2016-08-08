@@ -1,0 +1,16 @@
+                      
+	       <tbody>
+                            {{range .Hosts}}
+                            <tr class="gradeX">
+                                <td class="text-center"><a href="#">{{.Name}}</a></td>
+		 <td class="text-center">{{.Ip}}</td>
+                                <td class="text-center">{{.Service_name}}</td>
+                                <td class="text-center">{{.Cpu}}</td>
+                                <td class="text-center">{{.Mem}}</td>
+                                <td class="text-center">{{.Disk}}</td>
+                                <td class="text-center">{{.Idc}}</td>
+                                <th class="text-center">{{.Group}}</th>
+		 <th class="text-center">{{.Created}}</th>
+                            </tr>
+                            {{end}}
+                        </tbody>

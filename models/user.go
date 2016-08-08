@@ -99,11 +99,6 @@ func ModifyUser(id, name, passwd, email, tel, auth, dept string) (error, string)
 		user.Auth = authInt
 		user.Dept = dept
 	}
-	err = o.QueryTable("user").Filter("name", name).One(user)
-	if err == nil {
-		msg = "已存在" + name + "用户"
-		return nil, msg
-	}
 	_, err = o.Update(user)
 	msg = "修改成功"
 	return err, msg

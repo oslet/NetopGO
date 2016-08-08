@@ -18,7 +18,7 @@
                     <li class="idc"> <a href="/host/list">主机列表</a></li>
                     <li class="idc"> <a href="/group/list">业务组列表</a></li>
                     <li class="idc"> <a href="/line/list">线路列表</a></li>
-                    <li class="idc"> <a href="/syslist/list">系统列表</a></li>
+                    <li class="idc"> <a href="/system/list">系统列表</a></li>
                 </ul>
             </li>
             <li id="db">
@@ -57,6 +57,7 @@
                 <a href="javascript:void(0)"><i class="fa fa-edit"></i> <span class="nav-label">报表管理</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
                     <li class="report_host"><a href="/report/host/list/">新增主机</a></li>
+                    <li class="report_host"><a href="/report/recycle/list/">回收主机</a></li>
                 </ul>
             </li>  
             <li class="special_link">

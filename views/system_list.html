@@ -10,12 +10,12 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="">
-                        <a href="/syslist/add" class="btn btn-sm btn-primary " {{if ne $Auth 1}}disabled="disabled"{{end}}> 添加系统 </a>
+                        <a href="/system/add" class="btn btn-sm btn-primary " {{if ne $Auth 1}}disabled="disabled"{{end}}> 添加系统 </a>
                         <a id="del_btn" class="btn btn-sm btn-danger" {{if ne $Auth 1}}disabled="disabled"{{end}}> 删除所选 </a>
                         {{if .IsSearch}}
-                        <a href="/syslist/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        <a href="/system/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}
-                        <form id="search_form" method="get" action="/syslist/search" class="form-inline pull-right">
+                        <form id="search_form" method="get" action="/system/search" class="form-inline pull-right">
                             <div class="input-group">
                                 <select name="class" class="form-control">
                                     <option value="1" selected>---请选择分类---</option>
@@ -50,12 +50,16 @@
                                 <th class="text-center">owner1</th>
                                 <th class="text-center">owner2</th>
                                 <th class="text-center">域名</th>
+		 <th class="text-center">维护性质</th>
+		 <th class="text-center">负责人</th>
+		 <th class="text-center">团队</th> 
+		 <th class="text-cernter">公司</th>
                                 <th class="text-center">用途/备注</th>
                                 <th class="text-center">操作</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{range .Syslists}}
+                            {{range .Systemlists}}
                             <tr class="gradeX">
                                 <td class="text-center">
                                     <input type="checkbox" name="checked" value="{{.Id}}">
@@ -65,10 +69,14 @@
                                 <td class="text-center">{{.Owner1}}</td>
                                 <td class="text-center">{{.Owner2}}</td>
                                 <td class="text-center">{{.Domain_name}}</td>
+		 <td class="text-center">{{.Controller}}</trd>
+                                <td class="text-center">{{.Responsible}}</td>
+                                <td class="text-center">{{.Team}}</td>
+                                <td class="text-center">{{.Company}}</td>																
                                 <td class="text-center">{{.Comment}}</td>
                                 <td class="text-center">
-                                    <a href="/syslist/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Auth 1}}disabled="disabled"{{end}}>编辑</a>
-                                    <a href="/syslist/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Auth 1}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                    <a href="/system/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Auth 1}}disabled="disabled"{{end}}>编辑</a>
+                                    <a href="/system/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Auth 1}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
                                 </td>
 
                             </tr>
@@ -100,12 +108,12 @@
                     check_array.push($(this).attr("value"))
                 });
                 console.log(check_array.join(","));
-                $.post("/syslist/bitchDel",
+                $.post("/system/bitchDel",
                         {ids: check_array.join(",")},
                         function(data){
                             //console.log(data);
                             //$(".gradeX input:checked").closest("tr").remove();                            
-                            window.location.href="/syslist/list"                            
+                            window.location.href="/system/list"                            
                             //alert(data);
                         }
                 )

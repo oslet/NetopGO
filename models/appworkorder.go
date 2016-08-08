@@ -28,40 +28,40 @@ import (
 5-异常回滚
 */
 type Appworkorder struct {
-	Id           int64
-	Appname      string `orm:size(30)`
-	Version      string `orm:size(10)`
-	Apptype      string `orm:size(20)`
-	Upgradetype  string `orm:size(20)`
-	FeatureList  string `orm:size(2048)`
-	ModifyCfg    string `orm:size(2048)`
-	RelayApp     string `orm:size(255)`
-	Sqlfile      string `orm:size(100)`
-	Attachment   string `orm:size(100)`
-	JenkinsName  string `orm:size(100)`
-	BuildNum     string `orm:size(10)`
-	Sponsor      string `orm:size(50)`
-	Tester       string `orm:size(50)`
-	Approver     string `orm:size(50)`
-	Operater     string `orm:size(50)`
-	Finalchker   string `orm:size(50)`
-	TestOutcome  string `orm:size(1024)`
-	PrdtOutcome  string `orm:size(1024)`
-	OpOutcome    string `orm:size(1024)`
-	FinalOutcome string `orm:size(1024)`
-	Status       string `orm:size(50)`
-	DbStatus     string `orm:size(50)`
-	Isapproved   string `orm:size(50)`
-	Isedit       string `orm:size(5)`
-	RequestCount int64
-	Created      string `orm:size(20)`
+	Id             int64
+	Appname        string `orm:size(30)`
+	Version        string `orm:size(10)`
+	Apptype        string `orm:size(20)`
+	Upgradetype    string `orm:size(20)`
+	FeatureList    string `orm:size(2048)`
+	ModifyCfg      string `orm:size(2048)`
+	RelayApp       string `orm:size(255)`
+	Sqlfile        string `orm:size(100)`
+	Attachment     string `orm:size(100)`
+	SourceCodeName string `orm:size(100)`
+	BuildNum       string `orm:size(10)`
+	Sponsor        string `orm:size(50)`
+	Tester         string `orm:size(50)`
+	Approver       string `orm:size(50)`
+	Operater       string `orm:size(50)`
+	Finalchker     string `orm:size(50)`
+	TestOutcome    string `orm:size(1024)`
+	PrdtOutcome    string `orm:size(1024)`
+	OpOutcome      string `orm:size(1024)`
+	FinalOutcome   string `orm:size(1024)`
+	Status         string `orm:size(50)`
+	DbStatus       string `orm:size(50)`
+	Isapproved     string `orm:size(50)`
+	Isedit         string `orm:size(5)`
+	RequestCount   int64
+	Created        string `orm:size(20)`
 }
 
 func init() {
 	orm.RegisterModel(new(Appworkorder))
 }
 
-func AddAppOrder(apptype, appname, version, jenkinsname, buildnum, featurelist, modifycfg, relayapp, upgradetype, sponsor, attachment, sqlfile, currDept string) error {
+func AddAppOrder(apptype, appname, version, sourcecodename, buildnum, featurelist, modifycfg, relayapp, upgradetype, sponsor, attachment, sqlfile, currDept string) error {
 	o := orm.NewOrm()
 	var dbstatus string
 	var status string
@@ -76,23 +76,23 @@ func AddAppOrder(apptype, appname, version, jenkinsname, buildnum, featurelist, 
 		status = "测试流程中"
 	}
 	appwo := &Appworkorder{
-		Appname:      appname,
-		Version:      version,
-		Apptype:      apptype,
-		Upgradetype:  upgradetype,
-		FeatureList:  featurelist,
-		ModifyCfg:    modifycfg,
-		RelayApp:     relayapp,
-		Sqlfile:      sqlfile,
-		Attachment:   attachment,
-		JenkinsName:  jenkinsname,
-		BuildNum:     buildnum,
-		Sponsor:      sponsor,
-		Status:       status,
-		Isedit:       "false",
-		DbStatus:     dbstatus,
-		RequestCount: 1,
-		Created:      time.Now().String()[:18],
+		Appname:        appname,
+		Version:        version,
+		Apptype:        apptype,
+		Upgradetype:    upgradetype,
+		FeatureList:    featurelist,
+		ModifyCfg:      modifycfg,
+		RelayApp:       relayapp,
+		Sqlfile:        sqlfile,
+		Attachment:     attachment,
+		SourceCodeName: sourcecodename,
+		BuildNum:       buildnum,
+		Sponsor:        sponsor,
+		Status:         status,
+		Isedit:         "false",
+		DbStatus:       dbstatus,
+		RequestCount:   1,
+		Created:        time.Now().String()[:18],
 	}
 	_, err := o.Insert(appwo)
 	return err
@@ -298,7 +298,7 @@ func CloseOrder(id string) error {
 	return err
 }
 
-func ApproveModify(id, apptype, appname, upgradetype, version, jenkinsname, buildnum, featurelist, modifycfg, relayapp, final_attachment, final_sqlfile, dept string) error {
+func ApproveModify(id, apptype, appname, upgradetype, version, sourcecodename, buildnum, featurelist, modifycfg, relayapp, final_attachment, final_sqlfile, dept string) error {
 	var status string
 	o := orm.NewOrm()
 	aid, err := strconv.ParseInt(id, 10, 64)
@@ -316,7 +316,7 @@ func ApproveModify(id, apptype, appname, upgradetype, version, jenkinsname, buil
 		appwo.Appname = appname
 		appwo.Upgradetype = upgradetype
 		appwo.Version = version
-		appwo.JenkinsName = jenkinsname
+		appwo.SourceCodeName = sourcecodename
 		appwo.BuildNum = buildnum
 		appwo.FeatureList = featurelist
 		appwo.ModifyCfg = modifycfg
