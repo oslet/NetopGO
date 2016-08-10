@@ -1,12 +1,14 @@
 package models
 
 import (
+	"time"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
-	"time"
 )
 
 type SlowOverview struct {
+	Id    int64
 	Name  string
 	Count int64
 }

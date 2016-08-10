@@ -1,5 +1,7 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
+{{$Auth := .Auth}}
+{{if eq .Auth 1}}
 <br>
                     <div class="ibox-content">
                         {{with .Group}}
@@ -29,7 +31,9 @@
             </div>
         </div>
     </div>
-
+{{else}}
+<div><span style="font-size:18px;color:red;">没有相关权限！</span></div>
+{{end}}
 <script>
 $('#userForm').validator({
     timely: 2,
@@ -42,13 +46,13 @@ $('#userForm').validator({
     },
     fields: {
         "name": {
-            rule: "required;check_username",
-            tip: "输入主机名",
+            rule: "required;length[2~30]",
+            tip: "输入业务组名",
             ok: "",
             msg: {required: "必须填写!"}
         },
         "comment": {
-            rule: "required;length[7~15]",
+            rule: "required;length[2~30]",
             tip: "输入备注",
             ok: "",
             msg: {required: "必须填写!"}
