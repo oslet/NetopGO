@@ -117,6 +117,7 @@ func (this *HostController) Post() {
 	service_name := this.Input().Get("service_name")
 	name := this.Input().Get("name")
 	ip := this.Input().Get("ip")
+	pubip := this.Input().Get("pubip")
 	port := this.Input().Get("port")
 	os_type := this.Input().Get("os_type")
 	owner := this.Input().Get("owner")
@@ -132,13 +133,13 @@ func (this *HostController) Post() {
 	comment := this.Input().Get("comment")
 	//beego.Info(idc)
 	if len(id) > 0 {
-		err, msg := models.ModifyHost(id, class, service_name, name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
+		err, msg := models.ModifyHost(id, class, service_name, name, ip, pubip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
 		if err != nil {
 			beego.Error(err)
 		}
 		this.Data["Message"] = msg
 	} else {
-		err, msg := models.AddHost(class, service_name, name, ip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
+		err, msg := models.AddHost(class, service_name, name, ip, pubip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
 		if err != nil {
 			beego.Error(err)
 		}
