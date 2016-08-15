@@ -145,3 +145,11 @@ func SearchSystemlistByName(currPage, pageSize int, class, name string) ([]*Syst
 	_, err := o.QueryTable("system").Filter("class", class).Filter("name__icontains", name).Limit(pageSize, (currPage-1)*pageSize).All(&Systemlists)
 	return Systemlists, err
 }
+
+func GetSystemById(id string) (*System, error) {
+	o := orm.NewOrm()
+	sid, err := strconv.ParseInt(id, 10, 64)
+	system := &System{}
+	err = o.QueryTable("system").Filter("id", sid).One(system)
+	return system, err
+}

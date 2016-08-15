@@ -10,7 +10,7 @@ import (
 type Group struct {
 	Id      int64
 	Name    string `orm:size(50)`
-	Conment string `orm:size(50)`
+	Comment string `orm:size(50)`
 	Created string
 }
 
@@ -46,12 +46,12 @@ func GetGroupById(id string) (*Group, error) {
 	return group, err
 }
 
-func AddGroup(name, conment string) (error, string) {
+func AddGroup(name, comment string) (error, string) {
 	o := orm.NewOrm()
 	var msg string
 	group := &Group{
 		Name:    name,
-		Conment: conment,
+		Comment: comment,
 		Created: time.Now().Format("2006-01-02 15:04:05"),
 	}
 	err := o.QueryTable("group").Filter("name", name).One(group)
@@ -64,7 +64,7 @@ func AddGroup(name, conment string) (error, string) {
 	return err, msg
 }
 
-func ModifyGroup(id, name, conment string) (error, string) {
+func ModifyGroup(id, name, comment string) (error, string) {
 	o := orm.NewOrm()
 	var msg string
 	gid, err := strconv.ParseInt(id, 10, 64)
@@ -74,7 +74,7 @@ func ModifyGroup(id, name, conment string) (error, string) {
 	err = o.Read(group)
 	if err == nil {
 		group.Name = name
-		group.Conment = conment
+		group.Comment = comment
 	}
 	o.Update(group)
 	return err, msg

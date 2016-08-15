@@ -12,7 +12,7 @@ type Line struct {
 	Name    string `orm:size(50)`
 	Use     string `orm:size(50)`
 	Enable  string `orm:size(8)`
-	Conment string `orm:size(50)`
+	Comment string `orm:size(50)`
 	Created string
 }
 
@@ -48,14 +48,14 @@ func GetLineById(id string) (*Line, error) {
 	return line, err
 }
 
-func AddLine(name, use, enable, conment string) (error, string) {
+func AddLine(name, use, enable, comment string) (error, string) {
 	o := orm.NewOrm()
 	var msg string
 	line := &Line{
 		Name:    name,
 		Use:     use,
 		Enable:  enable,
-		Conment: conment,
+		Comment: comment,
 		Created: time.Now().Format("2006-01-02 15:04:05"),
 	}
 	err := o.QueryTable("line").Filter("name", name).One(line)
@@ -68,7 +68,7 @@ func AddLine(name, use, enable, conment string) (error, string) {
 	return err, msg
 }
 
-func ModifyLine(id, name, use, enable, conment string) (error, string) {
+func ModifyLine(id, name, use, enable, comment string) (error, string) {
 	o := orm.NewOrm()
 	var msg string
 	gid, err := strconv.ParseInt(id, 10, 64)
@@ -80,7 +80,7 @@ func ModifyLine(id, name, use, enable, conment string) (error, string) {
 		line.Name = name
 		line.Use = use
 		line.Enable = enable
-		line.Conment = conment
+		line.Comment = comment
 	}
 	o.Update(line)
 	msg = "修改成功"

@@ -48,6 +48,7 @@ func init() {
 	beego.Router("/system/del", &controllers.SystemController{}, "get:Delete")
 	beego.Router("/system/bitchDel", &controllers.SystemController{}, "post:BitchDelete")
 	beego.Router("/system/search", &controllers.SystemController{}, "get:Search")
+	beego.Router("/system/detail", &controllers.SystemController{}, "get:Detail")
 
 	beego.Router("/host/list", &controllers.HostController{})
 	beego.Router("/host/add", &controllers.HostController{}, "get:Add")

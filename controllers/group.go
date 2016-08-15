@@ -88,15 +88,15 @@ func (this *GroupController) Post() {
 
 	id := this.Input().Get("id")
 	name := this.Input().Get("name")
-	conment := this.Input().Get("conment")
+	comment := this.Input().Get("comment")
 	if len(id) > 0 {
-		err, msg := models.ModifyGroup(id, name, conment)
+		err, msg := models.ModifyGroup(id, name, comment)
 		if err != nil {
 			beego.Error(err)
 		}
 		this.Data["Message"] = msg
 	} else {
-		err, msg := models.AddGroup(name, conment)
+		err, msg := models.AddGroup(name, comment)
 		if err != nil {
 			beego.Error(err)
 		}

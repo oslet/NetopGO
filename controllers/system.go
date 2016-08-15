@@ -223,3 +223,27 @@ func (this *SystemController) Search() {
 	this.TplName = "system_list.html"
 	return
 }
+
+func (this *SystemController) Detail() {
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["IsSearch"] = false
+
+	id := this.Input().Get("id")
+	sysname, err := models.GetSystemById(id)
+	if err != nil {
+		beego.Error(err)
+	}
+	auth := role.(int64)
+	this.Data["Auth"] = auth
+
+	this.Data["System"] = sysname
+	this.Data["Path1"] = "系统列表"
+	this.Data["Path2"] = "系统详情"
+	this.Data["Href"] = "/system/list"
+	this.Data["Category"] = "system"
+	this.TplName = "system_detail.html"
+	return
+}

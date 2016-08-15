@@ -90,15 +90,15 @@ func (this *LineController) Post() {
 	name := this.Input().Get("name")
 	use := this.Input().Get("use")
 	enable := this.Input().Get("enable")
-	conment := this.Input().Get("conment")
+	comment := this.Input().Get("comment")
 	if len(id) > 0 {
-		err, msg := models.ModifyLine(id, name, use, enable, conment)
+		err, msg := models.ModifyLine(id, name, use, enable, comment)
 		if err != nil {
 			beego.Error(err)
 		}
 		this.Data["Message"] = msg
 	} else {
-		err, msg := models.AddLine(name, use, enable, conment)
+		err, msg := models.AddLine(name, use, enable, comment)
 		if err != nil {
 			beego.Error(err)
 		}

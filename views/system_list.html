@@ -48,13 +48,8 @@
                                 <th class="text-center">系统分类</th>
                                 <th class="text-center">系统名称</th>
                                 <th class="text-center">owner1</th>
-                                <th class="text-center">owner2</th>
                                 <th class="text-center">域名</th>
 		 <th class="text-center">维护性质</th>
-		 <th class="text-center">负责人</th>
-		 <th class="text-center">团队</th> 
-		 <th class="text-cernter">公司</th>
-                                <th class="text-center">用途/备注</th>
                                 <th class="text-center">操作</th>
                             </tr>
                         </thead>
@@ -67,14 +62,10 @@
                                 <td class="text-center">{{.Class}}</td>
                                 <td class="text-center"><a href="#">{{.Name}}</a></td>
                                 <td class="text-center">{{.Owner1}}</td>
-                                <td class="text-center">{{.Owner2}}</td>
                                 <td class="text-center">{{.Domain_name}}</td>
-		 <td class="text-center">{{.Controller}}</trd>
-                                <td class="text-center">{{.Responsible}}</td>
-                                <td class="text-center">{{.Team}}</td>
-                                <td class="text-center">{{.Company}}</td>																
-                                <td class="text-center">{{.Comment}}</td>
+		 <td class="text-center">{{.Controller}}</trd>													
                                 <td class="text-center">
+                                     <a href="/system/detail?id={{.Id}}" class="btn btn-xs btn-success" >详情</a>
                                     <a href="/system/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Auth 1}}disabled="disabled"{{end}}>编辑</a>
                                     <a href="/system/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Auth 1}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
                                 </td>
