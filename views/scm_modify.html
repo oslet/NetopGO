@@ -1,0 +1,110 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+{{$Auth := .Auth}}
+{{if eq .Auth 1}}
+<br>
+                    <div class="ibox-content">
+                        {{with .Scm}}
+                        <form method="post" id="userForm" class="form-horizontal" action="/scm/modify?id={{.Id}}">
+                            <div class="form-group">
+                                <label for="name" class="col-sm-2 control-label">项目名称<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="name" name="name" placeholder="name" type="text" class="form-control"  value="{{.Name}}" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="isdeployment" class="col-sm-2 control-label">是否部署组发布</label>
+                                <div class="col-sm-8">
+                                    <input id="isdeployment" name="isdeployment" placeholder="isdeployment" type="text" class="form-control"  value="{{.Isdeployment}}" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="ischeckin" class="col-sm-2 control-label">是否迁入</label>
+                                <div class="col-sm-8">
+                                    <input id="ischeckin" name="ischeckin" placeholder="ischeckin" type="text" class="form-control"  value="{{.Ischeckin}}" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="owner" class="col-sm-2 control-label">负责人<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="owner" name="owner" placeholder="" type="text" class="form-control"   value="{{.Owner}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="company" class="col-sm-2 control-label">所属公司<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="company" name="company" placeholder="" type="text" class="form-control"  value="{{.Company}}" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="scmaddr" class="col-sm-2 control-label">SCM地址<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="scmaddr" name="scmaddr" placeholder="" type="text" class="form-control"   value="{{.Scmaddr}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="comment" class="col-sm-2 control-label">线路备注<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="comment" name="comment" placeholder="" type="text" class="form-control"   value="{{.Comment}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button class="btn btn-white" type="reset">重置</button>
+                                    <button id="submit_button" class="btn btn-primary" type="submit">保存</button>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{{else}}
+<div><span style="font-size:18px;color:red;">没有相关权限！</span></div>
+{{end}}
+<script>
+$('#userForm').validator({
+    timely: 2,
+    theme: "yellow_right_effect",
+    rules: {
+        check_username: [/^[\w.]{1,20}$/, '至少1位大小写字母数字和下划线小数点'],
+        type_m: function(element){
+                    return  $("#M").is(":checked");
+            }
+    },
+    fields: {
+        "name": {
+            rule: "required;length[2~50]",
+            tip: "输入系统名",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "owner": {
+            rule: "required;length[2~50]",
+            tip: "输入负责人",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "company": {
+            rule: "required;length[2~50]",
+            tip: "输入所属公司",
+            ok: "",
+            msg: {required: "必须填写!"}
+        },
+        "scmaddr": {
+            rule: "required;length[2~50]",
+            tip: "输入scm路径",
+            ok: "",
+            msg: {required: "必须填写!"}
+        }
+    },
+    valid: function(form) {
+        form.submit();
+    }
+});
+</script>
+{{template "page_buttom" .}}
+
+
