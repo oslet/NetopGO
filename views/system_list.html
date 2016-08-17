@@ -12,6 +12,7 @@
                     <div class="">
                         <a href="/system/add" class="btn btn-sm btn-primary " {{if ne $Auth 1}}disabled="disabled"{{end}}> 添加系统 </a>
                         <a id="del_btn" class="btn btn-sm btn-danger" {{if ne $Auth 1}}disabled="disabled"{{end}}> 删除所选 </a>
+	         <a href="/system/export" class="btn btn-sm btn-success "> 导出列表 </a>
                         {{if .IsSearch}}
                         <a href="/system/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}

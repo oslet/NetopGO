@@ -16,10 +16,11 @@ type Host struct {
 	Service_name string `orm:size(50)`
 	Name         string `orm:size(50)`
 	Ip           string `orm:size(15)`
-	PubIp        string `orm:size(15)`
+	Pubip        string `orm:size(15)`
 	Port         string `orm:size(15)`
 	Os_type      string `orm:size(50)`
 	Owner        string `orm:size(50)`
+	Department   string `orm:size(50)`
 	Cpu          string `orm:size(50)`
 	Mem          string `orm:size(50)`
 	Disk         string `orm:size(50)`
@@ -66,7 +67,7 @@ func GetHostById(id string) (*Host, error) {
 	return host, err
 }
 
-func AddHost(class, service_name, name, ip, pubip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment string) (error, string) {
+func AddHost(class, service_name, name, ip, pubip, port, os_type, owner, department, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment string) (error, string) {
 	o := orm.NewOrm()
 	var msg string
 	rootpwd, _ = AESEncode(rootpwd, AesKey)
@@ -76,10 +77,11 @@ func AddHost(class, service_name, name, ip, pubip, port, os_type, owner, root, r
 		Service_name: service_name,
 		Name:         name,
 		Ip:           ip,
-		PubIp:        pubip,
+		Pubip:        pubip,
 		Port:         port,
 		Os_type:      os_type,
 		Owner:        owner,
+		Department:   department,
 		Root:         root,
 		Read:         read,
 		Rootpwd:      rootpwd,
@@ -102,7 +104,7 @@ func AddHost(class, service_name, name, ip, pubip, port, os_type, owner, root, r
 	return err, msg
 }
 
-func ModifyHost(id, class, service_name, name, ip, pubip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment string) (error, string) {
+func ModifyHost(id, class, service_name, name, ip, pubip, port, os_type, owner, department, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment string) (error, string) {
 	o := orm.NewOrm()
 	var msg string
 	rootpwd, _ = AESEncode(rootpwd, AesKey)
@@ -117,10 +119,11 @@ func ModifyHost(id, class, service_name, name, ip, pubip, port, os_type, owner, 
 		host.Service_name = service_name
 		host.Name = name
 		host.Ip = ip
-		host.PubIp = pubip
+		host.Pubip = pubip
 		host.Port = port
 		host.Os_type = os_type
 		host.Owner = owner
+		host.Department = department
 		host.Root = root
 		host.Read = read
 		host.Rootpwd = rootpwd
@@ -144,7 +147,7 @@ func DeleteHost(id string) error {
 	host := &Host{
 		Id: hid,
 	}
-	if _, err1 = o.Raw("insert into recycle_host(class,service_name,name,ip,port,os_type,owner,cpu,mem,disk,`group`,idc,COMMENT,created) select class,service_name,name,ip,port,os_type,owner,cpu,mem,disk,`group`,idc,COMMENT,CURRENT_TIMESTAMP() as created from `host` where id=?", hid).Exec(); err1 == nil {
+	if _, err1 = o.Raw("insert into recycle_host(class,service_name,name,ip,pubip,port,os_type,owner,department,cpu,mem,disk,`group`,idc,COMMENT,created) select class,service_name,name,ip,pubip,port,os_type,owner,department,cpu,mem,disk,`group`,idc,COMMENT,CURRENT_TIMESTAMP() as created from `host` where id=?", hid).Exec(); err1 == nil {
 
 		if _, err = o.Delete(host); err == nil {
 			return nil
@@ -157,18 +160,18 @@ func DeleteHost(id string) error {
 func SearchHostCount(idc, name string) (int64, error) {
 	o := orm.NewOrm()
 	hosts := make([]*Host, 0)
-	ids := []string{"%" + name + "%", "%" + name + "%", "%" + name + "%"}
+	ids := []string{"%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%"}
 	//total, err := o.QueryTable("host").Filter("idc", idc).Filter("name__icontains", name).All(&hosts)
-	total, err := o.Raw("select * from host where name like ? or service_name like ? or ip like ? and idc LIKE ?", ids, idc).QueryRows(&hosts)
+	total, err := o.Raw("select * from host where name like ? or service_name like ? or ip like ? or comment like ? and idc LIKE ?", ids, idc).QueryRows(&hosts)
 	return total, err
 }
 
 func SearchHostByName(currPage, pageSize int, idc, name string) ([]*Host, error) {
 	o := orm.NewOrm()
 	hosts := make([]*Host, 0)
-	ids := []string{"%" + name + "%", "%" + name + "%", "%" + name + "%"}
+	ids := []string{"%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%"}
 	//_, err := o.QueryTable("host").Filter("idc", idc).Filter("name__icontains", name).Limit(pageSize, (currPage-1)*pageSize).All(&hosts)
-	_, err := o.Raw("select * from host where name like ? or service_name like ? or ip like ?  and idc = ? limit ?,?", ids, idc, (currPage-1)*pageSize, pageSize).QueryRows(&hosts)
+	_, err := o.Raw("select * from host where name like ? or service_name like ? or ip like ? or comment like ? and idc = ? limit ?,?", ids, idc, (currPage-1)*pageSize, pageSize).QueryRows(&hosts)
 	return hosts, err
 }
 
@@ -225,7 +228,7 @@ func QueryHostWeekExport(method string) (*map[int64][]string, []string, int64) {
 
 	defer conn.Close()
 	if method == "week" {
-		rows, err := conn.Query("select name,ip,pub_ip,service_name,cpu,mem,disk,idc,`group`,created from `host` where DATE_SUB(CURDATE(), INTERVAL 7 day) <= date(`created`)")
+		rows, err := conn.Query("select name,ip,pubip,service_name,os_type,owner,department,cpu,mem,disk,idc,`group`,created from `host` where DATE_SUB(CURDATE(), INTERVAL 7 day) <= date(`created`)")
 		if err != nil {
 			return &result, columns, total
 		}
@@ -248,7 +251,7 @@ func QueryHostWeekExport(method string) (*map[int64][]string, []string, int64) {
 			result[total] = row
 		}
 	} else if method == "all" {
-		rows, err := conn.Query("select name,ip,pub_ip,service_name,cpu,mem,disk,idc,`group`,created from `host`")
+		rows, err := conn.Query("select name,ip,pubip,service_name,os_type,owner,department,cpu,mem,disk,idc,`group`,created from `host`")
 		if err != nil {
 			return &result, columns, total
 		}

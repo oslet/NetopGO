@@ -1,10 +1,13 @@
 package models
 
 import (
+	"database/sql"
 	"strconv"
 	"time"
 
+	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 type System struct {
@@ -152,4 +155,42 @@ func GetSystemById(id string) (*System, error) {
 	system := &System{}
 	err = o.QueryTable("system").Filter("id", sid).One(system)
 	return system, err
+}
+
+func QuerySystemExport() (*map[int64][]string, []string, int64) {
+	result := make(map[int64][]string)
+	var columns []string
+	var total int64
+	schemaUrl := beego.AppConfig.String("db_user") + ":" + beego.AppConfig.String("db_passwd") + "@tcp(" + beego.AppConfig.String("db_host") + ":" + beego.AppConfig.String("db_port") + ")/" + beego.AppConfig.String("db_schema") + "?charset=utf8"
+
+	conn, err := sql.Open("mysql", schemaUrl)
+	if err != nil {
+		return &result, columns, total
+	}
+	defer conn.Close()
+
+	rows, err := conn.Query("select class,name,owner1,owner2, domain_name,controller,responsible,team,company,comment from system")
+	if err != nil {
+		return &result, columns, total
+	}
+	defer rows.Close()
+	columns, err = rows.Columns()
+	values := make([]sql.RawBytes, len(columns))
+	scans := make([]interface{}, len(columns))
+
+	for i := range values {
+		scans[i] = &values[i]
+	}
+
+	for rows.Next() {
+		var row []string
+		_ = rows.Scan(scans...)
+		for _, col := range values {
+			row = append(row, string(col))
+		}
+		total = total + 1
+		result[total] = row
+	}
+
+	return &result, columns, total
 }

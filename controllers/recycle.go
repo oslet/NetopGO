@@ -155,9 +155,9 @@ func (this *RecycleHostController) Export() {
 	now := time.Now().String()
 	var filename string
 	if method == "week" {
-		filename = "week_host" + now[:4] + now[5:7] + now[8:10] + now[11:13] + now[14:16] + now[17:19] + ".xlsx"
+		filename = "week_recyclehost" + now[:4] + now[5:7] + now[8:10] + now[11:13] + now[14:16] + now[17:19] + ".xlsx"
 	} else if method == "all" {
-		filename = "all_host" + now[:4] + now[5:7] + now[8:10] + now[11:13] + now[14:16] + now[17:19] + ".xlsx"
+		filename = "all_recyclehost" + now[:4] + now[5:7] + now[8:10] + now[11:13] + now[14:16] + now[17:19] + ".xlsx"
 	}
 
 	filepath := path.Join("export", filename)
@@ -184,9 +184,9 @@ func (this *RecycleHostController) ReportSendMail() {
 
 	b64 := base64.NewEncoding("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/")
 
-	host := "mail.in.7daysinn.cn"
-	email := "falconalert@in.7daysinn.cn"
-	password := "RaAgpfAbcM8ubfNU5vnJr__rGMp5gOCP"
+	host := "smtp.sina.com"
+	email := "falconmail@sina.com"
+	password := "NAlv-W73wZNdHJ8i"
 	toEmail := "yun.li@platenogroup.com"
 
 	from := mail.Address{"主机报表", email}
@@ -243,6 +243,6 @@ func (this *RecycleHostController) ReportSendMail() {
 	if err != nil {
 		panic(err)
 	}
-	this.Redirect("/report/host/list", 302)
+	this.Redirect("/report/recycle/list", 302)
 	return
 }

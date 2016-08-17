@@ -49,6 +49,7 @@ func init() {
 	beego.Router("/system/bitchDel", &controllers.SystemController{}, "post:BitchDelete")
 	beego.Router("/system/search", &controllers.SystemController{}, "get:Search")
 	beego.Router("/system/detail", &controllers.SystemController{}, "get:Detail")
+	beego.Router("/system/export", &controllers.SystemController{}, "get:Export")
 
 	beego.Router("/host/list", &controllers.HostController{})
 	beego.Router("/host/add", &controllers.HostController{}, "get:Add")
@@ -161,6 +162,7 @@ func init() {
 	beego.Router("/report/recycle/list", &controllers.RecycleHostController{}, "get:ReportWeek")
 	beego.Router("/report/recycle/search", &controllers.RecycleHostController{}, "get:SearchWeek")
 	beego.Router("/report/recycle/export", &controllers.RecycleHostController{}, "get:Export")
+	beego.Router("/report/recycle/sendmail", &controllers.RecycleHostController{}, "get:ReportSendMail")
 
 	beego.Router("/attachment/:all", &controllers.AttachController{})
 }

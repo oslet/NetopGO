@@ -6,7 +6,12 @@ import (
 	"strconv"
 	"strings"
 
+	"os"
+	"path"
+	"time"
+
 	"github.com/astaxie/beego"
+	"github.com/tealeg/xlsx"
 )
 
 type SystemController struct {
@@ -245,5 +250,42 @@ func (this *SystemController) Detail() {
 	this.Data["Href"] = "/system/list"
 	this.Data["Category"] = "system"
 	this.TplName = "system_detail.html"
+	return
+}
+
+func (this *SystemController) Export() {
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "system"
+	values, columns, _ := models.QuerySystemExport()
+
+	file := xlsx.NewFile()
+	sheet, _ := file.AddSheet("Sheet1")
+	row := sheet.AddRow()
+	for _, val := range columns {
+		cell := row.AddCell()
+		cell.Value = val
+	}
+	for _, val := range *values {
+		row = sheet.AddRow()
+		for _, value := range val {
+			cell := row.AddCell()
+			cell.Value = value
+		}
+	}
+	now := time.Now().String()
+	filename := "all_system" + now[:4] + now[5:7] + now[8:10] + now[11:13] + now[14:16] + now[17:19] + ".xlsx"
+
+	filepath := path.Join("export", filename)
+	err := file.Save(filepath)
+	if err != nil {
+		beego.Error(err)
+	}
+	defer func() {
+		os.Remove(filepath)
+	}()
+	this.Ctx.Output.Download(filepath, filename)
 	return
 }

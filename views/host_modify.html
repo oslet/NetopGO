@@ -37,7 +37,7 @@
                             <div class="form-group">
                                 <label for="pubip" class="col-sm-2 control-label">公网IP<span class="black-fonts">*</span></label>
                                 <div class="col-sm-8">
-                                    <input id="pubip" name="pubip" placeholder="" type="text" class="form-control" value="{{.PubIp}}">
+                                    <input id="pubip" name="pubip" placeholder="" type="text" class="form-control" value="{{.Pubip}}">
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
@@ -56,9 +56,16 @@
                             </div>
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
-                                <label for="owner" class="col-sm-2 control-label">Owner<span class="red-fonts">*</span></label>
+                                <label for="owner" class="col-sm-2 control-label">负责人<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
                                     <input id="owner" name="owner" placeholder="" type="text" class="form-control" value="{{.Owner}}">
+                                </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="department" class="col-sm-2 control-label">申请部门<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="department" name="department" placeholder="" type="text" class="form-control" value="{{.Department}}">
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
@@ -91,9 +98,9 @@
                             </div>
                             <div class="hr-line-dashed"></div>                            
                             <div class="form-group">
-                                <label for="comment" class="col-sm-2 control-label">备注<span class="red-fonts">*</span></label>
+                                <label for="comment" class="col-sm-2 control-label">备注<span class="black-fonts">*</span></label>
                                 <div class="col-sm-8">
-                                    <textarea name="comment" class="form-control" rows="3" value="{{.Comment}}"></textarea>	
+                                    <input id="comment" name="comment" placeholder="" type="text" class="form-control"  value="{{.Comment}}">	
                                 </div>
                             </div>                 
                             <div class="hr-line-dashed"></div>
@@ -249,9 +256,9 @@ $('#userForm').validator({
             ok: "",
             msg: {required: "必须填写!"}
         },
-        "comment": {
-            rule: "required;length[1~50]",
-            tip: "输入备注",
+        "department": {
+            rule: "required;length[2~20]",
+            tip: "输入申请部门",
             ok: "",
             msg: {required: "必须填写!"}
         }

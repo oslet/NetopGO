@@ -121,6 +121,7 @@ func (this *HostController) Post() {
 	port := this.Input().Get("port")
 	os_type := this.Input().Get("os_type")
 	owner := this.Input().Get("owner")
+	department := this.Input().Get("department")
 	root := this.Input().Get("root")
 	read := this.Input().Get("read")
 	rootpwd := this.Input().Get("rootpwd")
@@ -133,13 +134,13 @@ func (this *HostController) Post() {
 	comment := this.Input().Get("comment")
 	//beego.Info(idc)
 	if len(id) > 0 {
-		err, msg := models.ModifyHost(id, class, service_name, name, ip, pubip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
+		err, msg := models.ModifyHost(id, class, service_name, name, ip, pubip, port, os_type, owner, department, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
 		if err != nil {
 			beego.Error(err)
 		}
 		this.Data["Message"] = msg
 	} else {
-		err, msg := models.AddHost(class, service_name, name, ip, pubip, port, os_type, owner, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
+		err, msg := models.AddHost(class, service_name, name, ip, pubip, port, os_type, owner, department, root, read, rootpwd, readpwd, cpu, mem, disk, group, idc, comment)
 		if err != nil {
 			beego.Error(err)
 		}
@@ -370,9 +371,9 @@ func (this *HostController) ReportSendMail() {
 
 	b64 := base64.NewEncoding("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/")
 
-	host := "mail.in.7daysinn.cn"
-	email := "falconalert@in.7daysinn.cn"
-	password := "RaAgpfAbcM8ubfNU5vnJr__rGMp5gOCP"
+	host := "smtp.sina.com"
+	email := "falconmail@sina.com"
+	password := "NAlv-W73wZNdHJ8i"
 	toEmail := "yun.li@platenogroup.com"
 
 	from := mail.Address{"主机报表", email}
@@ -385,25 +386,32 @@ func (this *HostController) ReportSendMail() {
 	header["MIME-Version"] = "1.0"
 	header["Content-Type"] = "text/html; charset=UTF-8"
 	header["Content-Transfer-Encoding"] = "base64"
+	/*
+	   	body := `
+	   	  <!DOCTYPE html>
+	       <html>
+	         <head>
+	           <meta charset="utf-8">
+	           <title>HOST Result</title>
+	         </head>
+	         <body>
+	           <h2>HOST Result</h2>
+	           <p>Your email has been sent to: </p>
+	           <pre>{{html .}}</pre>
+	           <p><a href="/">Start again!</a></p>
+	           <div>
+	             <p><b>© 2014 RubyLearning. All rights reserved.</b></p>
+	           </div>
+	         </body>
+	       </html>
+	   `
+	*/
 
 	body := `
-	  <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="utf-8">
-        <title>HOST Result</title>
-      </head>
-      <body>
-        <h2>HOST Result</h2>
-        <p>Your email has been sent to: </p>
-        <pre>{{html .}}</pre>
-        <p><a href="/">Start again!</a></p>
-        <div>
-          <p><b>© 2014 RubyLearning. All rights reserved.</b></p>
-        </div>
-      </body>
-    </html>
-`
+	{{range .Hosts}}
+		an email is {{.}}
+		{{end}}
+	`
 
 	//	var mailTemplate = template.Must(template.New("mail").Parse(mailTemplateHTML))
 	message := ""

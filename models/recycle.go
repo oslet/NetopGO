@@ -16,9 +16,11 @@ type RecycleHost struct {
 	Service_name string `orm:size(50)`
 	Name         string `orm:size(50)`
 	Ip           string `orm:size(15)`
+	Pubip        string `orm:size(15)`
 	Port         string `orm:size(15)`
 	Os_type      string `orm:size(50)`
 	Owner        string `orm:size(50)`
+	Department   string `orm:size(50)`
 	Cpu          string `orm:size(50)`
 	Mem          string `orm:size(50)`
 	Disk         string `orm:size(50)`
@@ -94,7 +96,7 @@ func QueryRecycleHostWeekExport(method string) (*map[int64][]string, []string, i
 	result := make(map[int64][]string)
 	var columns []string
 	var total int64
-	schemaUrl := beego.AppConfig.String("db_user") + ":" + beego.AppConfig.String("db_passwd") + "@tcp(" + beego.AppConfig.String("db_recyclehost") + ":" + beego.AppConfig.String("db_port") + ")/" + beego.AppConfig.String("db_schema") + "?charset=utf8"
+	schemaUrl := beego.AppConfig.String("db_user") + ":" + beego.AppConfig.String("db_passwd") + "@tcp(" + beego.AppConfig.String("db_host") + ":" + beego.AppConfig.String("db_port") + ")/" + beego.AppConfig.String("db_schema") + "?charset=utf8"
 
 	conn, err := sql.Open("mysql", schemaUrl)
 	if err != nil {
@@ -103,7 +105,7 @@ func QueryRecycleHostWeekExport(method string) (*map[int64][]string, []string, i
 
 	defer conn.Close()
 	if method == "week" {
-		rows, err := conn.Query("select name,ip,service_name,cpu,mem,disk,idc,`group`,created from `recycle_host` where DATE_SUB(CURDATE(), INTERVAL 7 day) <= date(`created`)")
+		rows, err := conn.Query("select name,ip,pubip,service_name,os_type,owner,department,cpu,mem,disk,idc,`group`,created from `recycle_host` where DATE_SUB(CURDATE(), INTERVAL 7 day) <= date(`created`)")
 		if err != nil {
 			return &result, columns, total
 		}
@@ -126,7 +128,7 @@ func QueryRecycleHostWeekExport(method string) (*map[int64][]string, []string, i
 			result[total] = row
 		}
 	} else if method == "all" {
-		rows, err := conn.Query("select name,ip,service_name,cpu,mem,disk,idc,`group`,created from `recycle_host`")
+		rows, err := conn.Query("select name,ip,pubip,service_name,os_type,owner,department,cpu,mem,disk,idc,`group`,created from `recycle_host`")
 		if err != nil {
 			return &result, columns, total
 		}

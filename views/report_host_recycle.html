@@ -32,7 +32,8 @@
                         <thead>
                             <tr>
                                 <th class="text-center">主机名</th>
-		 <th class="text-center">IP地址</th>
+		 <th class="text-center">内网IP</th>
+		 <th class="text-center">公网IP</th>
                                 <th class="text-center">系统服务名</th>
                                 <th class="text-center">Cpu</th>
                                 <th class="text-center">Mem</th>
@@ -47,6 +48,7 @@
                             <tr class="gradeX">
                                 <td class="text-center"><a href="#">{{.Name}}</a></td>
 		 <td class="text-center">{{.Ip}}</td>
+		 <td class="text-center">{{.Pubip}}</td>
                                 <td class="text-center">{{.Service_name}}</td>
                                 <td class="text-center">{{.Cpu}}</td>
                                 <td class="text-center">{{.Mem}}</td>
