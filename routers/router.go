@@ -68,6 +68,7 @@ func init() {
 	beego.Router("/host/del", &controllers.HostController{}, "get:Delete")
 	beego.Router("/host/bitchDel", &controllers.HostController{}, "post:BitchDelete")
 	beego.Router("/host/search", &controllers.HostController{}, "get:Search")
+	beego.Router("/host/detail", &controllers.HostController{}, "get:Detail")
 	beego.Router("/host/webconsole", &controllers.HostController{}, "get:WebConsole")
 	beego.Handler("/console/sshws", websocket.Handler(models.SSHWebSocketHandler))
 

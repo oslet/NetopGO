@@ -266,6 +266,30 @@ func (this *HostController) SearchWeek() {
 	return
 }
 
+func (this *HostController) Detail() {
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["IsSearch"] = false
+
+	id := this.Input().Get("id")
+	hosts, err := models.GetHostById(id)
+	if err != nil {
+		beego.Error(err)
+	}
+	auth := role.(int64)
+	this.Data["Auth"] = auth
+
+	this.Data["Hosts"] = hosts
+	this.Data["Path1"] = "主机列表"
+	this.Data["Path2"] = "主机详情"
+	this.Data["Href"] = "/host/list"
+	this.Data["Category"] = "host"
+	this.TplName = "host_detail.html"
+	return
+}
+
 func (this *HostController) Export() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
