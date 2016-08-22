@@ -162,8 +162,14 @@ func SearchHostCount(idc, name string) (int64, error) {
 	hosts := make([]*Host, 0)
 	ids := []string{"%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%"}
 	//total, err := o.QueryTable("host").Filter("idc", idc).Filter("name__icontains", name).All(&hosts)
-	total, err := o.Raw("select * from host where name like ? or service_name like ? or ip like ? or comment like ? and idc LIKE ?", ids, idc).QueryRows(&hosts)
-	return total, err
+	if len(name) == 0 {
+		total, err := o.QueryTable("host").Filter("idc", idc).All(&hosts)
+		return total, err
+	} else {
+		total, err := o.Raw("select * from host where name like ? or service_name like ? or ip like ? or comment like ? and idc LIKE ?", ids, idc).QueryRows(&hosts)
+		return total, err
+	}
+	//return total, err
 }
 
 func SearchHostByName(currPage, pageSize int, idc, name string) ([]*Host, error) {
@@ -171,8 +177,15 @@ func SearchHostByName(currPage, pageSize int, idc, name string) ([]*Host, error)
 	hosts := make([]*Host, 0)
 	ids := []string{"%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%"}
 	//_, err := o.QueryTable("host").Filter("idc", idc).Filter("name__icontains", name).Limit(pageSize, (currPage-1)*pageSize).All(&hosts)
-	_, err := o.Raw("select * from host where name like ? or service_name like ? or ip like ? or comment like ? and idc = ? limit ?,?", ids, idc, (currPage-1)*pageSize, pageSize).QueryRows(&hosts)
-	return hosts, err
+	//var err error
+	if len(name) == 0 {
+		_, err := o.QueryTable("host").Filter("idc", idc).Limit(pageSize, (currPage-1)*pageSize).All(&hosts)
+		return hosts, err
+	} else {
+		_, err := o.Raw("select * from host where name like ? or service_name like ? or ip like ? or comment like ? and idc = ? limit ?,?", ids, idc, (currPage-1)*pageSize, pageSize).QueryRows(&hosts)
+		return hosts, err
+	}
+	//return hosts, err
 }
 
 /*
