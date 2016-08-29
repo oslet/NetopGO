@@ -1,18 +1,17 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
+{{$Uname := .Uname}}
 {{$Auth := .Auth}}
-{{if eq .Auth 3}}
-<div><span style="font-size:18px;color:red;">没有相关权限！</span></div>
-{{else}}
+{{if eq .Auth 1}}
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="">
-                        <a href="/system/add" class="btn btn-sm btn-primary " {{if ne $Auth 1}}disabled="disabled"{{end}}> 添加系统 </a>
-                        <a id="del_btn" class="btn btn-sm btn-danger" {{if ne $Auth 1}}disabled="disabled"{{end}}> 删除所选 </a>
-	         <a href="/system/export" class="btn btn-sm btn-success "> 导出列表 </a>
+                        <a href="/system/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 添加系统 </a>
+                        <a id="del_btn" class="btn btn-sm btn-danger" {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 删除所选 </a>
+	         <a href="/system/export" class="btn btn-sm btn-success " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 导出列表 </a>
                         {{if .IsSearch}}
                         <a href="/system/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}
@@ -67,8 +66,8 @@
 		 <td class="text-center">{{.Controller}}</trd>													
                                 <td class="text-center">
                                      <a href="/system/detail?id={{.Id}}" class="btn btn-xs btn-success" >详情</a>
-                                    <a href="/system/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Auth 1}}disabled="disabled"{{end}}>编辑</a>
-                                    <a href="/system/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Auth 1}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                    <a href="/system/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>编辑</a>
+                                    <a href="/system/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Uname "netop"}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
                                 </td>
 
                             </tr>
@@ -88,6 +87,8 @@
         </div>
     </div>
 </div>
+{{else}}
+<div><span style="font-size:18px;color:red;">没有相关权限！</span></div>
 {{end}}
 <script src="/static/js/jquery.shiftcheckbox.js"></script>
 <script>

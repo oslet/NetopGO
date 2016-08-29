@@ -21,7 +21,7 @@ func (this *ScmController) Get() {
 	var page string
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	this.Data["Uname"] = uname.(string)
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
 	this.Data["Path1"] = "SCM列表"

@@ -1,5 +1,6 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
+{{$Uname := .Uname}}
 {{if eq .Auth 1}}
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
@@ -7,8 +8,8 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="">
-                        <a href="/line/add" class="btn btn-sm btn-primary "> 添加线路 </a>
-                        <a id="del_btn" class="btn btn-sm btn-danger "> 删除所选 </a>
+                        <a href="/line/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 添加线路 </a>
+                        <a id="del_btn" class="btn btn-sm btn-danger " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 删除所选 </a>
                         {{if .IsSearch}}
                         <a href="/line/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}
@@ -50,8 +51,8 @@
                                 <td class="text-center">{{.Comment}}</td>
                                 <td class="text-center">{{.Created}}</td>
                                 <td class="text-center">
-                                    <a href="/line/add?id={{.Id}}" class="btn btn-xs btn-info">编辑</a>
-                                    <a href="/line/del?id={{.Id}}" class="btn btn-xs btn-danger" onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                    <a href="/line/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>编辑</a>
+                                    <a href="/line/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Uname "netop"}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
                                 </td>
                             </tr>
                             {{end}}

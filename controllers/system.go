@@ -22,7 +22,7 @@ func (this *SystemController) Get() {
 	var page string
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	this.Data["Uname"] = uname.(string)
 	this.Data["Role"] = role
 	this.Data["Category"] = "system"
 	this.Data["IsSearch"] = false
