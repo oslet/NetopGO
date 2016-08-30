@@ -497,11 +497,11 @@ func NextStatus(cate, dept, status, upgradeType string) (string, string, string)
 		who = "approver"
 		outcome = "prdtoutcome"
 	} else if cate == "app" && dept == "运维" && upgradeType == "修复bug" && status == "实施流程中" {
-		nextStatus = "验证流程中"
+		nextStatus = "工单已关闭"
 		who = "operater"
 		outcome = "opoutcome"
 	} else if cate == "app" && dept == "运维" && upgradeType == "产品发布" && status == "实施流程中" {
-		nextStatus = "验证流程中"
+		nextStatus = "工单已关闭"
 		who = "operater"
 		outcome = "opoutcome"
 	} else if cate == "app" && dept == "运维" && upgradeType == "系统运维" && status == "实施流程中" {
@@ -788,21 +788,21 @@ func IsViewDiv(dept, status, upgradeType string) (testOutcome, prdtOutcome, opOu
 		opReadonly = "false"
 		finalReadonly = "false"
 	} else if dept == "运维" && status == "实施流程中" && upgradeType == "修复bug" {
-		test = "true"
+		test = "false"
 		product = "false"
 		op = "true"
 		final = "false"
-		testReadonly = "true"
+		testReadonly = "false"
 		productReadonly = "false"
 		opReadonly = "false"
 		finalReadonly = "false"
 	} else if dept == "运维" && status == "实施流程中" && upgradeType == "产品发布" {
-		test = "true"
-		product = "true"
+		test = "false"
+		product = "false"
 		op = "true"
 		final = "false"
-		testReadonly = "true"
-		productReadonly = "true"
+		testReadonly = "false"
+		productReadonly = "false"
 		opReadonly = "false"
 		finalReadonly = "false"
 	} else if dept == "运维" && status == "实施流程中" && upgradeType == "系统运维" {
