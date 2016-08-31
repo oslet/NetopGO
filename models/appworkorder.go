@@ -73,7 +73,7 @@ func AddAppOrder(apptype, appname, version, sourcecodename, buildnum, featurelis
 	if currDept == "运维" {
 		status = "实施流程中"
 	} else {
-		status = "测试流程中"
+		status = "实施流程中"
 	}
 	appwo := &Appworkorder{
 		Appname:        appname,
