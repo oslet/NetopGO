@@ -73,18 +73,28 @@
                                     <textarea name="relayapp" class="form-control" placeholder="" rows="4" readonly>{{.RelayApp}}</textarea>
                                 </div>
                             </div>
+							<!--
                             <div class="form-group">
                                 <label for="attachment" class="col-sm-2 control-label">程序附件</label>
                                 <div class="col-sm-8">
                                     （<a target="_blank" href="/attachment/{{.Attachment}}">{{.Attachment}}</a>）
                                 </div>
                             </div>
+							-->
+                            <div class="form-group">
+                                <label for="testreport" class="col-sm-2 control-label">测试报告</label>
+                                <div class="col-sm-8">
+                                    （<a target="_blank" href="/attachment/{{.Testreport}}">{{.Testreport}}</a>）
+                                </div>
+                            </div>
+							<!--
                             <div class="form-group">
                                 <label for="sqlfile" class="col-sm-2 control-label">sql附件</label>
                                 <div class="col-sm-8">
                                     （<a target="_blank" href="/attachment/{{.Sqlfile}}">{{.Sqlfile}}</a>）
                                 </div>
                             </div>
+							-->
                             {{if ne .Upgradetype "系统运维"}}
                             <div class="form-group">
                                 <label for="testoutcome" class="col-sm-2 control-label">测试意见</label>

@@ -137,16 +137,30 @@ func (this *AppWOController) AppOrderPost() {
 	if err != nil {
 		beego.Error(err)
 	}
+	_, report, err := this.GetFile("testreport")
+	if err != nil {
+		beego.Error(err)
+	}
 	_, sql, err := this.GetFile("sqlfile")
 	if err != nil {
 		beego.Error(err)
 	}
 	var attachment string
+	var testreport string
 	var sqlfile string
 	if fh != nil {
 		attachment = fh.Filename
 		//beego.Info(attachment)
 		err := this.SaveToFile("attachment", path.Join("attachment", attachment))
+		if err != nil {
+			beego.Error(err)
+		}
+	}
+	if report != nil {
+		timestamp := time.Now().UnixNano()
+		testreport = strconv.FormatInt(timestamp, 10) + report.Filename
+		//beego.Info(attachment)
+		err := this.SaveToFile("testreport", path.Join("attachment", testreport))
 		if err != nil {
 			beego.Error(err)
 		}
@@ -160,7 +174,7 @@ func (this *AppWOController) AppOrderPost() {
 		}
 	}
 
-	err = models.AddAppOrder(apptype, appname, version, sourcecodename, buildnum, featurelist, modifycfg, relayapp, upgradetype, sponsor, attachment, sqlfile, currDept)
+	err = models.AddAppOrder(apptype, appname, version, sourcecodename, buildnum, featurelist, modifycfg, relayapp, upgradetype, sponsor, attachment, testreport, sqlfile, currDept)
 	if err != nil {
 		beego.Error(err)
 	}
@@ -400,9 +414,14 @@ func (this *AppWOController) ApproveModifyPost() {
 	modifycfg := this.Input().Get("modifycfg")
 	relayapp := this.Input().Get("relayapp")
 	old_attachment := this.Input().Get("old_attachment")
+	old_testreport := this.Input().Get("old_testreport")
 	old_sqlfile := this.Input().Get("old_sqlfile")
 
 	_, fh, err := this.GetFile("attachment")
+	if err != nil {
+		beego.Error(err)
+	}
+	_, report, err := this.GetFile("testreport")
 	if err != nil {
 		beego.Error(err)
 	}
@@ -411,6 +430,7 @@ func (this *AppWOController) ApproveModifyPost() {
 		beego.Error(err)
 	}
 	var final_attachment string
+	var final_testreport string
 	var final_sqlfile string
 	if fh != nil {
 		final_attachment = fh.Filename
@@ -421,6 +441,16 @@ func (this *AppWOController) ApproveModifyPost() {
 		}
 	} else {
 		final_attachment = old_attachment
+	}
+	if report != nil {
+		final_testreport = report.Filename
+		//beego.Info(attachment)
+		err := this.SaveToFile("testreport", path.Join("attachment", final_testreport))
+		if err != nil {
+			beego.Error(err)
+		}
+	} else {
+		final_testreport = old_testreport
 	}
 	if sql != nil {
 		final_sqlfile = sql.Filename
@@ -433,7 +463,7 @@ func (this *AppWOController) ApproveModifyPost() {
 		final_sqlfile = old_sqlfile
 	}
 
-	err = models.ApproveModify(id, apptype, appname, upgradetype, version, sourcecodename, buildnum, featurelist, modifycfg, relayapp, final_attachment, final_sqlfile, dept.(string))
+	err = models.ApproveModify(id, apptype, appname, upgradetype, version, sourcecodename, buildnum, featurelist, modifycfg, relayapp, final_attachment, final_testreport, final_sqlfile, dept.(string))
 	if err == nil {
 		beego.Error(err)
 	}

@@ -36,6 +36,7 @@ type Appworkorder struct {
 	FeatureList    string `orm:size(2048)`
 	ModifyCfg      string `orm:size(2048)`
 	RelayApp       string `orm:size(255)`
+	Testreport     string `orm:size(100)`
 	Sqlfile        string `orm:size(100)`
 	Attachment     string `orm:size(100)`
 	SourceCodeName string `orm:size(100)`
@@ -61,7 +62,7 @@ func init() {
 	orm.RegisterModel(new(Appworkorder))
 }
 
-func AddAppOrder(apptype, appname, version, sourcecodename, buildnum, featurelist, modifycfg, relayapp, upgradetype, sponsor, attachment, sqlfile, currDept string) error {
+func AddAppOrder(apptype, appname, version, sourcecodename, buildnum, featurelist, modifycfg, relayapp, upgradetype, sponsor, attachment, testreport, sqlfile, currDept string) error {
 	o := orm.NewOrm()
 	var dbstatus string
 	var status string
@@ -83,6 +84,7 @@ func AddAppOrder(apptype, appname, version, sourcecodename, buildnum, featurelis
 		FeatureList:    featurelist,
 		ModifyCfg:      modifycfg,
 		RelayApp:       relayapp,
+		Testreport:     testreport,
 		Sqlfile:        sqlfile,
 		Attachment:     attachment,
 		SourceCodeName: sourcecodename,
@@ -298,7 +300,7 @@ func CloseOrder(id string) error {
 	return err
 }
 
-func ApproveModify(id, apptype, appname, upgradetype, version, sourcecodename, buildnum, featurelist, modifycfg, relayapp, final_attachment, final_sqlfile, dept string) error {
+func ApproveModify(id, apptype, appname, upgradetype, version, sourcecodename, buildnum, featurelist, modifycfg, relayapp, final_attachment, final_testreport, final_sqlfile, dept string) error {
 	var status string
 	o := orm.NewOrm()
 	aid, err := strconv.ParseInt(id, 10, 64)
@@ -322,6 +324,7 @@ func ApproveModify(id, apptype, appname, upgradetype, version, sourcecodename, b
 		appwo.ModifyCfg = modifycfg
 		appwo.RelayApp = relayapp
 		appwo.Attachment = final_attachment
+		appwo.Testreport = final_testreport
 		appwo.Sqlfile = final_sqlfile
 		appwo.Status = status
 		appwo.RequestCount = appwo.RequestCount + 1
