@@ -51,6 +51,14 @@ func init() {
 	beego.Router("/scm/detail", &controllers.ScmController{}, "get:Detail")
 	beego.Router("/scm/export", &controllers.ScmController{}, "get:Export")
 
+	beego.Router("/url/list", &controllers.UrlController{})
+	beego.Router("/url/add", &controllers.UrlController{}, "get:Add")
+	beego.Router("/url/add", &controllers.UrlController{}, "post:Post")
+	beego.Router("/url/modify", &controllers.UrlController{}, "post:Post")
+	beego.Router("/url/del", &controllers.UrlController{}, "get:Delete")
+	beego.Router("/url/bitchDel", &controllers.UrlController{}, "post:BitchDelete")
+	beego.Router("/url/search", &controllers.UrlController{}, "get:Search")
+
 	beego.Router("/system/list", &controllers.SystemController{})
 	beego.Router("/system/add", &controllers.SystemController{}, "get:Add")
 	beego.Router("/system/add", &controllers.SystemController{}, "post:Post")

@@ -20,6 +20,7 @@
                     <li class="idc"> <a href="/line/list">线路列表</a></li>
                     <li class="idc"> <a href="/system/list">系统列表</a></li>
                     <li class="idc"> <a href="/scm/list">SVN列表</a></li>
+                    <li class="idc"> <a href="/url/list">URL列表</a></li>
                 </ul>
             </li>
             <li id="db">
