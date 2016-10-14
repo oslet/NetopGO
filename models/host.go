@@ -42,7 +42,18 @@ func init() {
 func GetHostCount() (int64, error) {
 	o := orm.NewOrm()
 	hosts := make([]*Host, 0)
-	total, err := o.QueryTable("host").All(&hosts)
+	//total, err := o.QueryTable("host").All(&hosts)
+	total, err := o.Raw("select distinct(ip) from host").QueryRows(&hosts)
+	if err != nil {
+		return 0, err
+	}
+	return total, err
+}
+
+func GetAppCount() (int64, error) {
+	o := orm.NewOrm()
+	apps := make([]*Host, 0)
+	total, err := o.QueryTable("host").All(&apps)
 	if err != nil {
 		return 0, err
 	}

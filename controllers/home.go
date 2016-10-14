@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"NetopGO/models"
+
 	"github.com/astaxie/beego"
 )
 
@@ -25,6 +26,10 @@ func (this *MainController) Get() {
 		beego.Error(err)
 	}
 	hostNums, err := models.GetHostCount()
+	if err != nil {
+		beego.Error(err)
+	}
+	appNums, err := models.GetAppCount()
 	if err != nil {
 		beego.Error(err)
 	}
@@ -92,6 +97,7 @@ func (this *MainController) Get() {
 	this.Data["NowSize"] = nowSize
 	this.Data["UserNums"] = userNums
 	this.Data["HostNums"] = hostNums
+	this.Data["AppNums"] = appNums
 	this.Data["DbNums"] = dbNums
 	this.Data["TotalTimes"] = times
 	this.Data["TotalSizes"] = sizes
