@@ -21,7 +21,7 @@ func (this *UrlController) Get() {
 	this.Data["IsSearch"] = false
 	this.Data["Path1"] = "url列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/url/list"
+	this.Data["Href"] = "/asset/url/list"
 	this.Data["Category"] = "url"
 
 	if len(this.Input().Get("page")) == 0 {
@@ -65,13 +65,13 @@ func (this *UrlController) Add() {
 		this.Data["Url"] = url
 		this.Data["Path1"] = "url列表"
 		this.Data["Path2"] = "修改url"
-		this.Data["Href"] = "/url/list"
+		this.Data["Href"] = "/asset/url/list"
 		this.TplName = "url_modify.html"
 		return
 	}
 	this.Data["Path1"] = "url列表"
 	this.Data["Path2"] = "添加url"
-	this.Data["Href"] = "/url/list"
+	this.Data["Href"] = "/asset/url/list"
 	this.TplName = "url_add.html"
 
 }
@@ -104,8 +104,8 @@ func (this *UrlController) Post() {
 	}
 	this.Data["Path1"] = "url列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/url/list"
-	//this.Redirect("/url/list", 302)
+	this.Data["Href"] = "/asset/url/list"
+	//this.Redirect("/asset/url/list", 302)
 	this.TplName = "url_add.html"
 }
 
@@ -123,8 +123,8 @@ func (this *UrlController) Delete() {
 	}
 	this.Data["Path1"] = "url列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/url/list"
-	this.Redirect("/url/list", 302)
+	this.Data["Href"] = "/asset/url/list"
+	this.Redirect("/asset/url/list", 302)
 	return
 }
 
@@ -180,7 +180,7 @@ func (this *UrlController) Search() {
 	this.Data["Keyword"] = name
 	this.Data["Path1"] = "url列表"
 	this.Data["Path2"] = "搜索结果"
-	this.Data["Href"] = "/url/list"
+	this.Data["Href"] = "/asset/url/list"
 	this.TplName = "url_list.html"
 	return
 }

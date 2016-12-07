@@ -28,7 +28,7 @@ func (this *SystemController) Get() {
 	this.Data["IsSearch"] = false
 	this.Data["Path1"] = "系统列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/system/list"
+	this.Data["Href"] = "/asset/system/list"
 
 	/*
 		groups, err := models.GetNames()
@@ -88,14 +88,14 @@ func (this *SystemController) Add() {
 		//	this.Data["HostGroupName"] = host.Group
 		this.Data["Path1"] = "系统列表"
 		this.Data["Path2"] = "修改系统应用"
-		this.Data["Href"] = "/system/list"
+		this.Data["Href"] = "/asset/system/list"
 		this.TplName = "system_modify.html"
 		//this.TplName = "test.html"
 		return
 	}
 	this.Data["Path1"] = "系统列表"
 	this.Data["Path2"] = "添加系统"
-	this.Data["Href"] = "/system/list"
+	this.Data["Href"] = "/asset/system/list"
 	this.TplName = "system_add.html"
 
 }
@@ -137,8 +137,8 @@ func (this *SystemController) Post() {
 	}
 	this.Data["Path1"] = "系统列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/system/list"
-	//this.Redirect("/system/list", 302)
+	this.Data["Href"] = "/asset/system/list"
+	//this.Redirect("/asset/system/list", 302)
 	this.TplName = "system_add.html"
 }
 
@@ -156,8 +156,8 @@ func (this *SystemController) Delete() {
 	}
 	this.Data["Path1"] = "系统列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/system/list"
-	this.Redirect("/system/list", 302)
+	this.Data["Href"] = "/asset/system/list"
+	this.Redirect("/asset/system/list", 302)
 	return
 }
 
@@ -194,7 +194,7 @@ func (this *SystemController) Search() {
 	if class == "1" {
 		this.Data["Path1"] = "系统列表"
 		this.Data["Path2"] = ""
-		this.Data["Href"] = "/system/list"
+		this.Data["Href"] = "/asset/system/list"
 		this.TplName = "system_list.html"
 		return
 	}
@@ -224,7 +224,7 @@ func (this *SystemController) Search() {
 	//this.Data["Idc"] = idc
 	this.Data["Path1"] = "系统列表"
 	this.Data["Path2"] = "搜索结果"
-	this.Data["Href"] = "/system/list"
+	this.Data["Href"] = "/asset/system/list"
 	this.TplName = "system_list.html"
 	return
 }
@@ -247,7 +247,7 @@ func (this *SystemController) Detail() {
 	this.Data["System"] = sysname
 	this.Data["Path1"] = "系统列表"
 	this.Data["Path2"] = "系统详情"
-	this.Data["Href"] = "/system/list"
+	this.Data["Href"] = "/asset/system/list"
 	this.Data["Category"] = "system"
 	this.TplName = "system_detail.html"
 	return

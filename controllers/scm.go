@@ -26,7 +26,7 @@ func (this *ScmController) Get() {
 	this.Data["IsSearch"] = false
 	this.Data["Path1"] = "SCM列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/scm/list"
+	this.Data["Href"] = "/asset/scm/list"
 	this.Data["Category"] = "scm"
 
 	if len(this.Input().Get("page")) == 0 {
@@ -70,13 +70,13 @@ func (this *ScmController) Add() {
 		this.Data["Scm"] = scm
 		this.Data["Path1"] = "SCM列表"
 		this.Data["Path2"] = "修改SCM"
-		this.Data["Href"] = "/scm/list"
+		this.Data["Href"] = "/asset/scm/list"
 		this.TplName = "scm_modify.html"
 		return
 	}
 	this.Data["Path1"] = "SCM列表"
 	this.Data["Path2"] = "添加SCM"
-	this.Data["Href"] = "/scm/list"
+	this.Data["Href"] = "/asset/scm/list"
 	this.TplName = "scm_add.html"
 
 }
@@ -114,8 +114,8 @@ func (this *ScmController) Post() {
 	}
 	this.Data["Path1"] = "SCM列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/scm/list"
-	//this.Redirect("/scm/list", 302)
+	this.Data["Href"] = "/asset/scm/list"
+	//this.Redirect("/asset/scm/list", 302)
 	this.TplName = "scm_add.html"
 }
 
@@ -133,8 +133,8 @@ func (this *ScmController) Delete() {
 	}
 	this.Data["Path1"] = "SCM列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/scm/list"
-	this.Redirect("/scm/list", 302)
+	this.Data["Href"] = "/asset/scm/list"
+	this.Redirect("/asset/scm/list", 302)
 	return
 }
 
@@ -190,7 +190,7 @@ func (this *ScmController) Search() {
 	this.Data["Keyword"] = name
 	this.Data["Path1"] = "SCM列表"
 	this.Data["Path2"] = "搜索结果"
-	this.Data["Href"] = "/scm/list"
+	this.Data["Href"] = "/asset/scm/list"
 	this.TplName = "scm_list.html"
 	return
 }
@@ -213,7 +213,7 @@ func (this *ScmController) Detail() {
 	this.Data["Scm"] = scmname
 	this.Data["Path1"] = "系统列表"
 	this.Data["Path2"] = "系统详情"
-	this.Data["Href"] = "/scm/list"
+	this.Data["Href"] = "/asset/scm/list"
 	this.Data["Category"] = "scm"
 	this.TplName = "scm_detail.html"
 	return

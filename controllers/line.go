@@ -21,7 +21,7 @@ func (this *LineController) Get() {
 	this.Data["IsSearch"] = false
 	this.Data["Path1"] = "线路列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/line/list"
+	this.Data["Href"] = "/asset/line/list"
 	this.Data["Category"] = "line"
 
 	if len(this.Input().Get("page")) == 0 {
@@ -65,13 +65,13 @@ func (this *LineController) Add() {
 		this.Data["Line"] = line
 		this.Data["Path1"] = "线路列表"
 		this.Data["Path2"] = "修改线路"
-		this.Data["Href"] = "/line/list"
+		this.Data["Href"] = "/asset/line/list"
 		this.TplName = "line_modify.html"
 		return
 	}
 	this.Data["Path1"] = "线路列表"
 	this.Data["Path2"] = "添加线路"
-	this.Data["Href"] = "/line/list"
+	this.Data["Href"] = "/asset/line/list"
 	this.TplName = "line_add.html"
 
 }
@@ -106,8 +106,8 @@ func (this *LineController) Post() {
 	}
 	this.Data["Path1"] = "线路列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/line/list"
-	//this.Redirect("/line/list", 302)
+	this.Data["Href"] = "/asset/line/list"
+	//this.Redirect("/asset/line/list", 302)
 	this.TplName = "line_add.html"
 }
 
@@ -125,8 +125,8 @@ func (this *LineController) Delete() {
 	}
 	this.Data["Path1"] = "线路列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/line/list"
-	this.Redirect("/line/list", 302)
+	this.Data["Href"] = "/asset/line/list"
+	this.Redirect("/asset/line/list", 302)
 	return
 }
 
@@ -182,7 +182,7 @@ func (this *LineController) Search() {
 	this.Data["Keyword"] = name
 	this.Data["Path1"] = "线路列表"
 	this.Data["Path2"] = "搜索结果"
-	this.Data["Href"] = "/line/list"
+	this.Data["Href"] = "/asset/line/list"
 	this.TplName = "line_list.html"
 	return
 }

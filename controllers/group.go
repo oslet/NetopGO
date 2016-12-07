@@ -21,7 +21,7 @@ func (this *GroupController) Get() {
 	this.Data["IsSearch"] = false
 	this.Data["Path1"] = "业务组列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/group/list"
+	this.Data["Href"] = "/asset/group/list"
 	this.Data["Category"] = "group"
 
 	if len(this.Input().Get("page")) == 0 {
@@ -65,13 +65,13 @@ func (this *GroupController) Add() {
 		this.Data["Group"] = group
 		this.Data["Path1"] = "业务组列表"
 		this.Data["Path2"] = "修改业务组"
-		this.Data["Href"] = "/group/list"
+		this.Data["Href"] = "/asset/group/list"
 		this.TplName = "group_modify.html"
 		return
 	}
 	this.Data["Path1"] = "业务组列表"
 	this.Data["Path2"] = "添加业务组"
-	this.Data["Href"] = "/group/list"
+	this.Data["Href"] = "/asset/group/list"
 	this.TplName = "group_add.html"
 
 }
@@ -104,8 +104,8 @@ func (this *GroupController) Post() {
 	}
 	this.Data["Path1"] = "业务组列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/group/list"
-	//this.Redirect("/group/list", 302)
+	this.Data["Href"] = "/asset/group/list"
+	//this.Redirect("/asset/group/list", 302)
 	this.TplName = "group_add.html"
 }
 
@@ -123,8 +123,8 @@ func (this *GroupController) Delete() {
 	}
 	this.Data["Path1"] = "业务组列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/group/list"
-	this.Redirect("/group/list", 302)
+	this.Data["Href"] = "/asset/group/list"
+	this.Redirect("/asset/group/list", 302)
 	return
 }
 
@@ -180,7 +180,7 @@ func (this *GroupController) Search() {
 	this.Data["Keyword"] = name
 	this.Data["Path1"] = "业务组列表"
 	this.Data["Path2"] = "搜索结果"
-	this.Data["Href"] = "/group/list"
+	this.Data["Href"] = "/asset/group/list"
 	this.TplName = "group_list.html"
 	return
 }

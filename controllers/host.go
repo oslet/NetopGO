@@ -31,7 +31,7 @@ func (this *HostController) Get() {
 	this.Data["IsSearch"] = false
 	this.Data["Path1"] = "主机列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/host/list"
+	this.Data["Href"] = "/asset/host/list"
 
 	groups, err := models.GetNames()
 	if err != nil {
@@ -90,14 +90,14 @@ func (this *HostController) Add() {
 		this.Data["HostGroupName"] = host.Group
 		this.Data["Path1"] = "主机列表"
 		this.Data["Path2"] = "修改主机"
-		this.Data["Href"] = "/host/list"
+		this.Data["Href"] = "/asset/host/list"
 		this.TplName = "host_modify.html"
 		//this.TplName = "test.html"
 		return
 	}
 	this.Data["Path1"] = "主机列表"
 	this.Data["Path2"] = "添加主机"
-	this.Data["Href"] = "/host/list"
+	this.Data["Href"] = "/asset/host/list"
 	this.TplName = "host_add.html"
 
 }
@@ -148,8 +148,8 @@ func (this *HostController) Post() {
 	}
 	this.Data["Path1"] = "主机列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/host/list"
-	//this.("/host/list", 302)
+	this.Data["Href"] = "/asset/host/list"
+	//this.("/asset/host/list", 302)
 	this.TplName = "host_add.html"
 }
 
@@ -167,8 +167,8 @@ func (this *HostController) Delete() {
 	}
 	this.Data["Path1"] = "主机列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/host/list"
-	this.Redirect("/host/list", 302)
+	this.Data["Href"] = "/asset/host/list"
+	this.Redirect("/asset/host/list", 302)
 	return
 }
 
@@ -201,7 +201,7 @@ func (this *HostController) ReportWeek() {
 	this.Data["IsSearch"] = false
 	this.Data["Path1"] = "主机列表"
 	this.Data["Path2"] = ""
-	this.Data["Href"] = "/report/host/list"
+	this.Data["Href"] = "/report/asset/host/list"
 
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
@@ -261,7 +261,7 @@ func (this *HostController) SearchWeek() {
 	//this.Data["Idc"] = idc
 	this.Data["Path1"] = "主机列表"
 	this.Data["Path2"] = "搜索结果"
-	this.Data["Href"] = "/report/host/list"
+	this.Data["Href"] = "/report/asset/host/list"
 	this.TplName = "report_host_list.html"
 	return
 }
@@ -284,7 +284,7 @@ func (this *HostController) Detail() {
 	this.Data["Hosts"] = hosts
 	this.Data["Path1"] = "主机列表"
 	this.Data["Path2"] = "主机详情"
-	this.Data["Href"] = "/host/list"
+	this.Data["Href"] = "/asset/host/list"
 	this.Data["Category"] = "host"
 	this.TplName = "host_detail.html"
 	return
@@ -349,7 +349,7 @@ func (this *HostController) Search() {
 	if idc == "1" {
 		this.Data["Path1"] = "主机列表"
 		this.Data["Path2"] = ""
-		this.Data["Href"] = "/host/list"
+		this.Data["Href"] = "/asset/host/list"
 		this.TplName = "host_list.html"
 		return
 	}
@@ -378,7 +378,7 @@ func (this *HostController) Search() {
 	this.Data["Idc"] = idc
 	this.Data["Path1"] = "主机列表"
 	this.Data["Path2"] = "搜索结果"
-	this.Data["Href"] = "/host/list"
+	this.Data["Href"] = "/asset/host/list"
 	this.TplName = "host_list.html"
 	return
 }
@@ -461,7 +461,7 @@ func (this *HostController) ReportSendMail() {
 	if err != nil {
 		panic(err)
 	}
-	this.Redirect("/report/host/list", 302)
+	this.Redirect("/report/asset/host/list", 302)
 	return
 }
 

@@ -12,15 +12,15 @@
                     <li class="group"><a href="/user/list">用户列表</a></li>
                 </ul>
             </li>
-            <li id="host">
-                <a><i class="fa fa-inbox"></i> <span class="nav-label">主机管理</span><span class="fa arrow"></span></a>
+            <li id="asset">
+                <a><i class="fa fa-inbox"></i> <span class="nav-label">资产管理</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li class="idc"> <a href="/host/list">主机列表</a></li>
-                    <li class="idc"> <a href="/group/list">业务组列表</a></li>
-                    <li class="idc"> <a href="/line/list">线路列表</a></li>
-                    <li class="idc"> <a href="/system/list">系统列表</a></li>
-                    <li class="idc"> <a href="/scm/list">SVN列表</a></li>
-                    <li class="idc"> <a href="/url/list">URL列表</a></li>
+                    <li class="asset"> <a href="/asset/host/list">主机列表</a></li>
+                    <li class="asset"> <a href="/asset/group/list">业务组列表</a></li>
+                    <li class="asset"> <a href="/asset/line/list">线路列表</a></li>
+                    <li class="asset"> <a href="/asset/system/list">系统列表</a></li>
+                    <li class="asset"> <a href="/asset/scm/list">SVN列表</a></li>
+                    <li class="asset"> <a href="/asset/url/list">URL列表</a></li>
                 </ul>
             </li>
             <li id="db">
@@ -31,15 +31,15 @@
                     <li class="rule"><a href="/schema/list">数据源列表</a></li>                    
                 </ul>
             </li>
-            <li id="record">
+            <li id="workorder">
                 <a href="javascript:void(0)"><i class="fa fa-edit"></i> <span class="nav-label">系统发布</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li class="download"><a href="/workorder/my/list">应用工单</a></li>
-                    <li class="download"><a href="/workorder/mydb/list">数据库工单</a></li>
-                    <li class="download"><a href="/workorder/app">提交应用工单</a></li>
-                    <li class="download"><a href="/workorder/db">提交数据库工单</a></li>
-                    <li class="download"><a href="/record/fault/list">故障记录</a></li>
-                    <li class="download"><a href="/record/quest/list">问题记录</a></li>
+                    <li class="record"><a href="/workorder/my/list">应用工单</a></li>
+                    <li class="record"><a href="/workorder/mydb/list">数据库工单</a></li>
+                    <li class="record"><a href="/workorder/app">提交应用工单</a></li>
+                    <li class="record"><a href="/workorder/db">提交数据库工单</a></li>
+                    <li class="record"><a href="/record/fault/list">故障记录</a></li>
+                    <li class="record"><a href="/record/quest/list">问题记录</a></li>
                 </ul>
             </li>      
             <!--      
@@ -58,7 +58,7 @@
             <li id="report">
                 <a href="javascript:void(0)"><i class="fa fa-edit"></i> <span class="nav-label">报表管理</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li class="report_host"><a href="/report/host/list/">新增主机</a></li>
+                    <li class="report_host"><a href="/report/asset/host/list/">新增主机</a></li>
                     <li class="report_host"><a href="/report/recycle/list/">回收主机</a></li>
                 </ul>
             </li>  
