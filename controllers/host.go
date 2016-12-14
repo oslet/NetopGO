@@ -27,7 +27,7 @@ func (this *HostController) Get() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname.(string)
 	this.Data["Role"] = role
-	this.Data["Category"] = "host"
+	this.Data["Category"] = "asset/host"
 	this.Data["IsSearch"] = false
 	this.Data["Path1"] = "主机列表"
 	this.Data["Path2"] = ""
@@ -233,7 +233,7 @@ func (this *HostController) SearchWeek() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	this.Data["Category"] = "report/host"
+	this.Data["Category"] = "report/asset/host"
 
 	week := this.Input().Get("keyword")
 
@@ -285,7 +285,7 @@ func (this *HostController) Detail() {
 	this.Data["Path1"] = "主机列表"
 	this.Data["Path2"] = "主机详情"
 	this.Data["Href"] = "/asset/host/list"
-	this.Data["Category"] = "host"
+	this.Data["Category"] = "/asset/host"
 	this.TplName = "host_detail.html"
 	return
 }
@@ -342,7 +342,7 @@ func (this *HostController) Search() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	this.Data["Category"] = "host"
+	this.Data["Category"] = "asset/host"
 
 	name := this.Input().Get("keyword")
 	idc := this.Input().Get("idc")

@@ -69,11 +69,11 @@ func AddScm(name, isdeployment, ischeckin, owner, company, scmaddr, comment stri
 	}
 	err := o.QueryTable("scm").Filter("name", name).One(scm)
 	if err == nil {
-		msg = "线路" + name + "已存在"
+		msg = "源码管理" + name + "已存在"
 		return nil, msg
 	}
 	_, err = o.Insert(scm)
-	msg = "添加线路成功"
+	msg = "添加源码管理成功"
 	return err, msg
 }
 

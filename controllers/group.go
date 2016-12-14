@@ -22,7 +22,7 @@ func (this *GroupController) Get() {
 	this.Data["Path1"] = "业务组列表"
 	this.Data["Path2"] = ""
 	this.Data["Href"] = "/asset/group/list"
-	this.Data["Category"] = "group"
+	this.Data["Category"] = "asset/group"
 
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
@@ -153,7 +153,7 @@ func (this *GroupController) Search() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	this.Data["Category"] = "group"
+	this.Data["Category"] = "asset/group"
 
 	name := this.Input().Get("keyword")
 	//beego.Info(name)

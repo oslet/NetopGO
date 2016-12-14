@@ -22,7 +22,7 @@ func (this *LineController) Get() {
 	this.Data["Path1"] = "线路列表"
 	this.Data["Path2"] = ""
 	this.Data["Href"] = "/asset/line/list"
-	this.Data["Category"] = "line"
+	this.Data["Category"] = "asset/line"
 
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
@@ -155,7 +155,7 @@ func (this *LineController) Search() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	this.Data["Category"] = "line"
+	this.Data["Category"] = "asset/line"
 
 	name := this.Input().Get("keyword")
 	//beego.Info(name)

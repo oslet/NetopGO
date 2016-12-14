@@ -24,7 +24,7 @@ func (this *SystemController) Get() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname.(string)
 	this.Data["Role"] = role
-	this.Data["Category"] = "system"
+	this.Data["Category"] = "asset/system"
 	this.Data["IsSearch"] = false
 	this.Data["Path1"] = "系统列表"
 	this.Data["Path2"] = ""
@@ -120,16 +120,17 @@ func (this *SystemController) Post() {
 	responsible := this.Input().Get("responsible")
 	team := this.Input().Get("team")
 	company := this.Input().Get("company")
+	support_level := this.Input().Get("support_level")
 	comment := this.Input().Get("comment")
 	//beego.Info(idc)
 	if len(id) > 0 {
-		err, msg := models.ModifySystemlist(id, class, name, owner1, owner2, domain_name, controller, responsible, team, company, comment)
+		err, msg := models.ModifySystemlist(id, class, name, owner1, owner2, domain_name, controller, responsible, team, company, support_level, comment)
 		if err != nil {
 			beego.Error(err)
 		}
 		this.Data["Message"] = msg
 	} else {
-		err, msg := models.AddSystemlist(class, name, owner1, owner2, domain_name, controller, responsible, team, company, comment)
+		err, msg := models.AddSystemlist(class, name, owner1, owner2, domain_name, controller, responsible, team, company, support_level, comment)
 		if err != nil {
 			beego.Error(err)
 		}
@@ -186,7 +187,7 @@ func (this *SystemController) Search() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	this.Data["Category"] = "system"
+	this.Data["Category"] = "asset/system"
 
 	name := this.Input().Get("keyword")
 

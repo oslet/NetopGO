@@ -11,18 +11,19 @@ import (
 )
 
 type System struct {
-	Id          int64
-	Class       string `orm:size(50)`
-	Name        string `orm:size(50)`
-	Owner1      string `orm:size(20)`
-	Owner2      string `orm:size(20)`
-	Domain_name string `orm:size(50)`
-	Controller  string `orm:size(50)`
-	Responsible string `orm:size(20)`
-	Team        string `orm:size(20)`
-	Company     string `orm:size(50)`
-	Comment     string `orm:size(100)`
-	Created     time.Time
+	Id            int64
+	Class         string `orm:size(50)`
+	Name          string `orm:size(50)`
+	Owner1        string `orm:size(20)`
+	Owner2        string `orm:size(20)`
+	Domain_name   string `orm:size(50)`
+	Controller    string `orm:size(50)`
+	Responsible   string `orm:size(20)`
+	Team          string `orm:size(20)`
+	Company       string `orm:size(50)`
+	Support_level string `orm:size(20)`
+	Comment       string `orm:size(100)`
+	Created       time.Time
 }
 
 // register host model
@@ -58,23 +59,24 @@ func GetSystemlistById(id string) (*System, error) {
 	return Systemlist, err
 }
 
-func AddSystemlist(class, name, owner1, owner2, domain_name, controller, responsible, team, company, comment string) (error, string) {
+func AddSystemlist(class, name, owner1, owner2, domain_name, controller, responsible, team, company, support_level, comment string) (error, string) {
 	o := orm.NewOrm()
 	var msg string
 	//rootpwd, _ = AESEncode(rootpwd, AesKey)
 	//readpwd, _ = AESEncode(readpwd, AesKey)
 	Systemlist := &System{
-		Class:       class,
-		Name:        name,
-		Owner1:      owner1,
-		Owner2:      owner2,
-		Domain_name: domain_name,
-		Controller:  controller,
-		Responsible: responsible,
-		Team:        team,
-		Company:     company,
-		Comment:     comment,
-		Created:     time.Now(),
+		Class:         class,
+		Name:          name,
+		Owner1:        owner1,
+		Owner2:        owner2,
+		Domain_name:   domain_name,
+		Controller:    controller,
+		Responsible:   responsible,
+		Team:          team,
+		Company:       company,
+		Support_level: support_level,
+		Comment:       comment,
+		Created:       time.Now(),
 	}
 	err := o.QueryTable("system").Filter("name", name).One(Systemlist)
 	if err == nil {
@@ -86,7 +88,7 @@ func AddSystemlist(class, name, owner1, owner2, domain_name, controller, respons
 	return err, msg
 }
 
-func ModifySystemlist(id, class, name, owner1, owner2, domain_name, controller, responsible, team, company, comment string) (error, string) {
+func ModifySystemlist(id, class, name, owner1, owner2, domain_name, controller, responsible, team, company, support_level, comment string) (error, string) {
 	o := orm.NewOrm()
 	var msg string
 	//rootpwd, _ = AESEncode(rootpwd, AesKey)
@@ -107,6 +109,7 @@ func ModifySystemlist(id, class, name, owner1, owner2, domain_name, controller, 
 		Systemlist.Responsible = responsible
 		Systemlist.Team = team
 		Systemlist.Company = company
+		Systemlist.Support_level = support_level
 	}
 	o.Update(Systemlist)
 	msg = "修改成功"
@@ -169,7 +172,7 @@ func QuerySystemExport() (*map[int64][]string, []string, int64) {
 	}
 	defer conn.Close()
 
-	rows, err := conn.Query("select class,name,owner1,owner2, domain_name,controller,responsible,team,company,comment from system")
+	rows, err := conn.Query("select class,name,owner1,owner2, domain_name,controller,responsible,team,company,support_level,comment from system")
 	if err != nil {
 		return &result, columns, total
 	}

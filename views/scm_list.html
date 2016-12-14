@@ -8,13 +8,13 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="">
-                        <a href="/scm/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 添加SCM </a>
+                        <a href="/asset/scm/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 添加SCM </a>
                         <a id="del_btn" class="btn btn-sm btn-danger " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 删除所选 </a>
-	         <a href="/scm/export" class="btn btn-sm btn-success " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 导出列表 </a>
+	         <a href="/asset/scm/export" class="btn btn-sm btn-success " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 导出列表 </a>
                         {{if .IsSearch}}
-                        <a href="/scm/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        <a href="/asset/scm/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}
-                        <form id="search_form" method="get" action="/scm/search" class="pull-right mail-search">
+                        <form id="search_form" method="get" action="/asset/scm/search" class="pull-right mail-search">
                             <div class="input-group">
                                 <input type="text" class="form-control input-sm" id="search_input" name="keyword" placeholder="按项目名称搜索...">
                                 <div class="input-group-btn">
@@ -54,9 +54,9 @@
                                 <td class="text-center">{{.Comment}}</td>
                                 <td class="text-center">{{.Created}}</td>
                                 <td class="text-center">
-                                     <a href="/scm/detail?id={{.Id}}" class="btn btn-xs btn-success" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>详情</a>
-                                    <a href="/scm/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>编辑</a>
-                                    <a href="/scm/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Uname "netop"}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                     <a href="/asset/scm/detail?id={{.Id}}" class="btn btn-xs btn-success" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>详情</a>
+                                    <a href="/asset/scm/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>编辑</a>
+                                    <a href="/asset/scm/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Uname "netop"}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
                                 </td>
                             </tr>
                             {{end}}
@@ -89,12 +89,12 @@
                     check_array.push($(this).attr("value"))
                 });
                 console.log(check_array.join(","));
-                $.post("/line/bitchDel",
+                $.post("/asset/scm/bitchDel",
                         {ids: check_array.join(",")},
                         function(data){
                             //console.log(data);
                             //$(".gradeX input:checked").closest("tr").remove();                            
-                            window.location.href="/line/list"                            
+                            window.location.href="/asset/scm/list"                            
                             //alert(data);
                         }
                 )

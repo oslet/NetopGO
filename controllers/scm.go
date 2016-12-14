@@ -27,7 +27,7 @@ func (this *ScmController) Get() {
 	this.Data["Path1"] = "SCM列表"
 	this.Data["Path2"] = ""
 	this.Data["Href"] = "/asset/scm/list"
-	this.Data["Category"] = "scm"
+	this.Data["Category"] = "asset/scm"
 
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
@@ -163,7 +163,7 @@ func (this *ScmController) Search() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	this.Data["Category"] = "scm"
+	this.Data["Category"] = "asset/scm"
 
 	name := this.Input().Get("keyword")
 	//beego.Info(name)

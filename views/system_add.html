@@ -5,7 +5,7 @@
 <br>
                     <div class="ibox-content">
 	      <div class="alert alert-warning text-center" id="alert_msg" style="display:none;">{{.Message}}</div>
-                        <form method="post" id="userForm" class="form-horizontal" action="/system/add">
+                        <form method="post" id="userForm" class="form-horizontal" action="/asset/system/add">
                             <div class="form-group">
                                 <label for="class" class="col-sm-2 control-label">系统分类</label>
                                 <div class="col-sm-8">
@@ -80,6 +80,17 @@
                                     <input id="company" name="company" placeholder="" type="text" class="form-control" >
                                 </div>
                             </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label for="support_level" class="col-sm-2 control-label">支持级别</label>
+                                <div class="col-sm-8">
+                                    <select name="support_level" class="form-control">
+                                        <option value="L1">L1</option>
+                                        <option value="L2">L2</option>
+                                        <option value="L3">L3</option>
+                                     </select>
+                                </div>
+                            </div>							
                             <div class="hr-line-dashed"></div>
                             <div class="form-group">
                                 <label for="comment" class="col-sm-2 control-label">用途/备注<span class="black-fonts">*</span></label>

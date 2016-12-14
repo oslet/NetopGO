@@ -2,10 +2,14 @@ package controllers
 
 import (
 	"NetopGO/models"
+	"os"
+	"path"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/astaxie/beego"
+	"github.com/tealeg/xlsx"
 )
 
 type UrlController struct {
@@ -22,7 +26,7 @@ func (this *UrlController) Get() {
 	this.Data["Path1"] = "url列表"
 	this.Data["Path2"] = ""
 	this.Data["Href"] = "/asset/url/list"
-	this.Data["Category"] = "url"
+	this.Data["Category"] = "asset/url"
 
 	if len(this.Input().Get("page")) == 0 {
 		page = "1"
@@ -153,7 +157,7 @@ func (this *UrlController) Search() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
-	this.Data["Category"] = "url"
+	this.Data["Category"] = "asset/url"
 
 	name := this.Input().Get("keyword")
 	//beego.Info(name)
@@ -182,5 +186,42 @@ func (this *UrlController) Search() {
 	this.Data["Path2"] = "搜索结果"
 	this.Data["Href"] = "/asset/url/list"
 	this.TplName = "url_list.html"
+	return
+}
+
+func (this *UrlController) Export() {
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname
+	this.Data["Role"] = role
+	this.Data["Category"] = "line"
+	values, columns, _ := models.QueryUrlExport()
+
+	file := xlsx.NewFile()
+	sheet, _ := file.AddSheet("Sheet1")
+	row := sheet.AddRow()
+	for _, val := range columns {
+		cell := row.AddCell()
+		cell.Value = val
+	}
+	for _, val := range *values {
+		row = sheet.AddRow()
+		for _, value := range val {
+			cell := row.AddCell()
+			cell.Value = value
+		}
+	}
+	now := time.Now().String()
+	filename := "all_url" + now[:4] + now[5:7] + now[8:10] + now[11:13] + now[14:16] + now[17:19] + ".xlsx"
+
+	filepath := path.Join("export", filename)
+	err := file.Save(filepath)
+	if err != nil {
+		beego.Error(err)
+	}
+	defer func() {
+		os.Remove(filepath)
+	}()
+	this.Ctx.Output.Download(filepath, filename)
 	return
 }

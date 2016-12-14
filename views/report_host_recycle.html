@@ -85,12 +85,12 @@
                     check_array.push($(this).attr("value"))
                 });
                 console.log(check_array.join(","));
-                $.post("/host/bitchDel",
+                $.post("/asset/host/bitchDel",
                         {ids: check_array.join(",")},
                         function(data){
                             //console.log(data);
                             //$(".gradeX input:checked").closest("tr").remove();                            
-                            window.location.href="/host/list"                            
+                            window.location.href="/asset/host/list"                            
                             //alert(data);
                         }
                 )

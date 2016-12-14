@@ -9,12 +9,12 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="">
-                        <a href="/group/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 添加业务组 </a>
+                        <a href="/asset/group/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 添加业务组 </a>
                         <a id="del_btn" class="btn btn-sm btn-danger " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 删除所选 </a>
                         {{if .IsSearch}}
                         <a href="/group/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}
-                        <form id="search_form" method="get" action="/group/search" class="pull-right mail-search">
+                        <form id="search_form" method="get" action="/asset/group/search" class="pull-right mail-search">
                             <div class="input-group">
                                 <input type="text" class="form-control input-sm" id="search_input" name="keyword" placeholder="按业务组名称搜索...">
                                 <div class="input-group-btn">
@@ -48,8 +48,8 @@
                                 <td class="text-center">{{.Comment}}</td>
                                 <td class="text-center">{{.Created}}</td>
                                 <td class="text-center">
-                                    <a href="/group/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>编辑</a>
-                                    <a href="/group/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Uname "netop"}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                    <a href="/asset/group/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>编辑</a>
+                                    <a href="/asset/group/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Uname "netop"}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
                                 </td>
                             </tr>
                             {{end}}
@@ -82,12 +82,12 @@
                     check_array.push($(this).attr("value"))
                 });
                 console.log(check_array.join(","));
-                $.post("/group/bitchDel",
+                $.post("/asset/group/bitchDel",
                         {ids: check_array.join(",")},
                         function(data){
                             //console.log(data);
                             //$(".gradeX input:checked").closest("tr").remove();                            
-                            window.location.href="/group/list"                            
+                            window.location.href="/asset/group/list"                            
                            // alert(data);
                         }
                 )

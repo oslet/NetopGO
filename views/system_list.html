@@ -9,13 +9,13 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="">
-                        <a href="/system/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 添加系统 </a>
+                        <a href="/asset/system/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 添加系统 </a>
                         <a id="del_btn" class="btn btn-sm btn-danger" {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 删除所选 </a>
-	         <a href="/system/export" class="btn btn-sm btn-success " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 导出列表 </a>
+	         <a href="/asset/system/export" class="btn btn-sm btn-success " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 导出列表 </a>
                         {{if .IsSearch}}
-                        <a href="/system/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        <a href="/asset/system/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}
-                        <form id="search_form" method="get" action="/system/search" class="form-inline pull-right">
+                        <form id="search_form" method="get" action="/asset/system/search" class="form-inline pull-right">
                             <div class="input-group">
                                 <select name="class" class="form-control">
                                     <option value="1" selected>---请选择分类---</option>
@@ -47,9 +47,9 @@
                                 </th>
                                 <th class="text-center">系统分类</th>
                                 <th class="text-center">系统名称</th>
-                                <th class="text-center">owner1</th>
+                                <th class="text-center">支持级别</th>
                                 <th class="text-center">域名</th>
-		 <th class="text-center">维护性质</th>
+		 						<th class="text-center">维护性质</th>
                                 <th class="text-center">操作</th>
                             </tr>
                         </thead>
@@ -61,13 +61,13 @@
                                 </td>
                                 <td class="text-center">{{.Class}}</td>
                                 <td class="text-center"><a href="#">{{.Name}}</a></td>
-                                <td class="text-center">{{.Owner1}}</td>
+                                <td class="text-center">{{.Support_level}}</td>
                                 <td class="text-center">{{.Domain_name}}</td>
-		 <td class="text-center">{{.Controller}}</trd>													
+		 						<td class="text-center">{{.Controller}}</trd>													
                                 <td class="text-center">
-                                     <a href="/system/detail?id={{.Id}}" class="btn btn-xs btn-success" >详情</a>
-                                    <a href="/system/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>编辑</a>
-                                    <a href="/system/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Uname "netop"}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                     <a href="/asset/system/detail?id={{.Id}}" class="btn btn-xs btn-success" >详情</a>
+                                    <a href="/asset/system/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>编辑</a>
+                                    <a href="/asset/system/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Uname "netop"}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
                                 </td>
 
                             </tr>
@@ -101,12 +101,12 @@
                     check_array.push($(this).attr("value"))
                 });
                 console.log(check_array.join(","));
-                $.post("/system/bitchDel",
+                $.post("/asset/system/bitchDel",
                         {ids: check_array.join(",")},
                         function(data){
                             //console.log(data);
                             //$(".gradeX input:checked").closest("tr").remove();                            
-                            window.location.href="/system/list"                            
+                            window.location.href="/asset/system/list"                            
                             //alert(data);
                         }
                 )

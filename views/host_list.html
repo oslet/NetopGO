@@ -9,12 +9,12 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="">
-                        <a href="/host/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 添加主机 </a>
+                        <a href="/asset/host/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 添加主机 </a>
                         <a id="del_btn" class="btn btn-sm btn-danger"  {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 删除所选 </a>
                         {{if .IsSearch}}
-                        <a href="/host/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        <a href="/asset/host/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}
-                        <form id="search_form" method="get" action="/host/search" class="form-inline pull-right">
+                        <form id="search_form" method="get" action="/asset/host/search" class="form-inline pull-right">
                             <div class="input-group">
                                 <select name="idc" class="form-control">
                                     <option value="1" selected>---请选择机房---</option>
@@ -72,9 +72,9 @@
                                     <a href="/host/webconsole?ip={{.Ip}}&id={{.Id}}&user={{.Read}}&role=2" target="_black" class="btn btn-xs btn btn-success" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>只读用户</a>
                                 </td>
                                 <td class="text-center">
-                                     <a href="/host/detail?id={{.Id}}" class="btn btn-xs btn-success" >详情</a>
-                                    <a href="/host/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>编辑</a>
-                                    <a href="/host/del?id={{.Id}}" class="btn btn-xs btn-warning" {{if ne $Uname "netop"}}disabled="disabled"{{end}} onclick="if(confirm('确定回收?')==false)return false;">回收</a>
+                                     <a href="/asset/host/detail?id={{.Id}}" class="btn btn-xs btn-success" >详情</a>
+                                    <a href="/asset/host/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>编辑</a>
+                                    <a href="/asset/host/del?id={{.Id}}" class="btn btn-xs btn-warning" {{if ne $Uname "netop"}}disabled="disabled"{{end}} onclick="if(confirm('确定回收?')==false)return false;">回收</a>
                                 </td>
 
                             </tr>
@@ -108,12 +108,12 @@
                     check_array.push($(this).attr("value"))
                 });
                 console.log(check_array.join(","));
-                $.post("/host/bitchDel",
+                $.post("/asset/host/bitchDel",
                         {ids: check_array.join(",")},
                         function(data){
                             //console.log(data);
                             //$(".gradeX input:checked").closest("tr").remove();                            
-                            window.location.href="/host/list"                            
+                            window.location.href="/asset/host/list"                            
                             //alert(data);
                         }
                 )

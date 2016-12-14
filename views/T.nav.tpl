@@ -58,7 +58,7 @@
             <li id="report">
                 <a href="javascript:void(0)"><i class="fa fa-edit"></i> <span class="nav-label">报表管理</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
-                    <li class="report_host"><a href="/report/asset/host/list/">新增主机</a></li>
+                    <li class="report_host"><a href="/report/host/list/">新增主机</a></li>
                     <li class="report_host"><a href="/report/recycle/list/">回收主机</a></li>
                 </ul>
             </li>  

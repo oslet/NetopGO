@@ -58,6 +58,7 @@ func init() {
 	beego.Router("/asset/url/del", &controllers.UrlController{}, "get:Delete")
 	beego.Router("/asset/url/bitchDel", &controllers.UrlController{}, "post:BitchDelete")
 	beego.Router("/asset/url/search", &controllers.UrlController{}, "get:Search")
+	beego.Router("/asset/url/export", &controllers.UrlController{}, "get:Export")
 
 	beego.Router("/asset/system/list", &controllers.SystemController{})
 	beego.Router("/asset/system/add", &controllers.SystemController{}, "get:Add")
@@ -66,7 +67,7 @@ func init() {
 	beego.Router("/asset/system/del", &controllers.SystemController{}, "get:Delete")
 	beego.Router("/asset/system/bitchDel", &controllers.SystemController{}, "post:BitchDelete")
 	beego.Router("/asset/system/search", &controllers.SystemController{}, "get:Search")
-	beego.Router("/system/detail", &controllers.SystemController{}, "get:Detail")
+	beego.Router("/asset/system/detail", &controllers.SystemController{}, "get:Detail")
 	beego.Router("/asset/system/export", &controllers.SystemController{}, "get:Export")
 
 	beego.Router("/asset/host/list", &controllers.HostController{})
