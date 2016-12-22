@@ -22,6 +22,12 @@ type System struct {
 	Team          string `orm:size(20)`
 	Company       string `orm:size(50)`
 	Support_level string `orm:size(20)`
+	Numbers       string `orm:size(20)`
+	Total_core    string `orm:size(20)`
+	Total_mem     string `orm:size(20)`
+	Total_disk    string `orm:size(20)`
+	Area          string `orm:size(20)`
+	Windows       string `orm:size(50)`
 	Comment       string `orm:size(100)`
 	Created       time.Time
 }
@@ -59,7 +65,7 @@ func GetSystemlistById(id string) (*System, error) {
 	return Systemlist, err
 }
 
-func AddSystemlist(class, name, owner1, owner2, domain_name, controller, responsible, team, company, support_level, comment string) (error, string) {
+func AddSystemlist(class, name, owner1, owner2, domain_name, controller, responsible, team, company, support_level, numbers, total_core, total_mem, total_disk, area, windows, comment string) (error, string) {
 	o := orm.NewOrm()
 	var msg string
 	//rootpwd, _ = AESEncode(rootpwd, AesKey)
@@ -75,6 +81,12 @@ func AddSystemlist(class, name, owner1, owner2, domain_name, controller, respons
 		Team:          team,
 		Company:       company,
 		Support_level: support_level,
+		Numbers:       numbers,
+		Total_core:    total_core,
+		Total_mem:     total_mem,
+		Total_disk:    total_disk,
+		Area:          area,
+		Windows:       windows,
 		Comment:       comment,
 		Created:       time.Now(),
 	}
@@ -88,7 +100,7 @@ func AddSystemlist(class, name, owner1, owner2, domain_name, controller, respons
 	return err, msg
 }
 
-func ModifySystemlist(id, class, name, owner1, owner2, domain_name, controller, responsible, team, company, support_level, comment string) (error, string) {
+func ModifySystemlist(id, class, name, owner1, owner2, domain_name, controller, responsible, team, company, support_level, numbers, total_core, total_mem, total_disk, area, windows, comment string) (error, string) {
 	o := orm.NewOrm()
 	var msg string
 	//rootpwd, _ = AESEncode(rootpwd, AesKey)
@@ -110,6 +122,12 @@ func ModifySystemlist(id, class, name, owner1, owner2, domain_name, controller, 
 		Systemlist.Team = team
 		Systemlist.Company = company
 		Systemlist.Support_level = support_level
+		Systemlist.Numbers = numbers
+		Systemlist.Total_core = total_core
+		Systemlist.Total_mem = total_mem
+		Systemlist.Total_disk = total_disk
+		Systemlist.Area = area
+		Systemlist.Windows = windows
 	}
 	o.Update(Systemlist)
 	msg = "修改成功"
@@ -172,7 +190,7 @@ func QuerySystemExport() (*map[int64][]string, []string, int64) {
 	}
 	defer conn.Close()
 
-	rows, err := conn.Query("select class,name,owner1,owner2, domain_name,controller,responsible,team,company,support_level,comment from system")
+	rows, err := conn.Query("select class,name,owner1,owner2, domain_name,controller,responsible,team,company,support_level,numbers,total_core,total_mem,total_disk,area,windows,comment from system")
 	if err != nil {
 		return &result, columns, total
 	}
