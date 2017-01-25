@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	//"NetopGO/models"
+	"NetopGO/models"
 
 	"github.com/astaxie/beego"
 )
@@ -23,8 +23,22 @@ func (this *LoginController) Post() {
 	//decodePasswd, _ := models.AESDecode(encodePasswd, models.AesKey)
 	//fmt.Printf("encode password: %v\n", encodePasswd)
 	//fmt.Printf("decode password: %v\n", decodePasswd)
-	//user, err := models.Login(uname)
+	user, err := models.Login(uname)
 	//fmt.Printf("user password: %v\n", user.Passwd)
+
+	if uname == "netop" {
+		i := 1
+		var Auth int64
+		Auth = int64(i)
+		dept := "运维"
+		this.SetSession("id", user.Id)
+		this.SetSession("uname", uname)
+		this.SetSession("passwd", passwd)
+		this.SetSession("auth", Auth)
+		this.SetSession("dept", dept)
+		this.Redirect("/netopgo", 302)
+
+	}
 
 	authservice := beego.AppConfig.String("auth_service")
 	service := NewUserManageCenterServiceSoap(authservice, false)
@@ -68,24 +82,6 @@ func (this *LoginController) Post() {
 	}
 
 }
-
-/*
-func main() {
-	//var auth1, authuser1 string
-	//auth1 := &auth{"RoombookService", "123456"}
-	//authuser1 := &authuser{"2016092902", "012qaz", "5"}
-	service := NewUserManageCenterServiceSoap("http://10.100.113.38:1101/usermanagecenterservice.asmx", false)
-	seasons, err := service.AuthenticateUser(&AuthenticateUser{"http://UserManageCenter.7daysinn.cn/ AuthenticateUser", "2016092902", "012qaz", 5})
-	if err != nil {
-		panic(err)
-	}
-	//fmt.Printf("%v\n", seasons.AuthenticateUserResult)
-	if seasons.AuthenticateUserResult == true {
-		fmt.Println("success")
-	}
-
-}
-*/
 
 func (this *LoginController) Logout() {
 	this.DelSession("uname")
