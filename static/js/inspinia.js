@@ -33,10 +33,11 @@ $(document).ready(function () {
         return false;
     });
 
-    // Append config box / Only for demo purpose
+    /* Append config box / Only for demo purpose
     $.get("/skin_config/", function (data) {
         $('body').append(data);
     });
+	*/
 
     // minimalize menu
     $('.navbar-minimalize').click(function () {

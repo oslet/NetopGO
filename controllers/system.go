@@ -121,16 +121,22 @@ func (this *SystemController) Post() {
 	team := this.Input().Get("team")
 	company := this.Input().Get("company")
 	support_level := this.Input().Get("support_level")
+	numbers := this.Input().Get("numbers")
+	total_core := this.Input().Get("total_core")
+	total_mem := this.Input().Get("total_mem")
+	total_disk := this.Input().Get("total_disk")
+	area := this.Input().Get("area")
+	windows := this.Input().Get("windows")
 	comment := this.Input().Get("comment")
 	//beego.Info(idc)
 	if len(id) > 0 {
-		err, msg := models.ModifySystemlist(id, class, name, owner1, owner2, domain_name, controller, responsible, team, company, support_level, comment)
+		err, msg := models.ModifySystemlist(id, class, name, owner1, owner2, domain_name, controller, responsible, team, company, support_level, numbers, total_core, total_mem, total_disk, area, windows, comment)
 		if err != nil {
 			beego.Error(err)
 		}
 		this.Data["Message"] = msg
 	} else {
-		err, msg := models.AddSystemlist(class, name, owner1, owner2, domain_name, controller, responsible, team, company, support_level, comment)
+		err, msg := models.AddSystemlist(class, name, owner1, owner2, domain_name, controller, responsible, team, company, support_level, numbers, total_core, total_mem, total_disk, area, windows, comment)
 		if err != nil {
 			beego.Error(err)
 		}

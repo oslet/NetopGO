@@ -22,7 +22,9 @@
                                 <label for="enable" class="col-sm-2 control-label">是否启用</label>
                                 <div class="col-sm-8">
                                     <select name="enable" class="form-control">
-                                    <input id="enable" name="enable" placeholder="enable" type="text" class="form-control" value="{{.Enable}}">
+                                        <option value="启用" {{if eq .Enable "启用"}}selected{{end}}>启用</option>
+                                        <option value="禁用" {{if eq .Enable "禁用"}}selected{{end}}>禁用</option>
+									</select>
                                 </div>
                             </div>    
                             <div class="form-group">

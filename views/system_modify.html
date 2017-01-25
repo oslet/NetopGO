@@ -11,12 +11,11 @@
                                 <div class="col-sm-8">
                                     <select name="class" class="form-control">
                                         <option value="内部系统" {{if eq .Class "内部系统"}}selected{{end}}>内部系统</option>
-                                        <option value="分店运营相关" {{if eq .Class "分店运营相关"}}selected{{end}}>分店运营相关</option>
+                                        <option value="分店运营相关" {{if eq .Class "运营相关"}}selected{{end}}>分店运营相关</option>
                                         <option value="网站预定" {{if eq .Class "网站预定"}}selected{{end}}>网站预定</option>
                                         <option value="销售相关" {{if eq .Class "销售相关"}}selected{{end}}>销售相关</option>
                                         <option value="数据相关" {{if eq .Class "数据相关"}}selected{{end}}>数据相关</option>
                                         <option value="财务相关" {{if eq .Class "财务相关"}}selected{{end}}>财务相关</option>
-                                        <option value="互联网公司" {{if eq .Class "互联网公司"}}selected{{end}}>互联网公司</option>
                                     </select>
                                 </div>
                             </div>
