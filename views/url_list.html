@@ -12,7 +12,7 @@
                         <a id="del_btn" class="btn btn-sm btn-danger " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 删除所选 </a>
 						<a href="/asset/url/export" class="btn btn-sm btn-success " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 导出列表 </a>
                         {{if .IsSearch}}
-                        <a href="/url/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        <a href="/asset/url/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}
                         <form id="search_form" method="get" action="/asset/url/search" class="pull-right mail-search">
                             <div class="input-group">

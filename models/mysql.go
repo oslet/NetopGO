@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	AesKey string = "rx,+&zNQZrCWxS#L"
+	AesKey string = beego.AppConfig.String("aeskey")
 )
 
 const (
