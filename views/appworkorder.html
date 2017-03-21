@@ -83,10 +83,19 @@
                                 </div>
                             </div>
 							-->
+							<!--
                             <div class="form-group">
                                 <label for="testreport" class="col-sm-2 control-label">测试报告<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
                                     <input type="file" class="form-control" name="testreport">
+                                </div>
+                            </div>
+							-->
+                            <div class="form-group">
+                                <label for="testreport" class="col-sm-2 control-label">测试报告<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <textarea name="testreport" class="form-control" rows="4" placeholder="请填写测试报告或提交附件"></textarea>
+									<input type="file" class="form-control" name="testreport">
                                 </div>
                             </div>
 							<!--
@@ -116,58 +125,72 @@
 $('#userForm').validator({
     timely: 2,
     theme: "yellow_right_effect",
+        rules: {
+            check_ip: [/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}$/, 'ip地址不正确'],
+            check_port: [/^\d{1,5}$/, '端口号不正确'],
+         type_m: function(element){
+                     return  $("#M").is(":checked");
+             }
+        },
     fields: {
         "apptype": {
-            rule: "required;",
+            rule: "required;length[1~500]",
             tip: "请选择业务类别",
             ok: "",
             msg: {required: "必须填写!"}
         },
         "version": {
-            rule: "required;",
+            rule: "required;length[1~500]",
             tip: "输入迭代版本",
             ok: "",
             msg: {required: "必须填写!"}
         },    
         "appname": {
-            rule: "required;",
+            rule: "required;length[1~500]",
             tip: "请选择应用名称",
             ok: "",
             msg: {required: "必须填写!"}
         },            
         "jenkinsname": {
-            rule: "required;",
+            rule: "required;length[1~500]",
             tip: "输入jenkins项目名称",
             ok: "",
             msg: {required: "必须填写!"}
         },                       
         "buildnum": {
-            rule: "required;",
+            rule: "required;length[1~500]",
             tip: "输入Build Num",
             ok: "",
             msg: {required: "必须填写!"}
         },                       
         "featurelist": {
-            rule: "required;",
+            rule: "required;length[1~500]",
             tip: "输入升级功能列表",
             ok: "",
             msg: {required: "必须填写!"}
         },                       
         "modifycfg": {
-            rule: "required;",
+            rule: "required;length[1~500]",
             tip: "输入配置文件修改项",
             ok: "",
             msg: {required: "必须填写!"}
         },                       
         "relayapp": {
-            rule: "required;",
+            rule: "required;length[1~500]",
             tip: "输入升级依赖描述",
             ok: "",
             msg: {required: "必须填写!"}
         },    
         "type": {
-            rule: "required;",
+            rule: "required;length[1~500]",
             tip: "请选择升级类型",
+            ok: "",
+            msg: {required: "必须填写!"}
+        }
+    },
+        "testreport": {
+            rule: "required;length[1~500]",
+            tip: "请提交测试报告",
             ok: "",
             msg: {required: "必须填写!"}
         }

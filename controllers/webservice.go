@@ -815,7 +815,7 @@ type CUser struct {
 
 	Title string `xml:"Title,omitempty"`
 
-	Type *EUserType `xml:"Type,omitempty"`
+	Type string `xml:"Type,omitempty"`
 
 	MebCardCode string `xml:"MebCardCode,omitempty"`
 
@@ -945,7 +945,7 @@ type CUserEx struct {
 
 	Title string `xml:"Title,omitempty"`
 
-	Type *EUserType `xml:"Type,omitempty"`
+	Type string `xml:"Type,omitempty"`
 
 	MebCardCode string `xml:"MebCardCode,omitempty"`
 
@@ -1093,7 +1093,7 @@ type CUserEx2 struct {
 
 	Title string `xml:"Title,omitempty"`
 
-	Type *EUserType `xml:"Type,omitempty"`
+	Type string `xml:"Type,omitempty"`
 
 	MebCardCode string `xml:"MebCardCode,omitempty"`
 

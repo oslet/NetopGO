@@ -148,6 +148,7 @@
                                 {{$HostGroupName:= .HostGroupName}}
                                     <select name="group" class="form-control">
                                         {{range .Groups}}
+                                        <option value="" {{if eq $HostGroupName .Name}}selected{{end}}>请指定业务组</option>
                                         <option value="{{.Name}}" {{if eq $HostGroupName .Name}}selected{{end}}>{{.Name}}</option>
                                         {{end}}
                                     </select>
@@ -158,6 +159,7 @@
                                 <label for="idc" class="col-sm-2 control-label">所属机房</label>
                                 <div class="col-sm-8">
                                     <select name="idc" class="form-control">
+                                        <option value="" {{if eq .Idc ""}}selected{{end}}>请指定机房</option>
                                         <option value="Ucloud" {{if eq .Idc "Ucloud"}}selected{{end}}>Ucloud</option>
                                         <option value="网宿机房" {{if eq .Idc "网宿机房"}}selected{{end}}>网宿机房</option>
                                         <option value="腾讯云" {{if eq .Idc "腾讯云"}}selected{{end}}>腾讯云</option>

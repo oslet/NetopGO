@@ -54,8 +54,9 @@ func (this *LoginController) Post() {
 			this.TplName = "login.html"
 			return
 		}
-		get_usercode := auex.AuthenticateUserExResult.ObjData.UserCode
-		if get_usercode == "2016092902" || get_usercode == "20106364336" {
+		get_usercode := auex.AuthenticateUserExResult.ObjData.Type
+		fmt.Println("get_usertype : ", get_usercode)
+		if get_usercode == "集团用户" {
 			i := 1
 			var Auth int64
 			Auth = int64(i)
@@ -67,19 +68,13 @@ func (this *LoginController) Post() {
 			this.SetSession("dept", dept)
 			this.Redirect("/netopgo", 302)
 		} else {
-			i := 3
-			var Auth int64
-			Auth = int64(i)
-			dept := "研发"
-			this.SetSession("id", auex.AuthenticateUserExResult.ObjData.UserID)
-			this.SetSession("uname", uname)
-			this.SetSession("passwd", passwd)
-			this.SetSession("auth", Auth)
-			this.SetSession("dept", dept)
-			this.Redirect("/netopgo", 302)
+			beego.Error(err)
+			this.Data["Error"] = true
+			this.TplName = "login.html"
+			return
 		}
-
 	}
+
 }
 
 func (this *LoginController) Logout() {

@@ -21,10 +21,10 @@
             {{if .Error}}
                 <div class="alert alert-danger text-center">用户名或密码错误!</div>
             {{end}}
-            <h2>Welcome to OPS</h2>
+            <h2>Welcome to OPSMGR</h2>
             <form class="m-t" role="form" method="post" action="/login">
                 <div class="form-group">
-                    <input type="text" name="uname" class="form-control" placeholder="Username" required="length[6~50]">
+                    <input type="text" name="uname" class="form-control" placeholder="Username" required="length[2~50]">
                 </div>
                 <div class="form-group">
                     <input type="password" name="passwd" class="form-control" placeholder="Password" required="">
