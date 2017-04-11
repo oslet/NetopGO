@@ -55,7 +55,8 @@ func (this *ScmController) Get() {
 func (this *ScmController) Add() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "Scm"
 	Auth := role.(int64)
@@ -84,7 +85,8 @@ func (this *ScmController) Add() {
 func (this *ScmController) Post() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
 	this.Data["Category"] = "scm"
@@ -122,7 +124,8 @@ func (this *ScmController) Post() {
 func (this *ScmController) Delete() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "scm"
 
@@ -141,7 +144,8 @@ func (this *ScmController) Delete() {
 func (this *ScmController) BitchDelete() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "scm"
 
@@ -222,7 +226,8 @@ func (this *ScmController) Detail() {
 func (this *ScmController) Export() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "scm"
 	values, columns, _ := models.QueryScmExport()

@@ -55,7 +55,8 @@ func (this *RecycleHostController) ReportWeek() {
 	var page string
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "report/recycle"
 	this.Data["IsSearch"] = false
@@ -129,7 +130,8 @@ func (this *RecycleHostController) SearchWeek() {
 func (this *RecycleHostController) Export() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "report/recycle"
 	method := this.Input().Get("method")

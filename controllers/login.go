@@ -56,7 +56,7 @@ func (this *LoginController) Post() {
 		}
 		get_usercode := auex.AuthenticateUserExResult.ObjData.Type
 		fmt.Println("get_usertype : ", get_usercode)
-		if get_usercode == "集团用户" {
+		if get_usercode != "" {
 			i := 1
 			var Auth int64
 			Auth = int64(i)

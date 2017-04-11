@@ -63,7 +63,8 @@ func (this *SystemController) Get() {
 func (this *SystemController) Add() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "system"
 	Auth := role.(int64)
@@ -103,7 +104,8 @@ func (this *SystemController) Add() {
 func (this *SystemController) Post() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
 	this.Data["Category"] = "system"
@@ -152,7 +154,8 @@ func (this *SystemController) Post() {
 func (this *SystemController) Delete() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "system"
 
@@ -171,7 +174,8 @@ func (this *SystemController) Delete() {
 func (this *SystemController) BitchDelete() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "system"
 
@@ -263,7 +267,8 @@ func (this *SystemController) Detail() {
 func (this *SystemController) Export() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "system"
 	values, columns, _ := models.QuerySystemExport()

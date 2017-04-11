@@ -50,7 +50,8 @@ func (this *GroupController) Get() {
 func (this *GroupController) Add() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "group"
 	Auth := role.(int64)

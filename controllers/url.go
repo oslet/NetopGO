@@ -54,7 +54,8 @@ func (this *UrlController) Get() {
 func (this *UrlController) Add() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "Url"
 	Auth := role.(int64)
@@ -83,7 +84,8 @@ func (this *UrlController) Add() {
 func (this *UrlController) Post() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
 	this.Data["Category"] = "url"
@@ -116,7 +118,8 @@ func (this *UrlController) Post() {
 func (this *UrlController) Delete() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "url"
 
@@ -135,7 +138,8 @@ func (this *UrlController) Delete() {
 func (this *UrlController) BitchDelete() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "url"
 
@@ -192,7 +196,8 @@ func (this *UrlController) Search() {
 func (this *UrlController) Export() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "line"
 	values, columns, _ := models.QueryUrlExport()

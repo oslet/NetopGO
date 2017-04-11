@@ -1,7 +1,8 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
-{{$Auth := .Auth}}
-{{if eq .Auth 1}}
+{{$auth := .Auth}}
+{{$Uname := .Uname}}
+{{if and (eq .Auth 1) (eq .Uname "netop")}}
 <br>
                     <div class="ibox-content">
 	      <div class="alert alert-warning text-center" id="alert_msg" style="display:none;">{{.Message}}</div>

@@ -9,8 +9,10 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="">
+					{{if and (eq .Auth 1) (eq .Uname "netop")}}
                         <a href="/asset/host/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 添加主机 </a>
                         <a id="del_btn" class="btn btn-sm btn-danger"  {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 删除所选 </a>
+					{{end}}
                         {{if .IsSearch}}
                         <a href="/asset/host/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}

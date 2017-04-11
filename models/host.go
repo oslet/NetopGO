@@ -252,7 +252,7 @@ func QueryHostWeekExport(method string) (*map[int64][]string, []string, int64) {
 
 	defer conn.Close()
 	if method == "week" {
-		rows, err := conn.Query("select name,ip,pubip,service_name,os_type,owner,department,cpu,mem,disk,idc,`group`,created from `host` where DATE_SUB(CURDATE(), INTERVAL 7 day) <= date(`created`)")
+		rows, err := conn.Query("select id,name,ip,pubip,service_name,os_type,owner,department,cpu,mem,disk,idc,`group`,created from `host` where DATE_SUB(CURDATE(), INTERVAL 7 day) <= date(`created`) order by id")
 		if err != nil {
 			return &result, columns, total
 		}
@@ -275,7 +275,7 @@ func QueryHostWeekExport(method string) (*map[int64][]string, []string, int64) {
 			result[total] = row
 		}
 	} else if method == "all" {
-		rows, err := conn.Query("select name,ip,pubip,service_name,os_type,owner,department,cpu,mem,disk,idc,`group`,created from `host`")
+		rows, err := conn.Query("select id,name,ip,pubip,service_name,os_type,owner,department,cpu,mem,disk,idc,`group`,created from `host` order by id")
 		if err != nil {
 			return &result, columns, total
 		}

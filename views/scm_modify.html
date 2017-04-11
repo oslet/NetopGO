@@ -1,7 +1,8 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
 {{$Auth := .Auth}}
-{{if eq .Auth 1}}
+{{$Uname := .Uname}}
+{{if and (eq .Auth 1) (eq .Uname "netop")}}
 <br>
                     <div class="ibox-content">
                         {{with .Scm}}
@@ -94,7 +95,7 @@ $('#userForm').validator({
             msg: {required: "必须填写!"}
         },
         "scmaddr": {
-            rule: "required;length[2~50]",
+            rule: "required;length[7~100]",
             tip: "输入scm路径",
             ok: "",
             msg: {required: "必须填写!"}

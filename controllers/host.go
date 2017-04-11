@@ -65,11 +65,12 @@ func (this *HostController) Get() {
 func (this *HostController) Add() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "host"
-	auth := role.(int64)
-	this.Data["Auth"] = auth
+	Auth := role.(int64)
+	this.Data["Auth"] = Auth
 
 	groups, err := models.GetNames()
 	if err != nil {
@@ -105,7 +106,8 @@ func (this *HostController) Add() {
 func (this *HostController) Post() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
 	this.Data["Category"] = "host"
@@ -156,7 +158,8 @@ func (this *HostController) Post() {
 func (this *HostController) Delete() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "host"
 
@@ -293,7 +296,8 @@ func (this *HostController) Detail() {
 func (this *HostController) Export() {
 	uid, uname, role, _ := this.IsLogined()
 	this.Data["Id"] = uid
-	this.Data["Uname"] = uname
+	Uname := uname.(string)
+	this.Data["Uname"] = Uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "report/host"
 	method := this.Input().Get("method")
