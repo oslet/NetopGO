@@ -12,12 +12,18 @@
                                 <div class="col-sm-8">
                                     <select name="class" class="form-control">
                                         <option value="内部系统" {{if eq .Class "内部系统"}}selected{{end}}>内部系统</option>
-                                        <option value="分店运营相关" {{if eq .Class "运营相关"}}selected{{end}}>分店运营相关</option>
+                                        <option value="分店运营相关" {{if eq .Class "运营相关"}}selected{{end}}>运营相关</option>
                                         <option value="网站预定" {{if eq .Class "网站预定"}}selected{{end}}>网站预定</option>
                                         <option value="销售相关" {{if eq .Class "销售相关"}}selected{{end}}>销售相关</option>
                                         <option value="数据相关" {{if eq .Class "数据相关"}}selected{{end}}>数据相关</option>
                                         <option value="财务相关" {{if eq .Class "财务相关"}}selected{{end}}>财务相关</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="status" class="col-sm-2 control-label">系统状态<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="status" name="status" placeholder="status" type="text" class="form-control" value="{{.Status}}">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -27,21 +33,27 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="owner1" class="col-sm-2 control-label">owner1<span class="red-fonts">*</span></label>
+                                <label for="buss_owner" class="col-sm-2 control-label">业务owner<span class="red-fonts">*</span></label>
                                 <div class="col-sm-8">
-                                    <input id="owner1" name="owner1" placeholder="owner1" type="text" class="form-control" value="{{.Owner1}}">
+                                    <input id="buss_owner" name="buss_owner" placeholder="buss_owner" type="text" class="form-control" value="{{.Buss_owner}}">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="owner2" class="col-sm-2 control-label">owner2<span class="black-fonts">*</span></label>
+                                <label for="buss_attr" class="col-sm-2 control-label">业务归属<span class="black-fonts">*</span></label>
                                 <div class="col-sm-8">
-                                    <input id="owner2" name="owner2" placeholder="owner2" type="text" class="form-control" value="{{.Owner2}}">
+                                    <input id="buss_attr" name="buss_attr" placeholder="buss_attr" type="text" class="form-control" value="{{.Buss_attr}}">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="domain_name" class="col-sm-2 control-label">域名<span class="black-fonts">*</span></label>
                                 <div class="col-sm-8">
                                     <input id="domain_name" name="domain_name" placeholder="domain_name" type="text" class="form-control" value="{{.Domain_name}}">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="risk_category" class="col-sm-2 control-label">风险类别<span class="black-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="risk_category" name="risk_category" placeholder="risk_category" type="text" class="form-control" value="{{.Risk_category}}">
                                 </div>
                             </div>
                             <div class="form-group">                            

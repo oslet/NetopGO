@@ -10,27 +10,39 @@
                                 </div>
                             </div>                            
                             <div class="form-group">
+                                <label for="status" class="col-sm-2 control-label">系统状态</label>
+                                <div class="col-sm-8">
+                                    <input id="status" name="status" placeholder="" type="text" class="form-control" value="{{.Status}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label for="name" class="col-sm-2 control-label">系统名称</label>
                                 <div class="col-sm-8">
                                     <input id="name" name="name" placeholder="" type="text" class="form-control" value="{{.Name}}" readonly>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="owner1" class="col-sm-2 control-label">owner1</label>
+                                <label for="buss_owner" class="col-sm-2 control-label">业务owner</label>
                                 <div class="col-sm-8">
-                                    <input id="owner1" name="owner1" placeholder="" type="text" class="form-control" value="{{.Owner1}}" readonly>
+                                    <input id="buss_owner" name="buss_owner" placeholder="" type="text" class="form-control" value="{{.Buss_owner}}" readonly>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="owner2" class="col-sm-2 control-label">owner2</label>
+                                <label for="buss_attr" class="col-sm-2 control-label">业务归属</label>
                                 <div class="col-sm-8">
-                             <input id="owner2" name="owner2" placeholder="" type="text" class="form-control" value="{{.Owner2}}" readonly>
+                             <input id="buss_attr" name="buss_attr" placeholder="" type="text" class="form-control" value="{{.Buss_attr}}" readonly>
                                 </div>
                             </div>
                              <div class="form-group">
                                 <label for="domain_name" class="col-sm-2 control-label">域名</label>
                                 <div class="col-sm-8">
                              <input id="domain_name" name="domain_name" placeholder="" type="text" class="form-control" value="{{.Domain_name}}" readonly>
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <label for="risk_category" class="col-sm-2 control-label">风险类别</label>
+                                <div class="col-sm-8">
+                             <input id="risk_category" name="risk_category" placeholder="" type="text" class="form-control" value="{{.Domain_name}}" readonly>
                                 </div>
                             </div>
                             <div class="form-group">
