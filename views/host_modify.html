@@ -148,9 +148,10 @@
                                 <div class="col-sm-8">
                                 {{$HostGroupName:= .HostGroupName}}
                                     <select name="group" class="form-control">
+                                        <option value="" {{if eq .HostGroupName ""}}selected{{end}}>请指定业务组</option>
                                         {{range .Groups}}
-                                        <option value="" {{if eq $HostGroupName .Name}}selected{{end}}>请指定业务组</option>
                                         <option value="{{.Name}}" {{if eq $HostGroupName .Name}}selected{{end}}>{{.Name}}</option>
+
                                         {{end}}
                                     </select>
                                 </div>
