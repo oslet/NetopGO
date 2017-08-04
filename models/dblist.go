@@ -120,12 +120,26 @@ func SearchDblistCount(dbname string) (int64, error) {
 	total, err := o.QueryTable("dblist").Filter("name__icontains", dbname).All(&dblists)
 	return total, err
 }
-
+/*
 func SearchDblistByName(currPage, pageSize int, dbname string) ([]*Dblist, error) {
 	o := orm.NewOrm()
 	dblists := make([]*Dblist, 0)
 	_, err := o.QueryTable("dblist").Filter("name__icontains", dbname).Limit(pageSize, (currPage-1)*pageSize).All(&dblists)
 	return dblists, err
+}
+*/
+
+func SearchDblistByName(currPage, pageSize int, name string) ([]*Dblist, error) {
+	o := orm.NewOrm()
+	dblists := make([]*Dblist, 0)
+	ids := []string{"%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%"}
+	if len(name) == 0 {
+		_, err := o.QueryTable("dblist").Limit(pageSize, (currPage-1)*pageSize).All(&dblists)
+		return dblists, err
+	} else {
+		_, err := o.Raw("select * from dblist where ip like ? or port like ? or dbinst like ? or dbname like ? or isswitch like ? or attrteam like ? or name like ? limit ?,?", ids, (currPage-1)*pageSize, pageSize).QueryRows(&dblists)
+		return dblists, err
+	}
 }
 
 func GetDblistNames() ([]*Dblist, error) {
