@@ -1,5 +1,8 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
+{{$Auth := .Auth}}
+{{$Uname := .Uname}}
+{{if and (eq .Auth 1) (eq .Uname "netop")}}
 <br>    
     <div class="col-sm-7 white-bg" id="top10" style="width: 100%; height: 320px;padding: 15px 0px 15px 0px;"></div>
     <div>-</div>

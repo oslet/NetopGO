@@ -1,5 +1,8 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
+{{$Auth := .Auth}}
+{{$Uname := .Uname}}
+{{if and (eq .Auth 1) (eq .Uname "netop")}}
 <br>
                     <div class="ibox-content">
                         <form method="post" id="userForm" class="form-horizontal" action="/db/add">

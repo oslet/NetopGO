@@ -1,6 +1,7 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
-{{if eq .Auth 2}}
+{{$Uname := .Uname}}
+{{if and (eq .Auth 1) (eq .Uname "netop")}}
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-12">
