@@ -21,6 +21,7 @@
                     <li class="asset"> <a href="/asset/system/list">系统列表</a></li>
                     <li class="asset"> <a href="/asset/scm/list">SVN列表</a></li>
                     <li class="asset"> <a href="/asset/url/list">URL列表</a></li>
+                    <li class="asset"> <a href="/asset/dblist/list">DB列表</a></li>
                 </ul>
             </li>
             <li id="db">

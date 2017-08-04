@@ -9,14 +9,14 @@
                 <div class="ibox-content">
                     <div class="">
 					{{if and (eq .Auth 1) (eq .Uname "netop")}}						
-                        <a href="/asset/scm/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 添加SCM </a>
+                        <a href="/asset/dblist/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 添加dblist </a>
                         <a id="del_btn" class="btn btn-sm btn-danger " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 删除所选 </a>
-	         		   <a href="/asset/scm/export" class="btn btn-sm btn-success " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 导出列表 </a>
+	         		   <a href="/asset/dblist/export" class="btn btn-sm btn-success " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 导出列表 </a>
 			        {{end}}
                         {{if .IsSearch}}
-                        <a href="/asset/scm/list" class="btn btn-white pull-right"> 返回列表 </a>
+                        <a href="/asset/dblist/list" class="btn btn-white pull-right"> 返回列表 </a>
                         {{else}}
-                        <form id="search_form" method="get" action="/asset/scm/search" class="pull-right mail-search">
+                        <form id="search_form" method="get" action="/asset/dblist/search" class="pull-right mail-search">
                             <div class="input-group">
                                 <input type="text" class="form-control input-sm" id="search_input" name="keyword" placeholder="按项目名称搜索...">
                                 <div class="input-group-btn">
@@ -34,31 +34,33 @@
                                 <th class="text-center">
                                     <input type="checkbox" id="check_all" onclick="checkAll('check_all', 'checked')">
                                 </th>
-                                <th class="text-center">项目名</th>
-                                <th class="text-center">是否部署组</th>
-                                <th class="text-center">是否迁入</th>
-		                        <th class="text-center">负责人</th>
-                                <th class="text-center">备注</th>
-                                <th class="text-center">创建时间</th>                         
+                                <th class="text-center">IP</th>
+                                <th class="text-center">Port</th>
+                                <th class="text-center">数据库实例</th>
+		                        <th class="text-center">数据库名</th>
+                                <th class="text-center">是否交接</th>
+                                <th class="text-center">归属团队</th>
+                                <th class="text-center">归属业务</th>
                                 <th class="text-center">操作</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{range .Scms}}
+                            {{range .dblists}}
                             <tr class="gradeX">
                                 <td class="text-center">
                                     <input type="checkbox" name="checked" value="{{.Id}}">
                                 </td>
-                                <td class="text-center"><a href="#">{{.Name}}</a></td>
-                                <td class="text-center">{{.Isdeployment}}</td>
-                                <td class="text-center">{{.Ischeckin}}</td>
-                                <td class="text-center">{{.Owner}}</td>
-                                <td class="text-center">{{.Comment}}</td>
-                                <td class="text-center">{{.Created}}</td>
+                                <td class="text-center"><a href="#">{{.IP}}</a></td>
+                                <td class="text-center">{{.Port}}</td>
+                                <td class="text-center">{{.DBInst}}</td>
+                                <td class="text-center">{{.DBName}}</td>
+                                <td class="text-center">{{.IsSwitch}}</td>
+                                <td class="text-center">{{.AttrTeam}}</td>
+                                <td class="text-center">{{.Name}}</td>
                                 <td class="text-center">
-                                     <a href="/asset/scm/detail?id={{.Id}}" class="btn btn-xs btn-success" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>详情</a>
-                                    <a href="/asset/scm/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>编辑</a>
-                                    <a href="/asset/scm/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Uname "netop"}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                     <a href="/asset/dblist/detail?id={{.Id}}" class="btn btn-xs btn-success" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>详情</a>
+                                    <a href="/asset/dblist/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>编辑</a>
+                                    <a href="/asset/dblist/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Uname "netop"}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
                                 </td>
                             </tr>
                             {{end}}
@@ -91,12 +93,12 @@
                     check_array.push($(this).attr("value"))
                 });
                 console.log(check_array.join(","));
-                $.post("/asset/scm/bitchDel",
+                $.post("/asset/dblist/bitchDel",
                         {ids: check_array.join(",")},
                         function(data){
                             //console.log(data);
                             //$(".gradeX input:checked").closest("tr").remove();                            
-                            window.location.href="/asset/scm/list"                            
+                            window.location.href="/asset/dblist/list"                            
                             //alert(data);
                         }
                 )

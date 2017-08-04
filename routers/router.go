@@ -51,6 +51,16 @@ func init() {
 	beego.Router("/asset/scm/detail", &controllers.ScmController{}, "get:Detail")
 	beego.Router("/asset/scm/export", &controllers.ScmController{}, "get:Export")
 
+	beego.Router("/asset/dblist/list", &controllers.DblistController{})
+	beego.Router("/asset/dblist/add", &controllers.DblistController{}, "get:Add")
+	beego.Router("/asset/dblist/add", &controllers.DblistController{}, "post:Post")
+	beego.Router("/asset/dblist/modify", &controllers.DblistController{}, "post:Post")
+	beego.Router("/asset/dblist/del", &controllers.DblistController{}, "get:Delete")
+	beego.Router("/asset/dblist/bitchDel", &controllers.DblistController{}, "post:BitchDelete")
+	beego.Router("/asset/dblist/search", &controllers.DblistController{}, "get:Search")
+	beego.Router("/asset/dblist/detail", &controllers.DblistController{}, "get:Detail")
+	beego.Router("/asset/dblist/export", &controllers.DblistController{}, "get:Export")
+
 	beego.Router("/asset/url/list", &controllers.UrlController{})
 	beego.Router("/asset/url/add", &controllers.UrlController{}, "get:Add")
 	beego.Router("/asset/url/add", &controllers.UrlController{}, "post:Post")

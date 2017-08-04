@@ -1,0 +1,62 @@
+{{template "page_top" .}}
+{{template "nav_cat_bar" .}}
+                    {{with .dblist}}
+                    <div class="ibox-content">
+                        <form method="post" id="userForm" class="form-horizontal" action="" enctype="multipart/form-data"> 
+                           <div class="form-group">
+                                <label for="ip" class="col-sm-2 control-label">IP<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="ip" name="ip" placeholder="ip" type="text" class="form-control" value="{{.IP}}" readonly >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="port" class="col-sm-2 control-label">Port<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="port" name="port" placeholder="" type="text" class="form-control" value="{{.Port}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="dbinst" class="col-sm-2 control-label">数据库实例<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="dbinst" name="dbinst" placeholder="" type="text" class="form-control" value="{{.DBInst}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="dbname" class="col-sm-2 control-label">数据库名<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="dbname" name="dbname" placeholder="" type="text" class="form-control" value="{{.DBName}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="isswitch" class="col-sm-2 control-label">是否交接<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="isswitch" name="isswitch" placeholder="" type="text" class="form-control" value="{{.IsSwitch}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="attrteam" class="col-sm-2 control-label">归属团队<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="attrteam" name="attrteam" placeholder="" type="text" class="form-control" value="{{.AttrTeam}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="attrapp" class="col-sm-2 control-label">归属业务<span class="red-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="attrapp" name="attrapp" placeholder="" type="text" class="form-control" value="{{.Name}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="created" class="col-sm-2 control-label">创建时间<span class="black-fonts">*</span></label>
+                                <div class="col-sm-8">
+                                    <input id="created" name="created" placeholder="" type="text" class="form-control" value="{{.Created}}" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-2">
+                                    <button id="submit_button" class="btn btn-primary"><a href="/asset/dblist/list">返回列表</a></button>
+                                </div>
+                            </div>
+                        </form>
+                        {{end}}
+                    </div>
+{{template "page_buttom" .}}
