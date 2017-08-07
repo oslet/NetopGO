@@ -50,7 +50,7 @@
                                 <th class="text-center">系统名称</th>
                                 <th class="text-center">支持级别</th>
                                 <th class="text-center">域名</th>
-		 						<th class="text-center">维护性质</th>
+		 						<th class="text-center">代码归属</th>
                                 <th class="text-center">操作</th>
                             </tr>
                         </thead>
@@ -64,7 +64,7 @@
                                 <td class="text-center"><a href="#">{{.Name}}</a></td>
                                 <td class="text-center">{{.Support_level}}</td>
                                 <td class="text-center">{{.Domain_name}}</td>
-		 						<td class="text-center">{{.Controller}}</trd>													
+		 						<td class="text-center">{{.Controller}}</td>
                                 <td class="text-center">
                                      <a href="/asset/system/detail?id={{.Id}}" class="btn btn-xs btn-success" >详情</a>
                                     <a href="/asset/system/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>编辑</a>

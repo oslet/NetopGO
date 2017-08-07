@@ -120,6 +120,10 @@ func (this *SystemController) Post() {
 	buss_attr := this.Input().Get("buss_attr")
 	domain_name := this.Input().Get("domain_name")
 	risk_category := this.Input().Get("risk_category")
+	attr_dev := this.Input().Get("attr_dev")
+	attr_test := this.Input().Get("attr_test")
+	attr_arch := this.Input().Get("attr_arch")
+	attr_ops := this.Input().Get("attr_ops")
 	controller := this.Input().Get("controller")
 	responsible := this.Input().Get("responsible")
 	team := this.Input().Get("team")
@@ -134,13 +138,13 @@ func (this *SystemController) Post() {
 	comment := this.Input().Get("comment")
 	//beego.Info(idc)
 	if len(id) > 0 {
-		err, msg := models.ModifySystemlist(id, class, status, name, buss_owner, buss_attr, domain_name, risk_category, controller, responsible, team, company, support_level, numbers, total_core, total_mem, total_disk, area, windows, comment)
+		err, msg := models.ModifySystemlist(id, class, status, name, buss_owner, buss_attr, domain_name, risk_category, attr_dev, attr_test, attr_arch, attr_ops, controller, responsible, team, company, support_level, numbers, total_core, total_mem, total_disk, area, windows, comment)
 		if err != nil {
 			beego.Error(err)
 		}
 		this.Data["Message"] = msg
 	} else {
-		err, msg := models.AddSystemlist(class, status, name, buss_owner, buss_attr, domain_name, risk_category, controller, responsible, team, company, support_level, numbers, total_core, total_mem, total_disk, area, windows, comment)
+		err, msg := models.AddSystemlist(class, status, name, buss_owner, buss_attr, domain_name, risk_category, attr_dev, attr_test, attr_arch, attr_ops, controller, responsible, team, company, support_level, numbers, total_core, total_mem, total_disk, area, windows, comment)
 		if err != nil {
 			beego.Error(err)
 		}

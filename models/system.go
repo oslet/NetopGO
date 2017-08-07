@@ -19,6 +19,10 @@ type System struct {
 	Buss_attr     string `orm:size(20)`
 	Domain_name   string `orm:size(50)`
 	Risk_category string `orm:size(50)`
+	Attr_dev	string `"column(attr_dev)"`
+	Attr_test	string `"column(attr_test)"`
+	Attr_arch	string `"column(attr_arch)"`
+	Attr_ops	string `"column(attr_ops)"`
 	Controller    string `orm:size(50)`
 	Responsible   string `orm:size(20)`
 	Team          string `orm:size(20)`
@@ -67,7 +71,7 @@ func GetSystemlistById(id string) (*System, error) {
 	return Systemlist, err
 }
 
-func AddSystemlist(class, status, name, buss_owner, buss_attr, domain_name, risk_category, controller, responsible, team, company, support_level, numbers, total_core, total_mem, total_disk, area, windows, comment string) (error, string) {
+func AddSystemlist(class, status, name, buss_owner, buss_attr, domain_name, risk_category, attr_dev, attr_test, attr_arch, attr_ops, controller, responsible, team, company, support_level, numbers, total_core, total_mem, total_disk, area, windows, comment string) (error, string) {
 	o := orm.NewOrm()
 	var msg string
 	//rootpwd, _ = AESEncode(rootpwd, AesKey)
@@ -80,6 +84,10 @@ func AddSystemlist(class, status, name, buss_owner, buss_attr, domain_name, risk
 		Buss_attr:     buss_attr,
 		Domain_name:   domain_name,
 		Risk_category: risk_category,
+		Attr_dev: attr_dev,
+		Attr_test: attr_test,
+		Attr_arch: attr_arch,
+		Attr_ops: attr_ops,
 		Controller:    controller,
 		Responsible:   responsible,
 		Team:          team,
@@ -104,7 +112,7 @@ func AddSystemlist(class, status, name, buss_owner, buss_attr, domain_name, risk
 	return err, msg
 }
 
-func ModifySystemlist(id, class, status, name, buss_owner, buss_attr, domain_name, risk_category, controller, responsible, team, company, support_level, numbers, total_core, total_mem, total_disk, area, windows, comment string) (error, string) {
+func ModifySystemlist(id, class, status, name, buss_owner, buss_attr, domain_name, risk_category, attr_dev, attr_test, attr_arch, attr_ops, controller, responsible, team, company, support_level, numbers, total_core, total_mem, total_disk, area, windows, comment string) (error, string) {
 	o := orm.NewOrm()
 	var msg string
 	//rootpwd, _ = AESEncode(rootpwd, AesKey)
@@ -122,6 +130,10 @@ func ModifySystemlist(id, class, status, name, buss_owner, buss_attr, domain_nam
 		Systemlist.Buss_attr = buss_attr
 		Systemlist.Domain_name = domain_name
 		Systemlist.Risk_category = risk_category
+		Systemlist.Attr_dev = attr_dev
+		Systemlist.Attr_test = attr_test
+		Systemlist.Attr_arch = attr_arch
+		Systemlist.Attr_ops = attr_ops
 		Systemlist.Controller = controller
 		Systemlist.Comment = comment
 		Systemlist.Responsible = responsible
@@ -163,15 +175,6 @@ func SearchSystemlistCount(class, name string) (int64, error) {
 func SearchSystemlistByName(currPage, pageSize int, class, name string) ([]*System, error) {
 	o := orm.NewOrm()
 	Systemlists := make([]*System, 0)
-	/*
-		var cond *orm.Condition
-		cond = orm.NewCondition()
-		cond = cond.Or("name__icontains", name)
-		//cond = cond.Or("ip__icontains", "ip")
-		var qs orm.QuerySeter
-		qs = o.QueryTable("system").Limit(pageSize, (currPage-1)*pageSize).SetCond(cond)
-		_, err := qs.All(&Systemlists)
-	*/
 	_, err := o.QueryTable("system").Filter("class", class).Filter("name__icontains", name).Limit(pageSize, (currPage-1)*pageSize).All(&Systemlists)
 	return Systemlists, err
 }
@@ -196,7 +199,7 @@ func QuerySystemExport() (*map[int64][]string, []string, int64) {
 	}
 	defer conn.Close()
 
-	rows, err := conn.Query("select class,status,name,buss_owner,buss_attr, domain_name,risk_category,controller,responsible,team,company,support_level,numbers,total_core,total_mem,total_disk,area,windows,comment from system")
+	rows, err := conn.Query("select class,status,name,buss_owner,buss_attr, domain_name,risk_category, attr_dev, attr_test, attr_arch, attr_ops, controller,responsible,team,company,support_level,numbers,total_core,total_mem,total_disk,area,windows,comment from system")
 	if err != nil {
 		return &result, columns, total
 	}

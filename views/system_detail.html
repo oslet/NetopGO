@@ -46,12 +46,52 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="controller" class="col-sm-2 control-label">维护性质</label>
+                                <label for="attr_dev" class="col-sm-2 control-label">开发归属</label>
+                                <div class="col-sm-8">
+                                    <select name="attr_dev" class="form-control" readonly>
+                                        <option value="" selected>---未选择归属---</option>
+                                        <option value="归属集团" {{if eq .Attr_dev "归属集团"}}selected{{end}}>归属集团</option>
+                                        <option value="归属第三方" {{if eq .Attr_dev "归属第三方"}}selected{{end}}>归属第三方</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="attr_test" class="col-sm-2 control-label">测试归属</label>
+                                <div class="col-sm-8">
+                                    <select name="attr_test" class="form-control" readonly>
+                                        <option value="" selected>---未选择归属---</option>
+                                        <option value="归属集团" {{if eq .Attr_test "归属集团"}}selected{{end}}>归属集团</option>
+                                        <option value="归属第三方" {{if eq .Attr_test "归属第三方"}}selected{{end}}>归属第三方</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="attr_arch" class="col-sm-2 control-label">基础架构归属</label>
+                                <div class="col-sm-8">
+                                    <select name="attr_arch" class="form-control" readonly>
+                                        <option value="" selected>---未选择归属---</option>
+                                        <option value="归属集团" {{if eq .Attr_arch "归属集团"}}selected{{end}}>归属集团</option>
+                                        <option value="归属第三方" {{if eq .Attr_arch "归属第三方"}}selected{{end}}>归属第三方</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="attr_ops" class="col-sm-2 control-label">应用运维归属</label>
+                                <div class="col-sm-8">
+                                    <select name="attr_ops" class="form-control" readonly>
+                                        <option value="" selected>---未选择归属---</option>
+                                        <option value="归属集团" {{if eq .Attr_ops "归属集团"}}selected{{end}}>归属集团</option>
+                                        <option value="归属第三方" {{if eq .Attr_ops "归属第三方"}}selected{{end}}>归属第三方</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="controller" class="col-sm-2 control-label">代码归属</label>
                                 <div class="col-sm-8">
                                     <select name="controller" class="form-control" readonly>
-                                        <option value="集团维护" {{if eq .Controller "集团维护"}}selected{{end}}>集团维护</option>
-                                        <option value="第三方全权管理" {{if eq .Controller "第三方全权管理"}}selected{{end}}>第三方全权管理</option>
-                                        <option value="集团运维代码属第三方" {{if eq .Controller "集团运维代码属第三方"}}selected{{end}}>集团运维代码属第三方</option>
+                                        <option value="" selected>---未选择归属---</option>
+                                        <option value="归属集团" {{if eq .Controller "归属集团"}}selected{{end}}>归属集团</option>
+                                        <option value="归属第三方" {{if eq .Controller "归属第三方"}}selected{{end}}>归属第三方</option>
                                     </select>
                                 </div>
                             </div>

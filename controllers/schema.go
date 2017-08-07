@@ -216,6 +216,8 @@ func (this *SchemaController) View() {
 	this.Data["Id"] = uid
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
+	auth := role.(int64)
+	this.Data["Auth"] = auth
 	this.Data["Category"] = "db"
 	schema := this.Input().Get("schema")
 	time, size, total, err := models.GetTotalSizeView(schema)
