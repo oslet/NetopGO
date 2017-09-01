@@ -40,7 +40,7 @@ func (this *LoginController) Post() {
 		this.SetSession("passwd", user.Passwd)
 		this.SetSession("auth", user.Auth)
 		this.SetSession("dept", user.Dept)
-		this.Redirect("/netopgo", 302)
+		this.Redirect("/", 301)
 	} else {
 		authservice := beego.AppConfig.String("auth_service")
 		service := NewUserManageCenterServiceSoap(authservice, false)
@@ -66,7 +66,8 @@ func (this *LoginController) Post() {
 			this.SetSession("passwd", passwd)
 			this.SetSession("auth", Auth)
 			this.SetSession("dept", dept)
-			this.Redirect("/netopgo", 302)
+			this.TplName = "login.html"
+			this.Redirect("/", 301)
 		} else {
 			beego.Error(err)
 			this.Data["Error"] = true
