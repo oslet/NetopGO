@@ -1,0 +1,91 @@
+<html>
+
+<body>
+
+<style> 
+table {  
+  
+     border-collapse: collapse;     
+}  
+  
+caption {  
+  
+     font-size: larger;  
+  
+     margin: 1em auto;  
+  
+}  
+  
+th,td {  
+  
+     padding: .65em;  
+  
+}  
+  
+th {  
+  
+   background: #000000 nonerepeat scroll 0 0;  
+  
+   border: 1px solid #000000;  
+  
+   color: #000000;  
+  
+}  
+  
+td {  
+  
+     border: 1px solid#777;  
+  
+} 
+
+tbody tr:nth-child(odd) {  
+  
+     background: #CCCCCC;  
+  
+}
+
+thead tr:nth-child(odd) {  
+  
+     background: #A1ACDB;  
+  
+}
+   
+</style> 
+
+<p>今日项目发布情况总览：<p>
+    <table border="1" cellspacing="0" cellpadding="1">
+
+       <thead>
+           <tr>
+               <th class="text-center">程序名称</th>
+               <th class="text-center">发布内容</th>
+               <th class="text-center">申请人</th>		 
+               <th class="text-center">发布人</th>
+               <th class="text-center">部门</th>                                
+               <th class="text-center">发布时间</th>
+               <th class="text-center">发布后跟进情况</th>
+			   <th class="text-center">跟进人</th>
+           </tr>
+       </thead>
+
+		
+<tbody>	
+
+   {{range .}}
+<tr>
+   <td class="text-center">{{.Appname}}</td>
+   <td class="text-center">{{.Appcontent}}</a></td>
+   <td class="text-center">{{.Applicant}}</td>
+   <td class="text-center">{{.Publisher}}</td>
+   <td class="text-center">{{.Department}}</td>
+   <td class="text-center">{{.Publishtime}}</td>
+   <td class="text-center">{{.Followstatus}}</td>
+   <td class="text-center">{{.Followman}}</td>
+<tr>
+ {{end}}
+  </tbody>
+</table>
+
+</body>
+
+</html>
