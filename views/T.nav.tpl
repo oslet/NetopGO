@@ -35,6 +35,7 @@
             <li id="workorder">
                 <a href="javascript:void(0)"><i class="fa fa-edit"></i> <span class="nav-label">系统发布</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level">
+                    <li class="record"><a href="/workorder/dailyreport/list">程序发布报表</a></li>
                     <li class="record"><a href="/workorder/my/list">应用工单</a></li>
                     <li class="record"><a href="/workorder/mydb/list">数据库工单</a></li>
                     <li class="record"><a href="/workorder/app">提交应用工单</a></li>

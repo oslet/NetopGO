@@ -1,8 +1,7 @@
-{{template "page_top" .}}
-{{template "nav_cat_bar" .}}
+{{template "page_top" .}} 
+{{template "nav_cat_bar" .}} 
 {{$Auth := .Auth}}
-{{$Uname := .Uname}}
-{{if and (eq .Auth 1) (eq .Uname "netop")}}
+{{$Uname := .Uname}} {{if and (eq .Auth 1) (eq .Uname "netop")}}
 <br>
 <div class="ibox-content">
     {{with .Dblist}}
@@ -10,25 +9,25 @@
         <div class="form-group">
             <label for="ip" class="col-sm-2 control-label">IP<span class="red-fonts">*</span></label>
             <div class="col-sm-8">
-                <input id="ip" name="ip" placeholder="" type="text" class="form-control"  value="{{.IP}}" >
+                <input id="ip" name="ip" placeholder="" type="text" class="form-control" value="{{.IP}}">
             </div>
         </div>
         <div class="form-group">
             <label for="port" class="col-sm-2 control-label">Port<span class="red-fonts">*</span></label>
             <div class="col-sm-8">
-                <input id="port" name="port" placeholder="" type="text" class="form-control"  value="{{.Port}}" >
+                <input id="port" name="port" placeholder="" type="text" class="form-control" value="{{.Port}}">
             </div>
         </div>
         <div class="form-group">
             <label for="dbinst" class="col-sm-2 control-label">数据库实例<span class="red-fonts">*</span></label>
             <div class="col-sm-8">
-                <input id="dbinst" name="dbinst" placeholder="" type="text" class="form-control"  value="{{.DBInst}}" >
+                <input id="dbinst" name="dbinst" placeholder="" type="text" class="form-control" value="{{.DBInst}}">
             </div>
         </div>
         <div class="form-group">
             <label for="dbname" class="col-sm-2 control-label">数据库名<span class="red-fonts">*</span></label>
             <div class="col-sm-8">
-                <input id="dbname" name="dbname" placeholder="" type="text" class="form-control"   value="{{.DBName}}">
+                <input id="dbname" name="dbname" placeholder="" type="text" class="form-control" value="{{.DBName}}">
             </div>
         </div>
         <div class="form-group">
@@ -43,7 +42,7 @@
         <div class="form-group">
             <label for="attrteam" class="col-sm-2 control-label">归属团队<span class="red-fonts">*</span></label>
             <div class="col-sm-8">
-                <input id="attrteam" name="attrteam" placeholder="" type="text" class="form-control"   value="{{.AttrTeam}}">
+                <input id="attrteam" name="attrteam" placeholder="" type="text" class="form-control" value="{{.AttrTeam}}">
             </div>
         </div>
         {{end}}
@@ -76,8 +75,8 @@
             rules: {
                 check_ip: [/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}$/, 'ip地址不正确'],
                 check_port: [/^\d{1,5}$/, '端口号不正确'],
-                type_m: function(element){
-                    return  $("#M").is(":checked");
+                type_m: function(element) {
+                    return $("#M").is(":checked");
                 }
             },
             fields: {
@@ -85,31 +84,41 @@
                     rule: "check_ip",
                     tip: "输入IP",
                     ok: "",
-                    msg: {required: "必须填写!"}
+                    msg: {
+                        required: "必须填写!"
+                    }
                 },
                 "port": {
                     rule: "check_port",
                     tip: "输入端口",
                     ok: "",
-                    msg: {required: "必须填写!"}
+                    msg: {
+                        required: "必须填写!"
+                    }
                 },
                 "dbinst": {
                     rule: "required;length[1~100]",
                     tip: "输入数据库实例",
                     ok: "",
-                    msg: {required: "必须填写!"}
+                    msg: {
+                        required: "必须填写!"
+                    }
                 },
                 "dbname": {
                     rule: "required;length[1~100]",
                     tip: "输入数据库名称",
                     ok: "",
-                    msg: {required: "必须填写!"}
+                    msg: {
+                        required: "必须填写!"
+                    }
                 },
                 "attrteam": {
                     rule: "required;length[1~100]",
                     tip: "输入归属团队",
                     ok: "",
-                    msg: {required: "必须填写!"}
+                    msg: {
+                        required: "必须填写!"
+                    }
                 }
             },
             valid: function(form) {
@@ -118,5 +127,3 @@
         });
     </script>
     {{template "page_buttom" .}}
-
-

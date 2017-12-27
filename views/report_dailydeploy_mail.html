@@ -5,7 +5,9 @@
 <style> 
 table {  
   
-     border-collapse: collapse;     
+     border-collapse: collapse;    
+width:30em;
+table-layout:fixed; 
 }  
   
 caption {  
@@ -18,8 +20,11 @@ caption {
   
 th,td {  
   
-     padding: .65em;  
-  
+     padding: .85em;
+width:100%;
+word-break:break-all;   
+/* white-space:nowrap; */
+text-overflow:ellipsis;   
 }  
   
 th {  
@@ -35,7 +40,7 @@ th {
 td {  
   
      border: 1px solid#777;  
-  
+  	
 } 
 
 tbody tr:nth-child(odd) {  
@@ -53,34 +58,35 @@ thead tr:nth-child(odd) {
 </style> 
 
 <p>今日项目发布情况总览：<p>
+
     <table border="1" cellspacing="0" cellpadding="1">
 
        <thead>
            <tr>
-               <th class="text-center">程序名称</th>
-               <th class="text-center">发布内容</th>
-               <th class="text-center">申请人</th>		 
-               <th class="text-center">发布人</th>
-               <th class="text-center">部门</th>                                
-               <th class="text-center">发布时间</th>
-               <th class="text-center">发布后跟进情况</th>
-			   <th class="text-center">跟进人</th>
+               <th style="width:150" class="text-center">程序名称</th>
+               <th style="width:500" class="text-center">发布内容</th>
+               <th style="width:80" class="text-center">申请人</th>		 
+               <th style="width:80" class="text-center">发布人</th>
+               <th style="width:80" class="text-center">部门</th>                                
+               <th style="width:170" class="text-center">发布时间</th>
+               <th style="width:120" class="text-center">发布后跟进情况</th>
+			   <th style="width:80" class="text-center">跟进人</th>
            </tr>
        </thead>
 
-		
+{{range .}}		
 <tbody>	
 
-   {{range .}}
+
 <tr>
-   <td class="text-center">{{.Appname}}</td>
-   <td class="text-center">{{.Appcontent}}</a></td>
-   <td class="text-center">{{.Applicant}}</td>
-   <td class="text-center">{{.Publisher}}</td>
-   <td class="text-center">{{.Department}}</td>
-   <td class="text-center">{{.Publishtime}}</td>
-   <td class="text-center">{{.Followstatus}}</td>
-   <td class="text-center">{{.Followman}}</td>
+   <td style="width:150" class="text-center">{{.Appname}}</td>
+   <td style="width:500;word-wrap:break-word;word-break:break-all" class="text-center">{{.Appcontent}}</a></td>
+   <td style="width:80" class="text-center">{{.Applicant}}</td>
+   <td style="width:80" class="text-center">{{.Publisher}}</td>
+   <td style="width:80" class="text-center">{{.Department}}</td>
+   <td style="width:170" class="text-center">{{.Publishtime}}</td>
+   <td style="width:120" class="text-center">{{.Followstatus}}</td>
+   <td style="width:80" class="text-center">{{.Followman}}</td>
 <tr>
  {{end}}
   </tbody>

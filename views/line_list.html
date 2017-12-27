@@ -1,20 +1,14 @@
-{{template "page_top" .}}
-{{template "nav_cat_bar" .}}
-{{$Uname := .Uname}}
-{{if eq .Auth 1}}
+{{template "page_top" .}} {{template "nav_cat_bar" .}} {{$Uname := .Uname}} {{if eq .Auth 1}}
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
         <div class="col-sm-12">
             <div class="ibox float-e-margins">
                 <div class="ibox-content">
                     <div class="">
-					{{if and (eq .Auth 1) (eq .Uname "netop")}}					
-                        <a href="/asset/line/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 添加线路 </a>
-                        <a id="del_btn" class="btn btn-sm btn-danger " {{if ne $Uname "netop"}}disabled="disabled"{{end}}> 删除所选 </a>
-						{{end}}
-                        {{if .IsSearch}}
-                        <a href="/asset/line/list" class="btn btn-white pull-right"> 返回列表 </a>
-                        {{else}}
+                        {{if and (eq .Auth 1) (eq .Uname "netop")}}
+                        <a href="/asset/line/add" class="btn btn-sm btn-primary " {{if ne $Uname "netop"}}disabled="disabled" {{end}}> 添加线路 </a>
+                        <a id="del_btn" class="btn btn-sm btn-danger " {{if ne $Uname "netop"}}disabled="disabled" {{end}}> 删除所选 </a> {{end}} {{if .IsSearch}}
+                        <a href="/asset/line/list" class="btn btn-white pull-right"> 返回列表 </a> {{else}}
                         <form id="search_form" method="get" action="/asset/line/search" class="pull-right mail-search">
                             <div class="input-group">
                                 <input type="text" class="form-control input-sm" id="search_input" name="keyword" placeholder="按线路名称搜索...">
@@ -27,7 +21,7 @@
                         </form>
                         {{end}}
                     </div>
-                    <table class="table table-striped table-bordered table-hover " id="editable" >
+                    <table class="table table-striped table-bordered table-hover " id="editable">
                         <thead>
                             <tr>
                                 <th class="text-center">
@@ -37,7 +31,7 @@
                                 <th class="text-center">用途名</th>
                                 <th class="text-center">是否启用</th>
                                 <th class="text-center">备注</th>
-                                <th class="text-center">创建时间</th>                         
+                                <th class="text-center">创建时间</th>
                                 <th class="text-center">操作</th>
                             </tr>
                         </thead>
@@ -53,8 +47,8 @@
                                 <td class="text-center">{{.Comment}}</td>
                                 <td class="text-center">{{.Created}}</td>
                                 <td class="text-center">
-                                    <a href="/asset/line/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled"{{end}}>编辑</a>
-                                    <a href="/asset/line/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Uname "netop"}}disabled="disabled"{{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
+                                    <a href="/asset/line/add?id={{.Id}}" class="btn btn-xs btn-info" {{if ne $Uname "netop"}}disabled="disabled" {{end}}>编辑</a>
+                                    <a href="/asset/line/del?id={{.Id}}" class="btn btn-xs btn-danger" {{if ne $Uname "netop"}}disabled="disabled" {{end}} onclick="if(confirm('确定删除?')==false)return false;">删除</a>
                                 </td>
                             </tr>
                             {{end}}
@@ -78,29 +72,29 @@
 {{end}}
 <script src="/static/js/jquery.shiftcheckbox.js"></script>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
 
-        $('#del_btn').click(function(){
+        $('#del_btn').click(function() {
             var check_array = [];
             if (confirm("确定删除")) {
                 $(".gradeX input:checked").each(function() {
                     check_array.push($(this).attr("value"))
                 });
                 console.log(check_array.join(","));
-                $.post("/asset/line/bitchDel",
-                        {ids: check_array.join(",")},
-                        function(data){
-                            //console.log(data);
-                            //$(".gradeX input:checked").closest("tr").remove();                            
-                            window.location.href="/asset/line/list"                            
+                $.post("/asset/line/bitchDel", {
+                        ids: check_array.join(",")
+                    },
+                    function(data) {
+                        //console.log(data);
+                        //$(".gradeX input:checked").closest("tr").remove();                            
+                        window.location.href = "/asset/line/list"
                             //alert(data);
-                        }
+                    }
                 )
             }
 
         });
 
     });
-
 </script>
 {{template "page_buttom"}}

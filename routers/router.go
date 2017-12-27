@@ -168,6 +168,16 @@ func init() {
 	beego.Router("/workorder/my/search", &controllers.AppWOController{}, "get:Search")
 	beego.Router("/workorder/my/export", &controllers.AppWOController{}, "get:Export")
 
+	beego.Router("/workorder/dailyreport/list", &controllers.DailyreportController{})
+	beego.Router("/workorder/dailyreport/add", &controllers.DailyreportController{}, "get:Add")
+	beego.Router("/workorder/dailyreport/add", &controllers.DailyreportController{}, "post:Post")
+	beego.Router("/workorder/dailyreport/modify", &controllers.DailyreportController{}, "post:Post")
+	beego.Router("/workorder/dailyreport/del", &controllers.DailyreportController{}, "get:Delete")
+	beego.Router("/workorder/dailyreport/bitchDel", &controllers.DailyreportController{}, "post:BitchDelete")
+	beego.Router("/workorder/dailyreport/search", &controllers.DailyreportController{}, "get:Search")
+	beego.Router("/workorder/dailyreport/detail", &controllers.DailyreportController{}, "get:Detail")
+	beego.Router("/workorder/dailyreport/export", &controllers.DailyreportController{}, "get:Export")
+
 	beego.Router("/workorder/db", &controllers.DBWOController{}, "get:DBOrder")
 	beego.Router("/workorder/db", &controllers.DBWOController{}, "post:DBOrderPost")
 	beego.Router("/workorder/mydb/list", &controllers.DBWOController{}, "get:Get")

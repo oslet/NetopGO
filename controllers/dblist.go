@@ -97,9 +97,9 @@ func (this *DblistController) Post() {
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
 	this.Data["Category"] = "dblist"
-
 	Auth := role.(int64)
 	this.Data["Auth"] = Auth
+
 	id := this.Input().Get("id")
 	ip := this.Input().Get("ip")
 	port := this.Input().Get("port")

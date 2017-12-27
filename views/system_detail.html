@@ -1,7 +1,7 @@
 {{template "page_top" .}}
 {{template "nav_cat_bar" .}}
-                    {{with .System}}
-                    <div class="ibox-content">
+{{with .System}}
+<div class="ibox-content">
                         <form method="post" id="userForm" class="form-horizontal" action="" enctype="multipart/form-data"> 
                             <div class="form-group">
                                 <label for="class" class="col-sm-2 control-label">系统分类</label>
@@ -169,8 +169,4 @@
                         </form>
                         {{end}}
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
 {{template "page_buttom" .}}

@@ -17,7 +17,7 @@ func init() {
 	orm.RunSyncdb("default", false, true)
 
 	c := cron.New()
-	spec := "*/30 * * * * *"
+	spec := "0 */10 * * * 1-5"
 
 	c.AddFunc(spec, func() {
 		models.TasksForDailyReport()

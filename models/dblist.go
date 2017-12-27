@@ -5,10 +5,11 @@ import (
 	"strconv"
 	"time"
 
+	"fmt"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
-	"fmt"
 )
 
 type Dblist struct {
@@ -19,7 +20,7 @@ type Dblist struct {
 	DBName   string `orm:"column(dbname)"`
 	IsSwitch string `orm:"column(isswitch)"`
 	AttrTeam string `orm:"column(attrteam)"`
-	Name	 string `"orm:column(name)"`
+	Name     string `"orm:column(name)"`
 	Created  time.Time
 }
 
@@ -59,14 +60,14 @@ func AddDblist(ip, port, dbinst, dbname, isswitch, attrteam, name string) (error
 	o := orm.NewOrm()
 	var msg string
 	dblist := &Dblist{
-		IP:         ip,
-		Port: port,
-		DBInst:    dbinst,
-		DBName:        dbname,
-		IsSwitch:      isswitch,
-		AttrTeam:   attrteam,
-		Name:      name,
-		Created:      time.Now(),
+		IP:       ip,
+		Port:     port,
+		DBInst:   dbinst,
+		DBName:   dbname,
+		IsSwitch: isswitch,
+		AttrTeam: attrteam,
+		Name:     name,
+		Created:  time.Now(),
 	}
 	err := o.QueryTable("dblist").Filter("name", dbname).One(dblist)
 	if err == nil {
@@ -114,12 +115,24 @@ func DeleteDblist(id string) error {
 	return nil
 }
 
+/*
 func SearchDblistCount(dbname string) (int64, error) {
 	o := orm.NewOrm()
 	dblists := make([]*Dblist, 0)
 	total, err := o.QueryTable("dblist").Filter("name__icontains", dbname).All(&dblists)
 	return total, err
 }
+*/
+func SearchDblistCount(name string) (int64, error) {
+	o := orm.NewOrm()
+	//dailyreportlists := make([]*Dailyreport, 0)
+	var num int64
+	var err error
+	ids := []string{"%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%"}
+	o.Raw("select count(*) from dblist where ip like binary ? or port like binary ? or dbinst like binary ? or dbname like binary ? or isswitch like binary ? or attrteam like binary ? or name like binary ?", ids).QueryRow(&num)
+	return num, err
+}
+
 /*
 func SearchDblistByName(currPage, pageSize int, dbname string) ([]*Dblist, error) {
 	o := orm.NewOrm()
@@ -134,7 +147,7 @@ func SearchDblistByName(currPage, pageSize int, name string) ([]*Dblist, error) 
 	dblists := make([]*Dblist, 0)
 	ids := []string{"%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%", "%" + name + "%"}
 	if len(name) == 0 {
-		_, err := o.QueryTable("dblist").Limit(pageSize, (currPage-1)*pageSize).All(&dblists)
+		_, err := o.QueryTable("dblist").Filter("name__icontains", name).Limit(pageSize, (currPage-1)*pageSize).All(&dblists)
 		return dblists, err
 	} else {
 		_, err := o.Raw("select * from dblist where ip like ? or port like ? or dbinst like ? or dbname like ? or isswitch like ? or attrteam like ? or name like ? limit ?,?", ids, (currPage-1)*pageSize, pageSize).QueryRows(&dblists)

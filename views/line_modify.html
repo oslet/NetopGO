@@ -1,96 +1,94 @@
-{{template "page_top" .}}
-{{template "nav_cat_bar" .}}
-{{$Auth := .Auth}}
-{{$Uname := .Uname}}
-{{if and (eq .Auth 1) (eq .Uname "netop")}}
+{{template "page_top" .}} {{template "nav_cat_bar" .}} {{$Auth := .Auth}} {{$Uname := .Uname}} {{if and (eq .Auth 1) (eq .Uname "netop")}}
 <br>
-                    <div class="ibox-content">
-                        {{with .Line}}
-                        <form method="post" id="userForm" class="form-horizontal" action="/asset/line/modify?id={{.Id}}">
-                            <div class="form-group">
-                                <label for="name" class="col-sm-2 control-label">线路名称<span class="red-fonts">*</span></label>
-                                <div class="col-sm-8">
-                                    <input id="name" name="name" placeholder="线路名称" type="text" class="form-control" value="{{.Name}}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="use" class="col-sm-2 control-label">目的用途<span class="red-fonts">*</span></label>
-                                <div class="col-sm-8">
-                                    <input id="use" name="use" placeholder="use" type="text" class="form-control" value="{{.Use}}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="enable" class="col-sm-2 control-label">是否启用</label>
-                                <div class="col-sm-8">
-                                    <select name="enable" class="form-control">
+<div class="ibox-content">
+    {{with .Line}}
+    <form method="post" id="userForm" class="form-horizontal" action="/asset/line/modify?id={{.Id}}">
+        <div class="form-group">
+            <label for="name" class="col-sm-2 control-label">线路名称<span class="red-fonts">*</span></label>
+            <div class="col-sm-8">
+                <input id="name" name="name" placeholder="线路名称" type="text" class="form-control" value="{{.Name}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="use" class="col-sm-2 control-label">目的用途<span class="red-fonts">*</span></label>
+            <div class="col-sm-8">
+                <input id="use" name="use" placeholder="use" type="text" class="form-control" value="{{.Use}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="enable" class="col-sm-2 control-label">是否启用</label>
+            <div class="col-sm-8">
+                <select name="enable" class="form-control">
                                         <option value="启用" {{if eq .Enable "启用"}}selected{{end}}>启用</option>
                                         <option value="禁用" {{if eq .Enable "禁用"}}selected{{end}}>禁用</option>
 									</select>
-                                </div>
-                            </div>    
-                            <div class="form-group">
-                                <label for="comment" class="col-sm-2 control-label">线路备注<span class="red-fonts">*</span></label>
-                                <div class="col-sm-8">
-                                    <input id="comment" name="comment" placeholder="线路备注" type="text" class="form-control" value="{{.Comment}}">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-4 col-sm-offset-2">
-                                    <button class="btn btn-white" type="reset">重置</button>
-                                    <button id="submit_button" class="btn btn-primary" type="submit">保存</button>
-                                </div>
-                            </div>
-                        </form>
-                        {{end}}
-                    </div>
-                </div>
             </div>
         </div>
-    </div>
+        <div class="form-group">
+            <label for="comment" class="col-sm-2 control-label">线路备注<span class="red-fonts">*</span></label>
+            <div class="col-sm-8">
+                <input id="comment" name="comment" placeholder="线路备注" type="text" class="form-control" value="{{.Comment}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4 col-sm-offset-2">
+                <button class="btn btn-white" type="reset">重置</button>
+                <button id="submit_button" class="btn btn-primary" type="submit">保存</button>
+            </div>
+        </div>
+    </form>
+    {{end}}
+</div>
 {{else}}
 <div><span style="font-size:18px;color:red;">没有相关权限！</span></div>
 {{end}}
 <script>
-$('#userForm').validator({
-    timely: 2,
-    theme: "yellow_right_effect",
-    rules: {
-        check_username: [/^[\w.]{1,20}$/, '至少1位大小写字母数字和下划线小数点'],
-        type_m: function(element){
-                    return  $("#M").is(":checked");
+    $('#userForm').validator({
+        timely: 2,
+        theme: "yellow_right_effect",
+        rules: {
+            check_username: [/^[\w.]{1,20}$/, '至少1位大小写字母数字和下划线小数点'],
+            type_m: function(element) {
+                return $("#M").is(":checked");
             }
-    },
-    fields: {
-        "name": {
-            rule: "required;check_username",
-            tip: "输入线路名称",
-            ok: "",
-            msg: {required: "必须填写!"}
         },
-        "use": {
-            rule: "required;length[3~200]",
-            tip: "输入目的用途",
-            ok: "",
-            msg: {required: "必须填写!"}
+        fields: {
+            "name": {
+                rule: "required;check_username",
+                tip: "输入线路名称",
+                ok: "",
+                msg: {
+                    required: "必须填写!"
+                }
+            },
+            "use": {
+                rule: "required;length[3~200]",
+                tip: "输入目的用途",
+                ok: "",
+                msg: {
+                    required: "必须填写!"
+                }
+            },
+            "enable": {
+                rule: "required",
+                tip: "选择是否启用",
+                ok: "",
+                msg: {
+                    required: "必须填写!"
+                }
+            },
+            "comment": {
+                rule: "required;length[7~15]",
+                tip: "输入备注",
+                ok: "",
+                msg: {
+                    required: "必须填写!"
+                }
+            }
         },
-        "enable": {
-            rule: "required",
-            tip: "选择是否启用",
-            ok: "",
-            msg: {required: "必须填写!"}
-        },
-        "comment": {
-            rule: "required;length[7~15]",
-            tip: "输入备注",
-            ok: "",
-            msg: {required: "必须填写!"}
+        valid: function(form) {
+            form.submit();
         }
-    },
-    valid: function(form) {
-        form.submit();
-    }
-});
+    });
 </script>
 {{template "page_buttom" .}}
-
-
