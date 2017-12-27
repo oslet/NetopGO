@@ -16,20 +16,21 @@ import (
 	"github.com/astaxie/beego"
 	//"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
-	//"github.com/robfig/cron"
+	"github.com/robfig/cron"
 )
 
 var (
-	mailserver  string = beego.AppConfig.String("mailserver")
-	mailport    string = beego.AppConfig.String("mailport")
-	mailuser    string = beego.AppConfig.String("mailuser")
-	mailpass    string = beego.AppConfig.String("mailpass")
-	mailsubject string = beego.AppConfig.String("mailsubject")
-	username    string = beego.AppConfig.String("db_user")
-	userpwd     string = beego.AppConfig.String("db_passwd")
-	dbhost      string = beego.AppConfig.String("db_host")
-	dbport      string = beego.AppConfig.String("db_port")
-	dbname      string = beego.AppConfig.String("db_schema")
+	mailserver   string = beego.AppConfig.String("mailserver")
+	mailport     string = beego.AppConfig.String("mailport")
+	mailuser     string = beego.AppConfig.String("mailuser")
+	mailpass     string = beego.AppConfig.String("mailpass")
+	mailsubject  string = beego.AppConfig.String("mailsubject")
+	mailtasktime string = beego.AppConfig.String("mailtasktime")
+	username     string = beego.AppConfig.String("db_user")
+	userpwd      string = beego.AppConfig.String("db_passwd")
+	dbhost       string = beego.AppConfig.String("db_host")
+	dbport       string = beego.AppConfig.String("db_port")
+	dbname       string = beego.AppConfig.String("db_schema")
 )
 
 type Dailyreporttask struct {
@@ -200,4 +201,16 @@ func getDB(username, userpwd, dbhost, dbport, dbname string) (*sql.DB, error) {
 		return nil, err
 	}
 	return db, nil
+}
+
+func DailyReportForMailTask() {
+	c := cron.New()
+	spec := mailtasktime
+
+	c.AddFunc(spec, func() {
+		TasksForDailyReport()
+	})
+
+	c.Start()
+	//select {} //阻塞主线程不退出
 }
