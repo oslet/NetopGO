@@ -1,0 +1,182 @@
+{{template "page_top" .}} 
+{{template "nav_cat_bar" .}} 
+{{$Auth := .Auth}}
+{{$Uname := .Uname}} {{if and (eq .Auth 1) (eq .Uname "netop")}}
+<br>
+<div class="ibox-content">
+    {{with .Dailyreportlist}}
+    <form method="post" id="userForm" class="form-horizontal" action="/workorder/dailyreport/modify?id={{.Id}}">
+        <div class="form-group">
+            <label for="appsys" class="col-sm-2 control-label">所属系统<span class="red-fonts">*</span></label>
+            <div class="col-sm-8">
+                <input id="appsys" name="appsys" placeholder="" type="text" class="form-control" value="{{.Appsys}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="appname" class="col-sm-2 control-label">程序名称<span class="red-fonts">*</span></label>
+            <div class="col-sm-8">
+                <input id="appname" name="appname" placeholder="" type="text" class="form-control" value="{{.Appname}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="appcontent" class="col-sm-2 control-label">发布内容<span class="red-fonts">*</span></label>
+            <div class="col-sm-8">
+                <input id="appcontent" name="appcontent" placeholder="" type="text" class="form-control" value="{{.Appcontent}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="applicgrp" class="col-sm-2 control-label">申请组<span class="red-fonts">*</span></label>
+            <div class="col-sm-8">
+                <input id="applicgrp" name="applicgrp" placeholder="" type="text" class="form-control" value="{{.Applicgrp}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="applicant" class="col-sm-2 control-label">申请人<span class="red-fonts">*</span></label>
+            <div class="col-sm-8">
+                <input id="applicant" name="applicant" placeholder="" type="text" class="form-control" value="{{.Applicant}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="publisher" class="col-sm-2 control-label">发布人<span class="red-fonts">*</span></label>
+            <div class="col-sm-8">
+                <input id="publisher" name="publisher" placeholder="" type="text" class="form-control" value="{{.Publisher}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="department" class="col-sm-2 control-label">所属部门<span class="red-fonts">*</span></label>
+            <div class="col-sm-8">
+                <input id="department" name="department" placeholder="" type="text" class="form-control" value="{{.Department}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="publishtime" class="col-sm-2 control-label">发布时间<span class="red-fonts">*</span></label>
+            <div class="col-sm-8">
+                <input id="publishtime" name="publishtime" placeholder="" type="text" class="form-control" value="{{.Publishtime}}">
+            </div>
+        </div>			
+        <div class="form-group">
+            <label for="followstatus" class="col-sm-2 control-label">发布后跟进情况</label>
+            <div class="col-sm-8">
+                <select name="followstatus" class="form-control">
+				   <option value="" selected disabled>---请选择---</option>
+                    <option value="成功" {{if eq .Followstatus "成功"}}selected{{end}}>成功</option>
+                    <option value="失败" {{if eq .Followstatus "失败"}}selected{{end}}>失败</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="followman" class="col-sm-2 control-label">跟进人<span class="red-fonts">*</span></label>
+            <div class="col-sm-8">
+                <input id="followman" name="followman" placeholder="" type="text" class="form-control" value="{{.Followman}}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="isinitial" class="col-sm-2 control-label">初次上线(是/否)</label>
+            <div class="col-sm-8">
+                <select name="isinitial" class="form-control">
+				   <option value="" selected disabled>---请选择---</option>
+                    <option value="否" {{if eq .Isinitial "否"}}selected{{end}}>否</option>
+                    <option value="是" {{if eq .Isinitial "是"}}selected{{end}}>是</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-4 col-sm-offset-2">
+                <button class="btn btn-white" type="reset">重置</button>
+                <button id="submit_button" class="btn btn-primary" type="submit">保存</button>
+            </div>
+        </div>
+    </form>
+	{{end}}
+	</div>
+{{else}}
+<div><span style="font-size:18px;color:red;">没有相关权限！</span></div>
+{{end}}
+<script>
+		$(".form_datetime").datetimepicker({
+        format: 'yyyy-mm-dd hh:ii'
+    });
+	
+        $('#userForm').validator({
+            timely: 2,
+            theme: "yellow_right_effect",
+            rules: {
+                check_ip: [/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}$/, 'ip地址不正确'],
+                check_port: [/^\d{1,5}$/, '端口号不正确'],
+				check_datetime: [/^(\d{1,4})(-|\/)(\d{1,2})\2(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/],
+                type_m: function(element) {
+                    return $("#M").is(":checked");
+                }
+            },
+       fields: {
+            "appsys": {
+                rule: "required;length[2~50]",
+                tip: "输入所属系统",
+                ok: "",
+                msg: {
+                    required: "必须填写!"
+                }
+            },
+            "appname": {
+                rule: "required;length[2~50]",
+                tip: "输入程序名",
+                ok: "",
+                msg: {
+                    required: "必须填写!"
+                }
+            },
+            "appcontent": {
+                rule: "required;length[5~1000]",
+                tip: "输入发布内容",
+                ok: "",
+                msg: {
+                    required: "必须填写!"
+                }
+            },
+            "applicant": {
+                rule: "required;length[2~50]",
+                tip: "输入申请人",
+                ok: "",
+                msg: {
+                    required: "必须填写!"
+                }
+            },
+            "publisher": {
+                rule: "required;length[2~50]",
+                tip: "输入发布人",
+                ok: "",
+                msg: {
+                    required: "必须填写!"
+                }
+            },
+            "department": {
+                rule: "required;length[2~50]",
+                tip: "输入所属部门",
+                ok: "",
+                msg: {
+                    required: "必须填写!"
+                }
+            },
+            "publishtime": {
+                rule: "required;length[2~50]",
+                tip: "输入发布时间",
+                ok: "",
+                msg: {
+                    required: "必须填写!"
+                }
+            },
+            "followman": {
+                rule: "required;length[2~50]",
+                tip: "输入跟进人",
+                ok: "",
+                msg: {
+                    required: "必须填写!"
+                }
+            }
+        },
+            valid: function(form) {
+                form.submit();
+            }
+        });
+    </script>
+{{template "page_buttom" .}}
