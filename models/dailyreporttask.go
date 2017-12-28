@@ -7,14 +7,15 @@ import (
 	"fmt"
 	"html/template"
 	"log"
+
 	"time"
 
 	"net/smtp"
-	//"os"
+
 	"strings"
 
 	"github.com/astaxie/beego"
-	//"github.com/astaxie/beego/orm"
+
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/robfig/cron"
 )
@@ -24,6 +25,9 @@ var (
 	mailport     string = beego.AppConfig.String("mailport")
 	mailuser     string = beego.AppConfig.String("mailuser")
 	mailpass     string = beego.AppConfig.String("mailpass")
+	mailto       string = beego.AppConfig.String("mailto")
+	mailcc       string = beego.AppConfig.String("mailcc")
+	mailbcc      string = beego.AppConfig.String("mailbcc")
 	mailsubject  string = beego.AppConfig.String("mailsubject")
 	mailtasktime string = beego.AppConfig.String("mailtasktime")
 	username     string = beego.AppConfig.String("db_user")
@@ -89,13 +93,22 @@ func (mail *Mail) BuildMessage() string {
 	return header
 }
 
+func Stringhandle(name string) []string {
+	var s []string
+	words := strings.Split(name, ",")
+	for _, w := range words {
+		s = append(s, w)
+	}
+	return s
+}
+
 func TasksForDailyReport() {
 	curdate := time.Now().Format("2006-01-02")
 	mail := Mail{}
 	mail.Sender = mailuser
-	mail.To = []string{mailuser}
-	mail.Cc = []string{}
-	mail.Bcc = []string{}
+	mail.To = Stringhandle(mailto)
+	mail.Cc = Stringhandle(mailcc)
+	mail.Bcc = Stringhandle(mailbcc)
 	mail.Subject = mailsubject + "(" + curdate + ")"
 	mail.Mtype = "html"
 
@@ -187,6 +200,9 @@ func GetDailyReport() string {
 		}
 	}
 	locals["reports"] = dailyreports
+	if len(dailyreports) == 0 {
+		return fmt.Sprintf("今日项目发布情况总览： 0")
+	}
 	t, _ := template.ParseFiles("views/report_dailydeploy_mail.html")
 	var body bytes.Buffer
 	t.Execute(&body, dailyreports)
