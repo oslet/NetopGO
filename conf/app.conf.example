@@ -1,0 +1,33 @@
+appname = NetopGO
+httpport = 8080
+runmode = dev
+
+db_host	= 10.100.14.242
+db_port	= 3306
+db_schema = netopgo
+db_user = root
+db_passwd = root
+
+mailserver = mail.qq.com
+mailport = 25
+mailuser = example@qq.com
+mailpass = example
+mailto = example@qq.com
+mailcc = example@qq.com,example@sina.com
+mailbcc = example@qq.com
+mailsubject = xx发布日报表
+
+mailtasktime = "0 0 18 * * 1-5"
+#mailtasktime = "0/5 * * * * 1-5"
+
+EnableAdmin = true
+AdminAddr = localhost
+AdminPort = 8088
+
+auth_service = http://1.1.1.1/ucms.asmx
+aeskey = 1600000000000000
+
+sessionon = true
+pageSize = 20
+AppType=基础服务,业务系统
+AppName=配置服务,监控服务，xx系统
