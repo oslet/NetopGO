@@ -2,7 +2,9 @@ package models
 
 import (
 	"bytes"
-	"crypto/tls"
+	//"crypto/tls"
+	"net"
+
 	"database/sql"
 	"fmt"
 	"html/template"
@@ -59,9 +61,9 @@ type Mail struct {
 }
 
 type SmtpServer struct {
-	Host      string
-	Port      string
-	TlsConfig *tls.Config
+	Host string
+	Port string
+	//TlsConfig *tls.Config
 }
 
 func (s *SmtpServer) ServerName() string {
@@ -117,13 +119,23 @@ func TasksForDailyReport() {
 	messageBody := mail.BuildMessage()
 
 	smtpServer := SmtpServer{Host: mailserver, Port: mailport}
-	smtpServer.TlsConfig = &tls.Config{
-		InsecureSkipVerify: true,
-		ServerName:         smtpServer.Host,
-	}
+	/*
+		smtpServer.TlsConfig = &tls.Config{
+			InsecureSkipVerify: true,
+			ServerName:         smtpServer.Host,
+		}
+	*/
 
 	auth := smtp.PlainAuth("", mail.Sender, mailpass, smtpServer.Host)
-	conn, err := tls.Dial("tcp", smtpServer.ServerName(), smtpServer.TlsConfig)
+
+	/*
+		conn, err := tls.Dial("tcp", smtpServer.ServerName(), smtpServer.TlsConfig)
+		if err != nil {
+			log.Panic(err)
+		}
+	*/
+	conn, err := net.Dial("tcp", smtpServer.ServerName())
+
 	if err != nil {
 		log.Panic(err)
 	}
@@ -206,7 +218,9 @@ func GetDailyReport() string {
 	t, _ := template.ParseFiles("views/report_dailydeploy_mail.html")
 	var body bytes.Buffer
 	t.Execute(&body, dailyreports)
-	return fmt.Sprintf(body.String())
+	s := body.String()
+	s = strings.Replace(s, "\r\n", "<br>", -1)
+	return s
 }
 
 func getDB(username, userpwd, dbhost, dbport, dbname string) (*sql.DB, error) {
