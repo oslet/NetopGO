@@ -2,9 +2,10 @@ package controllers
 
 import (
 	"NetopGO/models"
-	"github.com/astaxie/beego"
 	"strconv"
 	"strings"
+
+	"github.com/astaxie/beego"
 )
 
 type SchemaController struct {
@@ -57,6 +58,8 @@ func (this *SchemaController) Add() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "schema"
+	Auth := role.(int64)
+	this.Data["Auth"] = Auth
 
 	id := this.Input().Get("id")
 	if len(id) > 0 {
@@ -86,6 +89,8 @@ func (this *SchemaController) Post() {
 	this.Data["Role"] = role
 	this.Data["IsSearch"] = false
 	this.Data["Category"] = "schema"
+	Auth := role.(int64)
+	this.Data["Auth"] = Auth
 
 	id := this.Input().Get("id")
 	name := this.Input().Get("name")
@@ -120,6 +125,9 @@ func (this *SchemaController) Delete() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "schema"
+	Auth := role.(int64)
+	this.Data["Auth"] = Auth
+
 	id := this.Input().Get("id")
 	err := models.DeleteSchema(id)
 	if err != nil {
@@ -138,6 +146,8 @@ func (this *SchemaController) BitchDelete() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "schema"
+	Auth := role.(int64)
+	this.Data["Auth"] = Auth
 
 	ids := strings.Split(this.Input().Get("ids"), ",")
 	for _, id := range ids {
@@ -195,6 +205,8 @@ func (this *SchemaController) Partition() {
 	this.Data["Uname"] = uname
 	this.Data["Role"] = role
 	this.Data["Category"] = "schema"
+	Auth := role.(int64)
+	this.Data["Auth"] = Auth
 
 	schmea := this.Input().Get("schema")
 	flag := this.Input().Get("flag")
