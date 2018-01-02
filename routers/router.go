@@ -177,6 +177,7 @@ func init() {
 	beego.Router("/workorder/dailyreport/search", &controllers.DailyreportController{}, "get:Search")
 	beego.Router("/workorder/dailyreport/detail", &controllers.DailyreportController{}, "get:Detail")
 	beego.Router("/workorder/dailyreport/export", &controllers.DailyreportController{}, "get:Export")
+	beego.Router("/workorder/dailyreport/today", &controllers.DailyreportController{}, "get:Today")
 
 	beego.Router("/workorder/db", &controllers.DBWOController{}, "get:DBOrder")
 	beego.Router("/workorder/db", &controllers.DBWOController{}, "post:DBOrderPost")

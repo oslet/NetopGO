@@ -282,3 +282,46 @@ func (this *DailyreportController) Export() {
 	this.Ctx.Output.Download(filepath, filename)
 	return
 }
+
+func (this *DailyreportController) Today() {
+	var page string
+	uid, uname, role, _ := this.IsLogined()
+	this.Data["Id"] = uid
+	this.Data["Uname"] = uname.(string)
+	this.Data["Role"] = role
+	this.Data["Category"] = "workorder/dailyreport"
+	this.Data["IsSearch"] = false
+	this.Data["Path1"] = "程序更新报表"
+	this.Data["Path2"] = ""
+	this.Data["Href"] = "/workorder/dailyreport/list"
+
+	/*
+		groups, err := models.GetNames()
+		if err != nil {
+			beego.Error(err)
+		}
+		this.Data["Groups"] = groups
+	*/
+	if len(this.Input().Get("page")) == 0 {
+		page = "1"
+	} else {
+		page = this.Input().Get("page")
+	}
+	currPage, _ := strconv.ParseInt(page, 10, 64)
+	pageSize, _ := strconv.ParseInt(beego.AppConfig.String("pageSize"), 10, 64)
+	total, err := models.GetDailyreportCountToday()
+	Dailyreportlists, _, err := models.GetDailyreportsToday(int(currPage), int(pageSize))
+	if err != nil {
+		beego.Error(err)
+	}
+	res := models.Paginator(int(currPage), int(pageSize), total)
+
+	auth := role.(int64)
+	this.Data["Auth"] = auth
+	this.Data["paginator"] = res
+	this.Data["Dailyreportlists"] = Dailyreportlists
+	this.Data["totals"] = total
+
+	this.TplName = "dailyreport_list.html"
+	return
+}

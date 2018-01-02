@@ -41,10 +41,30 @@ func GetDailyreportCount() (int64, error) {
 	return total, err
 }
 
+func GetDailyreportCountToday() (int64, error) {
+	o := orm.NewOrm()
+	Dailyreportlist := make([]*Dailyreport, 0)
+	total, err := o.Raw("select * from dailyreport where date(publishtime) = curdate()").QueryRows(&Dailyreportlist)
+	if err != nil {
+		return 0, err
+	}
+	return total, err
+}
+
 func GetDailyreports(currPage, pageSize int) ([]*Dailyreport, int64, error) {
 	o := orm.NewOrm()
 	Dailyreportlist := make([]*Dailyreport, 0)
 	total, err := o.QueryTable("dailyreport").Limit(pageSize, (currPage-1)*pageSize).All(&Dailyreportlist)
+	if err != nil {
+		return nil, 0, err
+	}
+	return Dailyreportlist, total, err
+}
+
+func GetDailyreportsToday(currPage, pageSize int) ([]*Dailyreport, int64, error) {
+	o := orm.NewOrm()
+	Dailyreportlist := make([]*Dailyreport, 0)
+	total, err := o.Raw("select * from dailyreport where date(publishtime) = curdate()").QueryRows(&Dailyreportlist)
 	if err != nil {
 		return nil, 0, err
 	}
