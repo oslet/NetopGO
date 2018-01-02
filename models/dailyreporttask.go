@@ -98,6 +98,10 @@ func (mail *Mail) BuildMessage() string {
 func Stringhandle(name string) []string {
 	var s []string
 	words := strings.Split(name, ",")
+	if name == "" {
+		return []string{}
+	}
+
 	for _, w := range words {
 		s = append(s, w)
 	}
