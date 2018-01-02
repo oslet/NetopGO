@@ -8,14 +8,65 @@ import (
 )
 
 type SlowOverview struct {
-	Id    int64
-	Name  string
-	Count int64
+	Id        int64
+	Name      string
+	Timestamp string
+	Count     int64
 }
 
 type SizeChange struct {
 	Name string
 	Size float64
+}
+
+type Sqlinfo struct {
+	Id         int64
+	Name       string
+	Timestamp  string
+	Query_time string
+	Sql_text   string
+	Uuid       string
+}
+
+type Qps_tps_overview struct {
+	Id        int64
+	name      string
+	timestamp string
+	qps       string
+	tps       string
+}
+
+type Partition_info struct {
+	Id         int64
+	Schemaname string
+	Instance   string
+	Timestamp  string
+	Count      string
+	Type       string
+}
+
+type Inst_info struct {
+	Id         int64
+	Name       string
+	Schemaname string
+	Timestamp  string
+	Size       string
+}
+
+type All_size struct {
+	Id        int64
+	Size      string
+	Timestamp string
+}
+
+func init() {
+	orm.RegisterModel(new(SlowOverview))
+	orm.RegisterModel(new(Sqlinfo))
+	orm.RegisterModel(new(Qps_tps_overview))
+	orm.RegisterModel(new(Partition_info))
+	orm.RegisterModel(new(Inst_info))
+	orm.RegisterModel(new(All_size))
+
 }
 
 func GetAllSize() ([]string, []float64, error) {
