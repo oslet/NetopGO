@@ -224,7 +224,7 @@ func GetDailyReport() string {
 	t.Execute(&body, dailyreports)
 	s := body.String()
 	s = strings.Replace(s, "\r\n", "<br>", -1)
-	return s
+	return fmt.Sprintf(s)
 }
 
 func getDB(username, userpwd, dbhost, dbport, dbname string) (*sql.DB, error) {
