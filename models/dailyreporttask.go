@@ -2,23 +2,16 @@ package models
 
 import (
 	"bytes"
-	//"crypto/tls"
-	"net"
-
+	"crypto/tls"
 	"database/sql"
 	"fmt"
 	"html/template"
 	"log"
-
+	"net/smtp"
+	"strings"
 	"time"
 
-	"net/smtp"
-
-	"strings"
-
 	"github.com/astaxie/beego"
-
-	_ "github.com/go-sql-driver/mysql"
 	"github.com/robfig/cron"
 )
 
@@ -61,9 +54,9 @@ type Mail struct {
 }
 
 type SmtpServer struct {
-	Host string
-	Port string
-	//TlsConfig *tls.Config
+	Host      string
+	Port      string
+	TlsConfig *tls.Config
 }
 
 func (s *SmtpServer) ServerName() string {
@@ -123,27 +116,25 @@ func TasksForDailyReport() {
 	messageBody := mail.BuildMessage()
 
 	smtpServer := SmtpServer{Host: mailserver, Port: mailport}
-	/*
-		smtpServer.TlsConfig = &tls.Config{
-			InsecureSkipVerify: true,
-			ServerName:         smtpServer.Host,
-		}
-	*/
+
+	smtpServer.TlsConfig = &tls.Config{
+		InsecureSkipVerify: true,
+		ServerName:         smtpServer.Host,
+	}
 
 	auth := smtp.PlainAuth("", mail.Sender, mailpass, smtpServer.Host)
 
+	conn, err := tls.Dial("tcp", smtpServer.ServerName(), smtpServer.TlsConfig)
+	if err != nil {
+		log.Panic(err)
+	}
 	/*
-		conn, err := tls.Dial("tcp", smtpServer.ServerName(), smtpServer.TlsConfig)
+		conn, err := net.Dial("tcp", smtpServer.ServerName())
+
 		if err != nil {
 			log.Panic(err)
 		}
 	*/
-	conn, err := net.Dial("tcp", smtpServer.ServerName())
-
-	if err != nil {
-		log.Panic(err)
-	}
-
 	client, err := smtp.NewClient(conn, smtpServer.Host)
 	if err != nil {
 		log.Panic(err)
