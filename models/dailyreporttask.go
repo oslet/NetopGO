@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"database/sql"
+	"encoding/base64"
 	"fmt"
 	"html/template"
 	"log"
@@ -102,13 +103,15 @@ func Stringhandle(name string) []string {
 }
 
 func TasksForDailyReport() {
+	b64 := base64.NewEncoding("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/")
 	curdate := time.Now().Format("2006-01-02")
 	mail := Mail{}
 	mail.Sender = mailuser
 	mail.To = Stringhandle(mailto)
 	mail.Cc = Stringhandle(mailcc)
 	mail.Bcc = Stringhandle(mailbcc)
-	mail.Subject = mailsubject + "(" + curdate + ")"
+	//mail.Subject = mailsubject + "(" + curdate + ")"
+	mail.Subject = fmt.Sprintf("=?UTF-8?B?%s?=", b64.EncodeToString([]byte(mailsubject+"("+curdate+")")))
 	mail.Mtype = "html"
 
 	mail.Body = GetDailyReport()
